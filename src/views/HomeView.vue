@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BaseHeader from '../components/BaseHeader.vue'
 import BaseSide from '../components/BaseSide.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
@@ -13,7 +14,7 @@ import BaseSide from '../components/BaseSide.vue'
         <el-aside width="200px">
           <base-side></base-side>
         </el-aside>
-        <el-main>Main</el-main>
+        <el-main><RouterView /></el-main>
       </el-container>
     </el-container>
   </div>

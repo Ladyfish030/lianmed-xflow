@@ -4,6 +4,7 @@
     class="el-menu-vertical-demo"
     @open="handleOpen"
     @close="handleClose"
+    :router="true"
   >
     <el-sub-menu index="1">
       <template #title>
@@ -30,9 +31,9 @@
       <el-icon><document /></el-icon>
       <span>Navigator Three</span>
     </el-menu-item>
-    <el-menu-item index="4">
+    <el-menu-item index="flow">
       <el-icon><setting /></el-icon>
-      <span>Navigator Four</span>
+      <span>Flow</span>
     </el-menu-item>
   </el-menu>
 </template>
@@ -42,12 +43,6 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import {
-  Document,
-  Menu as IconMenu,
-  Location,
-  Setting,
-} from '@element-plus/icons-vue'
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
