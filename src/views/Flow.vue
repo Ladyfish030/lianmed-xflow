@@ -55,30 +55,43 @@ onConnect(addEdges)
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/node-resizer@latest/dist/style.css';
 
 .vue-flow__minimap {
-  transform: scale(75%);
-  transform-origin: bottom right;
+  -webkit-transform: scale(75%);
+      -ms-transform: scale(75%);
+          transform: scale(75%);
+  -webkit-transform-origin: bottom right;
+      -ms-transform-origin: bottom right;
+          transform-origin: bottom right;
 }
 
 .dndflow {
-  flex-direction: column;
+  height: 100%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  height: 100%;
   margin: 0;
-  height: 100%;
   text-transform: uppercase;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Microsoft YaHei';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
 .dndflow .vue-flow-wrapper {
-  flex-grow: 1;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
   height: 100%;
 }
 @media screen and (min-width: 640px) {
   .dndflow {
-    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
   }
   .dndflow aside {
     min-width: 25%;
@@ -86,8 +99,13 @@ onConnect(addEdges)
 }
 @media screen and (max-width: 639px) {
   .dndflow aside .nodes {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
     gap: 5px;
   }
 }

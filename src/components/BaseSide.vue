@@ -1,48 +1,48 @@
 <template>
-  <el-menu
+    <el-menu
     default-active="2"
     class="el-menu-vertical-demo"
+    :collapse="isCollapse"
     @open="handleOpen"
     @close="handleClose"
     :router="true"
   >
-    <el-sub-menu index="1">
+    <el-menu-item index="home">
+      <el-icon><House /></el-icon>
       <template #title>
-        <el-icon><location /></el-icon>
-        <span>Navigator One</span>
+        <span>主页</span>
       </template>
-      <el-menu-item-group title="Group One">
-        <el-menu-item index="1-1">item one</el-menu-item>
-        <el-menu-item index="1-2">item two</el-menu-item>
-      </el-menu-item-group>
-      <el-menu-item-group title="Group Two">
-        <el-menu-item index="1-3">item three</el-menu-item>
-      </el-menu-item-group>
-      <el-sub-menu index="1-4">
-        <template #title>item four</template>
-        <el-menu-item index="1-4-1">item one</el-menu-item>
-      </el-sub-menu>
-    </el-sub-menu>
-    <el-menu-item index="2">
-      <el-icon><icon-menu /></el-icon>
-      <span>Navigator Two</span>
-    </el-menu-item>
-    <el-menu-item index="3" disabled>
-      <el-icon><document /></el-icon>
-      <span>Navigator Three</span>
     </el-menu-item>
     <el-menu-item index="flow">
-      <el-icon><setting /></el-icon>
-      <span>Flow</span>
+      <el-icon><Share /></el-icon>
+      <template #title>
+        <span>Flow</span>
+      </template>
     </el-menu-item>
+    <div class="button-container">
+      <el-divider class="divider"/>
+    <el-button @click="ExpandOrFoldClickHandle" class="expand-or-fold-button">
+        <el-icon v-if="isCollapse"><Expand /></el-icon>
+        <el-icon v-else><Fold /></el-icon>
+    </el-button>
+    </div>
+
   </el-menu>
 </template>
+
 <script lang="ts">
 export default {
   name: 'BaseSide',
 }
 </script>
+
 <script lang="ts" setup>
+import { ref } from 'vue'
+
+const isCollapse = ref(true)
+function ExpandOrFoldClickHandle() {
+  isCollapse.value = !isCollapse.value
+}
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
@@ -50,3 +50,53 @@ const handleClose = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
 </script>
+
+<style>
+.el-menu-vertical-demo {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 100px;
+  min-height: 400px;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.button-container {
+  height: 30px;
+  margin: 0px;
+  margin-top: auto;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center; 
+  -webkit-box-align: center; 
+      -ms-flex-align: center; 
+          align-items: center; 
+}
+.divider {
+  margin: 0px;
+}
+.expand-or-fold-button {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  border-width: 0px;
+  border-radius: 0px;
+}
+.expand-or-fold-button:hover {
+  background-color: white;
+}
+</style>
