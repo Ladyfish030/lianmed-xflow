@@ -18,7 +18,6 @@ import { Background } from '@vue-flow/background'
   padding: 15px;
   background-color: whitesmoke;
   border-radius: 8px;
-  margin: 10px 0;
   cursor: grab;
   -webkit-box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.25);
   box-shadow: 5px 5px 10px 2px #00000040;

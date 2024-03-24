@@ -1,7 +1,15 @@
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 const drawer = ref(false)
-const direction = ref('rtl')
+let propertyList = reactive([])
 function nodeClickHandler(e) {
+  console.log('====================================')
+  console.log(e)
+  console.log(e.node.label)
+  propertyList = e.node.property
+  console.log('====================================')
+  console.log(propertyList)
+  console.log('====================================')
+  console.log('====================================')
   drawer.value = true
   console.log('====================================')
   console.log('画布上的节点被点击')
@@ -14,4 +22,4 @@ const handleClose = (done) => {
 function cancelClick() {
   drawer.value = false
 }
-export { nodeClickHandler, drawer, direction, handleClose }
+export { nodeClickHandler, drawer, handleClose, propertyList }

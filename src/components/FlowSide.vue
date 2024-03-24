@@ -10,46 +10,54 @@ const input1 = ref('')
 <template>
   <div class="component-library">
     <span class="description">组件库</span>
-    <el-divider class="divider"/>
+    <el-divider class="divider" />
     <el-menu
-        default-active="2"
-        class="el-menu-vertical-demo"
-        @open="handleOpen"
-        @close="handleClose"
-      >
-  <div class="input-container">
-    <el-input
-      v-model="input1"
-      placeholder="请输入关键字"
-      clearable
-      :prefix-icon="Search"
-    />
-  </div>
-        <el-sub-menu index="1">
-          <template #title>
-            <span class="menu-title">数据源组件</span>
-          </template>
-          <div :draggable="true" @dragstart="onDragStart($event, 'input')" class="node-container">
-            <el-button class="node" type="info" plain>
-              <el-icon><Grid /></el-icon>database
-            </el-button>
-          </div>
-          <div :draggable="true" @dragstart="onDragStart($event, 'input')" class="node-container">
-            <el-button class="node" type="info" plain>
-              <el-icon><Grid /></el-icon>soap
-            </el-button>
-          </div>
-        </el-sub-menu>
-        <el-sub-menu index="2">
-          <template #title>
-            <span class="menu-title">逻辑组件</span>
-          </template>
-        </el-sub-menu>
-        <el-sub-menu index="3">
-          <template #title>
-            <span class="menu-title">执行组件</span>
-          </template>
-        </el-sub-menu>
+      default-active="2"
+      class="el-menu-vertical-demo"
+      @open="handleOpen"
+      @close="handleClose"
+    >
+      <div class="input-container">
+        <el-input
+          v-model="input1"
+          placeholder="请输入关键字"
+          clearable
+          :prefix-icon="Search"
+        />
+      </div>
+      <el-sub-menu index="1">
+        <template #title>
+          <span class="menu-title">数据源组件</span>
+        </template>
+        <div
+          :draggable="true"
+          @dragstart="onDragStart($event, 'input', 'database')"
+          class="node-container"
+        >
+          <el-button class="node" type="info" plain>
+            <el-icon><Grid /></el-icon>database
+          </el-button>
+        </div>
+        <div
+          :draggable="true"
+          @dragstart="onDragStart($event, 'output')"
+          class="node-container"
+        >
+          <el-button class="node" type="info" plain>
+            <el-icon><Grid /></el-icon>soap
+          </el-button>
+        </div>
+      </el-sub-menu>
+      <el-sub-menu index="2">
+        <template #title>
+          <span class="menu-title">逻辑组件</span>
+        </template>
+      </el-sub-menu>
+      <el-sub-menu index="3">
+        <template #title>
+          <span class="menu-title">执行组件</span>
+        </template>
+      </el-sub-menu>
     </el-menu>
   </div>
 </template>
@@ -63,8 +71,8 @@ const input1 = ref('')
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
 }
 .description {
   height: 50px;
@@ -72,13 +80,13 @@ const input1 = ref('')
   color: black;
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex; 
-  -webkit-box-pack: center; 
-  -ms-flex-pack: center; 
-  justify-content: center; 
-  -webkit-box-align: center; 
-  -ms-flex-align: center; 
-  align-items: center; 
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   position: relative;
 }
 .divider {
@@ -89,11 +97,11 @@ const input1 = ref('')
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center; 
-  -webkit-box-align: center; 
-      -ms-flex-align: center; 
-          align-items: center; 
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 .input-container > .el-input {
   --el-input-width: 90%;
@@ -112,18 +120,18 @@ const input1 = ref('')
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center; 
-  -webkit-box-align: center; 
-      -ms-flex-align: center; 
-          align-items: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 .node {
   margin-bottom: 5px;
   width: 80%;
   -webkit-box-pack: left;
-      -ms-flex-pack: left;
-          justify-content: left; 
+  -ms-flex-pack: left;
+  justify-content: left;
   padding-left: 0px;
 }
 </style>

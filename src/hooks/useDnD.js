@@ -1,6 +1,5 @@
 import { useVueFlow } from '@vue-flow/core'
 import { ref, watch } from 'vue'
-
 let id = 0
 
 /**
@@ -21,10 +20,14 @@ const state = {
   draggedType: ref(null),
   isDragOver: ref(false),
   isDragging: ref(false),
+  nodeType: ref(''), //记忆当前节点类型
 }
 
 export default function useDragAndDrop() {
-  const { draggedType, isDragOver, isDragging } = state
+  let typeList = {
+    database: ['组件名', '数据库连接类型', '数据库连接方式', '搜索语句'],
+  }
+  const { draggedType, isDragOver, isDragging, nodeType } = state
 
   const { addNodes, screenToFlowCoordinate, onNodesInitialized, updateNode } =
     useVueFlow()
@@ -33,7 +36,8 @@ export default function useDragAndDrop() {
     document.body.style.userSelect = dragging ? 'none' : ''
   })
 
-  function onDragStart(event, type) {
+  function onDragStart(event, type, newNodeType) {
+    nodeType.value = newNodeType
     if (event.dataTransfer) {
       event.dataTransfer.setData('application/vueflow', type)
       event.dataTransfer.effectAllowed = 'move'
@@ -85,14 +89,17 @@ export default function useDragAndDrop() {
     })
 
     const nodeId = getId()
-
     const newNode = {
       id: nodeId,
       type: draggedType.value,
       position,
       label: `[${nodeId}]`,
+      property: {},
     }
-
+    for (let i in typeList[nodeType.value]) {
+      let key = typeList[nodeType.value][i]
+      newNode.property[key] = ''
+    }
     /**
      * Align node position after drop, so it's centered to the mouse
      *

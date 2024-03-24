@@ -7,8 +7,8 @@ import useDragAndDrop from '../hooks/useDnD'
 import {
   nodeClickHandler,
   drawer,
-  direction,
   handleClose,
+  propertyList,
 } from '../hooks/useDrawer'
 
 const { onConnect, addEdges } = useVueFlow()
@@ -16,7 +16,6 @@ const { onConnect, addEdges } = useVueFlow()
 const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop()
 
 const nodes = ref([])
-
 onConnect(addEdges)
 </script>
 
@@ -39,12 +38,13 @@ onConnect(addEdges)
   </div>
   <el-drawer
     v-model="drawer"
-    title="I am the title"
-    :direction="direction"
+    title="组件属性配置"
+    direction="rtl"
     :before-close="handleClose"
-    :modal="false"
   >
-    <span>Hi, there!</span>
+    <el-input v-for="(index, item) in propertyList" placeholder="请输入内容">
+      <template #prepend>{{ item }}</template>
+    </el-input>
   </el-drawer>
 </template>
 <style scoped>
@@ -53,22 +53,25 @@ onConnect(addEdges)
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/controls@latest/dist/style.css';
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/minimap@latest/dist/style.css';
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/node-resizer@latest/dist/style.css';
-
+.el-drawer,
+.el-drawer__title {
+  line-height: 20px;
+}
 .vue-flow__minimap {
   -webkit-transform: scale(75%);
-      -ms-transform: scale(75%);
-          transform: scale(75%);
+  -ms-transform: scale(75%);
+  transform: scale(75%);
   -webkit-transform-origin: bottom right;
-      -ms-transform-origin: bottom right;
-          transform-origin: bottom right;
+  -ms-transform-origin: bottom right;
+  transform-origin: bottom right;
 }
 
 .dndflow {
   height: 100%;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -82,16 +85,16 @@ onConnect(addEdges)
 }
 .dndflow .vue-flow-wrapper {
   -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
   height: 100%;
 }
 @media screen and (min-width: 640px) {
   .dndflow {
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-            flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
   }
   .dndflow aside {
     min-width: 25%;
@@ -104,8 +107,8 @@ onConnect(addEdges)
     display: flex;
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-            flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
     gap: 5px;
   }
 }
