@@ -1,21 +1,3 @@
-<template>
-  <div class="dndflow" @drop="onDrop">
-    <FlowSide />
-    <VueFlow :nodes="nodes" @dragover="onDragOver" @dragleave="onDragLeave" @nodeClick="nodeClickHandler">
-      <DropzoneBackground :style="{
-    backgroundColor: isDragOver ? '#e7f3ff' : 'transparent',
-    transition: 'background-color 0.2s ease',
-  }" />
-      <MiniMap pannable/>
-      <Controls position="top-right">
-      </Controls>
-    </VueFlow>
-  </div>
-  <el-drawer v-model="drawer" title="I am the title" :direction="direction" :before-close="handleClose" :modal="false">
-    <span>Hi, there!</span>
-  </el-drawer>
-</template>
-
 <script setup>
 import { ref } from 'vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
@@ -55,6 +37,9 @@ onConnect(addEdges)
           transition: 'background-color 0.2s ease',
         }"
       />
+      <MiniMap pannable/>
+      <Controls position="top-right">
+      </Controls>
     </VueFlow>
   </div>
   <el-drawer
