@@ -34,7 +34,7 @@ const input1 = ref('')
               <el-icon><Grid /></el-icon>database
             </el-button>
           </div>
-          <div :draggable="true" @dragstart="onDragStart($event, 'input')" class="node-container">
+          <div :draggable="true" @dragstart="onDragStart($event)" class="node-container">
             <el-button class="node" type="info" plain>
               <el-icon><Grid /></el-icon>soap
             </el-button>

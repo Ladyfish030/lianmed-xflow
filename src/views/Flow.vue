@@ -1,6 +1,26 @@
+<template>
+  <div class="dndflow" @drop="onDrop">
+    <FlowSide />
+    <VueFlow :nodes="nodes" @dragover="onDragOver" @dragleave="onDragLeave" @nodeClick="nodeClickHandler">
+      <DropzoneBackground :style="{
+    backgroundColor: isDragOver ? '#e7f3ff' : 'transparent',
+    transition: 'background-color 0.2s ease',
+  }" />
+      <MiniMap pannable/>
+      <Controls position="top-right">
+      </Controls>
+    </VueFlow>
+  </div>
+  <el-drawer v-model="drawer" title="I am the title" :direction="direction" :before-close="handleClose" :modal="false">
+    <span>Hi, there!</span>
+  </el-drawer>
+</template>
+
 <script setup>
 import { ref } from 'vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
+import { Controls } from '@vue-flow/controls'
+import { MiniMap } from '@vue-flow/minimap'
 import DropzoneBackground from '../components/DropzoneBackground.vue'
 import FlowSide from '../components/FlowSide.vue'
 import useDragAndDrop from '../hooks/useDnD'
@@ -11,42 +31,16 @@ import {
   handleClose,
 } from '../hooks/useDrawer'
 
-const { onConnect, addEdges } = useVueFlow()
+const { onConnect, addEdges, setViewport } = useVueFlow()
 
 const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop()
 
 const nodes = ref([])
 
 onConnect(addEdges)
+
 </script>
 
-<template>
-  <div class="dndflow" @drop="onDrop">
-    <FlowSide />
-    <VueFlow
-      :nodes="nodes"
-      @dragover="onDragOver"
-      @dragleave="onDragLeave"
-      @nodeClick="nodeClickHandler"
-    >
-      <DropzoneBackground
-        :style="{
-          backgroundColor: isDragOver ? '#e7f3ff' : 'transparent',
-          transition: 'background-color 0.2s ease',
-        }"
-      />
-    </VueFlow>
-  </div>
-  <el-drawer
-    v-model="drawer"
-    title="I am the title"
-    :direction="direction"
-    :before-close="handleClose"
-    :modal="false"
-  >
-    <span>Hi, there!</span>
-  </el-drawer>
-</template>
 <style scoped>
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.33.4/dist/style.css';
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.33.4/dist/theme-default.css';
@@ -56,19 +50,22 @@ onConnect(addEdges)
 
 .vue-flow__minimap {
   -webkit-transform: scale(75%);
-      -ms-transform: scale(75%);
-          transform: scale(75%);
+  -ms-transform: scale(75%);
+  transform: scale(75%);
   -webkit-transform-origin: bottom right;
-      -ms-transform-origin: bottom right;
-          transform-origin: bottom right;
+  -ms-transform-origin: bottom right;
+  transform-origin: bottom right;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .dndflow {
   height: 100%;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -80,23 +77,27 @@ onConnect(addEdges)
   text-align: center;
   color: #2c3e50;
 }
+
 .dndflow .vue-flow-wrapper {
   -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
   height: 100%;
 }
+
 @media screen and (min-width: 640px) {
   .dndflow {
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-            flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
   }
+
   .dndflow aside {
     min-width: 25%;
   }
 }
+
 @media screen and (max-width: 639px) {
   .dndflow aside .nodes {
     display: -webkit-box;
@@ -104,8 +105,8 @@ onConnect(addEdges)
     display: flex;
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-            flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
     gap: 5px;
   }
 }
