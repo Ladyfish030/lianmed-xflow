@@ -27,8 +27,8 @@ import useDragAndDrop from '../hooks/useDnD'
 import {
   nodeClickHandler,
   drawer,
-  direction,
   handleClose,
+  propertyList,
 } from '../hooks/useDrawer'
 
 const { onConnect, addEdges, setViewport } = useVueFlow()
@@ -36,18 +36,48 @@ const { onConnect, addEdges, setViewport } = useVueFlow()
 const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop()
 
 const nodes = ref([])
-
 onConnect(addEdges)
 
 </script>
 
+<template>
+  <div class="dndflow" @drop="onDrop">
+    <FlowSide />
+    <VueFlow
+      :nodes="nodes"
+      @dragover="onDragOver"
+      @dragleave="onDragLeave"
+      @nodeClick="nodeClickHandler"
+    >
+      <DropzoneBackground
+        :style="{
+          backgroundColor: isDragOver ? '#e7f3ff' : 'transparent',
+          transition: 'background-color 0.2s ease',
+        }"
+      />
+    </VueFlow>
+  </div>
+  <el-drawer
+    v-model="drawer"
+    title="组件属性配置"
+    direction="rtl"
+    :before-close="handleClose"
+  >
+    <el-input v-for="(index, item) in propertyList" placeholder="请输入内容">
+      <template #prepend>{{ item }}</template>
+    </el-input>
+  </el-drawer>
+</template>
 <style scoped>
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.33.4/dist/style.css';
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.33.4/dist/theme-default.css';
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/controls@latest/dist/style.css';
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/minimap@latest/dist/style.css';
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/node-resizer@latest/dist/style.css';
-
+.el-drawer,
+.el-drawer__title {
+  line-height: 20px;
+}
 .vue-flow__minimap {
   -webkit-transform: scale(75%);
   -ms-transform: scale(75%);
