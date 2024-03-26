@@ -1,6 +1,8 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
+import { Controls } from '@vue-flow/controls'
+import { MiniMap } from '@vue-flow/minimap'
 import DropzoneBackground from '../components/DropzoneBackground.vue'
 import FlowSide from '../components/FlowSide.vue'
 import useDragAndDrop from '../hooks/useDnD'
@@ -12,7 +14,7 @@ import {
   nodePropertyChange,
 } from '../hooks/useDrawer'
 
-const { onConnect, addEdges } = useVueFlow()
+const { onConnect, addEdges, setViewport } = useVueFlow()
 
 const { onDragOver, onDrop, onDragLeave, isDragOver, nodeList } =
   useDragAndDrop()
@@ -105,19 +107,7 @@ const nodes = ref([])
 const edges = ref([])
 Object.assign(nodes, nodeList)
 onConnect(addEdges)
-function test() {
-  //获得当前画布上所有的节点和线，到时候把这个传递给后端
-  console.log('====================================')
-  console.log('test')
-  console.log('====================================')
-  console.log('====================================')
-  console.log(flow.value.getEdges)
-  console.log('====================================')
-  console.log(flow.value.getNodes)
-}
-function edgeClick(e) {
-  e.edge.label = 'y'
-}
+
 </script>
 
 <template>
@@ -138,6 +128,9 @@ function edgeClick(e) {
           transition: 'background-color 0.2s ease',
         }"
       />
+      <MiniMap pannable/>
+      <Controls position="top-right">
+      </Controls>
     </VueFlow>
   </div>
   <el-drawer
@@ -171,6 +164,9 @@ function edgeClick(e) {
   -webkit-transform-origin: bottom right;
   -ms-transform-origin: bottom right;
   transform-origin: bottom right;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .dndflow {
@@ -190,12 +186,14 @@ function edgeClick(e) {
   text-align: center;
   color: #2c3e50;
 }
+
 .dndflow .vue-flow-wrapper {
   -webkit-box-flex: 1;
   -ms-flex-positive: 1;
   flex-grow: 1;
   height: 100%;
 }
+
 @media screen and (min-width: 640px) {
   .dndflow {
     -webkit-box-orient: horizontal;
@@ -203,10 +201,12 @@ function edgeClick(e) {
     -ms-flex-direction: row;
     flex-direction: row;
   }
+
   .dndflow aside {
     min-width: 25%;
   }
 }
+
 @media screen and (max-width: 639px) {
   .dndflow aside .nodes {
     display: -webkit-box;
