@@ -47,6 +47,15 @@ const input1 = ref('')
             <el-icon><Grid /></el-icon>soap
           </el-button>
         </div>
+        <div
+          :draggable="true"
+          @dragstart="onDragStart($event, 'default', 'foreach')"
+          class="node-container"
+        >
+          <el-button class="node" type="info" plain>
+            <el-icon><Grid /></el-icon>for-each
+          </el-button>
+        </div>
       </el-sub-menu>
       <el-sub-menu index="2">
         <template #title>

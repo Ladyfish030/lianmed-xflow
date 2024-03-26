@@ -1,12 +1,12 @@
 import { useVueFlow } from '@vue-flow/core'
-import { ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 let id = 0
 
 /**
  * @returns {string} - A unique id.
  */
 function getId() {
-  return `dndnode_${id++}`
+  return id++
 }
 
 /**
@@ -21,9 +21,11 @@ const state = {
   isDragOver: ref(false),
   isDragging: ref(false),
   nodeType: ref(''), //记忆当前节点类型
+  nodeLabel: ref(''),
 }
 
 export default function useDragAndDrop() {
+  const nodeList = reactive([])
   let typeList = {
     database: ['组件名', '数据库连接类型', '数据库连接方式', '搜索语句'],
   }
@@ -89,17 +91,30 @@ export default function useDragAndDrop() {
     })
 
     const nodeId = getId()
-    const newNode = {
+    const newNode = reactive({
       id: nodeId,
       type: draggedType.value,
       position,
       label: `[${nodeId}]`,
       property: {},
-    }
+    })
     for (let i in typeList[nodeType.value]) {
       let key = typeList[nodeType.value][i]
       newNode.property[key] = ''
+      // newNode.nodeType = nodeType.value
     }
+    // if (nodeType.value == 'database') {
+    //   newNode.type = draggedType.value
+    //   newNode.parentNode = '0'
+    // }
+    // if (nodeType.value == 'foreach') {
+    //   newNode.isParent = true
+    //   newNode.style = {
+    //     backgroundColor: 'rgba(16, 185, 129, 0.5)',
+    //     width: '200px',
+    //     height: '200px',
+    //   }
+    // }
     /**
      * Align node position after drop, so it's centered to the mouse
      *
@@ -117,6 +132,7 @@ export default function useDragAndDrop() {
     })
 
     addNodes(newNode)
+    nodeList.push(newNode)
   }
 
   return {
@@ -127,5 +143,6 @@ export default function useDragAndDrop() {
     onDragLeave,
     onDragOver,
     onDrop,
+    nodeList,
   }
 }
