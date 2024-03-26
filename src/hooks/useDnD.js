@@ -97,29 +97,13 @@ export default function useDragAndDrop() {
       position,
       label: `[${nodeId}]`,
       property: {},
+      nodeType: nodeType.value,
     })
+
     for (let i in typeList[nodeType.value]) {
       let key = typeList[nodeType.value][i]
       newNode.property[key] = ''
-      // newNode.nodeType = nodeType.value
     }
-    // if (nodeType.value == 'database') {
-    //   newNode.type = draggedType.value
-    //   newNode.parentNode = '0'
-    // }
-    // if (nodeType.value == 'foreach') {
-    //   newNode.isParent = true
-    //   newNode.style = {
-    //     backgroundColor: 'rgba(16, 185, 129, 0.5)',
-    //     width: '200px',
-    //     height: '200px',
-    //   }
-    // }
-    /**
-     * Align node position after drop, so it's centered to the mouse
-     *
-     * We can hook into events even in a callback, and we can remove the event listener after it's been called.
-     */
     const { off } = onNodesInitialized(() => {
       updateNode(nodeId, (node) => ({
         position: {

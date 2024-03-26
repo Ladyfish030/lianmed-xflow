@@ -12,7 +12,7 @@ const input1 = ref('')
     <span class="description">组件库</span>
     <el-divider class="divider" />
     <el-menu
-      default-active="2"
+      default-active="1"
       class="el-menu-vertical-demo"
       @open="handleOpen"
       @close="handleClose"
@@ -40,11 +40,52 @@ const input1 = ref('')
         </div>
         <div
           :draggable="true"
-          @dragstart="onDragStart($event, 'output')"
+          @dragstart="onDragStart($event, 'output', 'webService')"
           class="node-container"
         >
           <el-button class="node" type="info" plain>
-            <el-icon><Grid /></el-icon>soap
+            <el-icon><Grid /></el-icon>WebService
+          </el-button>
+        </div>
+        <div
+          :draggable="true"
+          @dragstart="onDragStart($event, 'default', 'dataAnalysis')"
+          class="node-container"
+        >
+          <el-button class="node" type="info" plain>
+            <el-icon><Grid /></el-icon>数据解析
+          </el-button>
+        </div>
+        <div
+          :draggable="true"
+          @dragstart="onDragStart($event, 'default', 'logger')"
+          class="node-container"
+        >
+          <el-button class="node" type="info" plain>
+            <el-icon><Grid /></el-icon>日志
+          </el-button>
+        </div>
+      </el-sub-menu>
+      <el-sub-menu index="2">
+        <template #title>
+          <span class="menu-title">逻辑组件</span>
+        </template>
+        <div
+          :draggable="true"
+          @dragstart="onDragStart($event, 'input', 'conditionalBranch')"
+          class="node-container"
+        >
+          <el-button class="node" type="info" plain>
+            <el-icon><Grid /></el-icon>条件分支
+          </el-button>
+        </div>
+        <div
+          :draggable="true"
+          @dragstart="onDragStart($event, 'childFlow')"
+          class="node-container"
+        >
+          <el-button class="node" type="info" plain>
+            <el-icon><Grid /></el-icon>子流程flow
           </el-button>
         </div>
         <div
@@ -56,11 +97,6 @@ const input1 = ref('')
             <el-icon><Grid /></el-icon>for-each
           </el-button>
         </div>
-      </el-sub-menu>
-      <el-sub-menu index="2">
-        <template #title>
-          <span class="menu-title">逻辑组件</span>
-        </template>
       </el-sub-menu>
       <el-sub-menu index="3">
         <template #title>

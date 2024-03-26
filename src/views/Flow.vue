@@ -6,6 +6,7 @@ import { MiniMap } from '@vue-flow/minimap'
 import DropzoneBackground from '../components/DropzoneBackground.vue'
 import FlowSide from '../components/FlowSide.vue'
 import useDragAndDrop from '../hooks/useDnD'
+import { edgeUpdate, edgeClick } from '../hooks/useEdge'
 import {
   nodeClickHandler,
   drawer,
@@ -107,7 +108,13 @@ const nodes = ref([])
 const edges = ref([])
 Object.assign(nodes, nodeList)
 onConnect(addEdges)
-
+function test() {
+  //获得当前画布上所有的节点和线，到时候把这个传递给后端
+  console.log('此时画布上所有的边：')
+  console.log(flow.value.getEdges)
+  console.log('此时画布上所有的点：')
+  console.log(flow.value.getNodes)
+}
 </script>
 
 <template>
@@ -121,6 +128,7 @@ onConnect(addEdges)
       @dragleave="onDragLeave"
       @nodeClick="nodeClickHandler"
       @edgeClick="edgeClick"
+      @edgesChange="edgeUpdate"
     >
       <DropzoneBackground
         :style="{
@@ -128,9 +136,8 @@ onConnect(addEdges)
           transition: 'background-color 0.2s ease',
         }"
       />
-      <MiniMap pannable/>
-      <Controls position="top-right">
-      </Controls>
+      <MiniMap pannable />
+      <Controls position="top-right"> </Controls>
     </VueFlow>
   </div>
   <el-drawer
