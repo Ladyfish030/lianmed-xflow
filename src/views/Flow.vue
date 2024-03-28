@@ -24,7 +24,7 @@ const flow = ref(null)
 //   { id: '1', type: 'input', label: 'node', position: { x: 250, y: 0 } },
 //   {
 //     id: '2',
-//     label: 'parent node',
+//     label: 'parent node22222222222',
 //     position: { x: 100, y: 100 },
 //     style: {
 //       backgroundColor: 'rgba(16, 185, 129, 0.5)',
@@ -40,7 +40,7 @@ const flow = ref(null)
 //   },
 //   {
 //     id: '4',
-//     label: 'parent node',
+//     label: 'parent node111111111',
 //     position: { x: 320, y: 175 },
 //     style: {
 //       backgroundColor: 'rgba(16, 185, 129, 0.5)',
@@ -50,7 +50,7 @@ const flow = ref(null)
 //   },
 //   {
 //     id: '4a',
-//     label: 'child node',
+//     label: 'child nodemrtgrfeda',
 //     position: { x: 15, y: 65 },
 //     extent: 'parent',
 //     parentNode: '4',
@@ -106,6 +106,7 @@ const flow = ref(null)
 // ])
 const nodes = ref([])
 const edges = ref([])
+const parentNodePosition = reactive([])
 Object.assign(nodes, nodeList)
 onConnect(addEdges)
 function test() {
@@ -114,6 +115,37 @@ function test() {
   console.log(flow.value.getEdges)
   console.log('此时画布上所有的点：')
   console.log(flow.value.getNodes)
+}
+function dragLeave(e) {
+  let nodeList = flow.value.getNodes
+  for (let item of nodeList) {
+    if (item.nodeType == 'childFlow' || item.nodeType == 'foreach') {
+      let pos = {
+        xMin: item.position.x,
+        xMax: item.position.x + item.dimensions.width,
+        yMin: item.position.y,
+        yMax: item.position.y + item.dimensions.height,
+        id: item.id,
+      }
+      parentNodePosition.push(pos)
+    }
+  }
+  console.log('===================onDragLeave=================')
+  console.log(e)
+  console.log('====================================')
+  onDragLeave(e)
+  nodeDragStop(e)
+}
+function nodeDragStop(e) {
+  console.log('==================nodeDragStop==================')
+  console.log(e)
+  console.log('====================================')
+  let { x, y } = e.nodes[0].position
+  for (let item of parentNodePosition) {
+    if (x >= item.xMin && x <= item.xMax && y >= item.yMin && y <= item.yMax) {
+      e.nodes[0].parentNode = item.id
+    }
+  }
 }
 </script>
 
@@ -125,10 +157,11 @@ function test() {
       :nodes="nodes"
       :edges="edges"
       @dragover="onDragOver"
-      @dragleave="onDragLeave"
+      @dragleave="dragLeave"
       @nodeClick="nodeClickHandler"
       @edgeClick="edgeClick"
       @edgesChange="edgeUpdate"
+      @node-drag-stop="nodeDragStop"
     >
       <DropzoneBackground
         :style="{

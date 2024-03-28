@@ -99,7 +99,13 @@ export default function useDragAndDrop() {
       property: {},
       nodeType: nodeType.value,
     })
-
+    if (nodeType.value == 'childFlow' || nodeType.value == 'foreach') {
+      newNode.style = {
+        backgroundColor: 'rgba(16, 185, 129, 0.5)',
+        width: '200px',
+        height: '200px',
+      }
+    }
     for (let i in typeList[nodeType.value]) {
       let key = typeList[nodeType.value][i]
       newNode.property[key] = ''
