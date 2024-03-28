@@ -9,10 +9,14 @@ import useDragAndDrop from '../hooks/useDnD'
 import { edgeUpdate, edgeClick } from '../hooks/useEdge'
 import {
   nodeClickHandler,
+  findClickedNode,
   drawer,
+  clickNode,
+  isSave,
+  saveComplete,
+  saveAttribute,
+  saveAttributeComplete,
   handleClose,
-  propertyList,
-  nodePropertyChange,
 } from '../hooks/useDrawer'
 
 const { onConnect, addEdges, setViewport } = useVueFlow()
@@ -180,14 +184,6 @@ function nodeDragStop(e) {
     :before-close="handleClose"
     class="my-drawer"
   >
-    <el-input
-      v-for="(index, item) in propertyList"
-      v-model="propertyList[item]"
-      @input="nodePropertyChange"
-      placeholder="请输入内容"
-    >
-      <template #prepend>{{ item }}</template>
-    </el-input>
   </el-drawer>
 </template>
 <style scoped>

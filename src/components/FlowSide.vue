@@ -12,10 +12,7 @@ const input1 = ref('')
   <div class="component-library">
     <span class="description">组件库</span>
     <el-divider class="divider" />
-    <el-menu
-      default-active="1"
-      class="el-menu-vertical-demo"
-    >
+    <el-menu default-active="1" class="el-menu-vertical-demo">
       <div class="input-container">
         <el-input
           v-model="input1"

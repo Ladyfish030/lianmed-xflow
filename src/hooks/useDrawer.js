@@ -14,7 +14,7 @@ function nodeClickHandler(e) {
 }
 
 function findClickedNode() {
-  const clickedNode = nodes.value.find(node => node.id === clickNode.value.id)
+  const clickedNode = nodes.value.find((node) => node.id === clickNode.value.id)
   return clickedNode
 }
 
@@ -47,5 +47,5 @@ export {
   saveComplete,
   saveAttribute,
   saveAttributeComplete,
-  handleClose
+  handleClose,
 }
