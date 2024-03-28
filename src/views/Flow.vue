@@ -120,7 +120,7 @@ function test() {
   console.log('此时画布上所有的点：')
   console.log(flow.value.getNodes)
 }
-function dragLeave(e) {
+function addNode(e) {
   let nodeList = flow.value.getNodes
   for (let item of nodeList) {
     if (item.nodeType == 'childFlow' || item.nodeType == 'foreach') {
@@ -134,38 +134,32 @@ function dragLeave(e) {
       parentNodePosition.push(pos)
     }
   }
-  console.log('===================onDragLeave=================')
-  console.log(e)
-  console.log('====================================')
-  onDragLeave(e)
-  nodeDragStop(e)
+  onDrop(e)
+  nodeDragStop(flow.value.getNodes[flow.value.getNodes.length - 1])
 }
-function nodeDragStop(e) {
-  console.log('==================nodeDragStop==================')
-  console.log(e)
-  console.log('====================================')
-  let { x, y } = e.nodes[0].position
+function nodeDragStop(node) {
+  let { x, y } = node.position
   for (let item of parentNodePosition) {
     if (x >= item.xMin && x <= item.xMax && y >= item.yMin && y <= item.yMax) {
-      e.nodes[0].parentNode = item.id
+      node.parentNode = item.id
     }
   }
 }
 </script>
 
 <template>
-  <div class="dndflow" @drop="onDrop">
-    <FlowSide @click="test" />
+  <div class="dndflow" @drop="addNode">
+    <FlowSide @click="test" @addNode="addNode" />
     <VueFlow
       ref="flow"
       :nodes="nodes"
       :edges="edges"
       @dragover="onDragOver"
-      @dragleave="dragLeave"
+      @dragleave="onDragLeave"
       @nodeClick="nodeClickHandler"
       @edgeClick="edgeClick"
       @edgesChange="edgeUpdate"
-      @node-drag-stop="nodeDragStop"
+      @node-drag-stop="nodeDragStop($event.nodes[0])"
     >
       <DropzoneBackground
         :style="{

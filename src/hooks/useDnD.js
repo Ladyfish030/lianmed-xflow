@@ -98,6 +98,7 @@ export default function useDragAndDrop() {
       label: `[${nodeId}]`,
       property: {},
       nodeType: nodeType.value,
+      expandParent: true,
     })
     if (nodeType.value == 'childFlow' || nodeType.value == 'foreach') {
       newNode.style = {
