@@ -13,7 +13,7 @@ const input1 = ref('')
     <span class="description">组件库</span>
     <el-divider class="divider" />
     <el-menu
-      default-active="2"
+      default-active="1"
       class="el-menu-vertical-demo"
     >
       <div class="input-container">
@@ -51,6 +51,33 @@ const input1 = ref('')
         <template #title>
           <span class="menu-title">逻辑组件</span>
         </template>
+        <div
+          :draggable="true"
+          @dragstart="onDragStart($event, 'input', 'conditionalBranch')"
+          class="node-container"
+        >
+          <el-button class="node" type="info" plain>
+            <el-icon><Grid /></el-icon>条件分支
+          </el-button>
+        </div>
+        <div
+          :draggable="true"
+          @dragstart="onDragStart($event, 'childFlow')"
+          class="node-container"
+        >
+          <el-button class="node" type="info" plain>
+            <el-icon><Grid /></el-icon>子流程flow
+          </el-button>
+        </div>
+        <div
+          :draggable="true"
+          @dragstart="onDragStart($event, 'default', 'foreach')"
+          class="node-container"
+        >
+          <el-button class="node" type="info" plain>
+            <el-icon><Grid /></el-icon>for-each
+          </el-button>
+        </div>
       </el-sub-menu>
       <el-sub-menu index="3">
         <template #title>

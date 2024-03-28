@@ -1,5 +1,5 @@
 import { useVueFlow } from '@vue-flow/core'
-import { ref, watch } from 'vue'
+import { ref, watch,reactive } from 'vue'
 import { NodeType } from '../enums/NodeType'
 import * as NodeAttribute from '../components/nodes/attribute/NodeAttribute'
 let id = 0
@@ -8,7 +8,7 @@ let id = 0
  * @returns {string} - A unique id.
  */
 function getId() {
-  return `dndnode_${id++}`
+  return id++
 }
 
 function getNewNode(nodeType) {
@@ -103,12 +103,8 @@ export default function useDragAndDrop() {
         id: nodeId,
         type: draggedType.value,
         position: position,
+        label: `[${nodeId}]`,
     }
-    /**
-     * Align node position after drop, so it's centered to the mouse
-     *
-     * We can hook into events even in a callback, and we can remove the event listener after it's been called.
-     */
     const { off } = onNodesInitialized(() => {
       updateNode(nodeId, (node) => ({
         position: {
@@ -133,5 +129,6 @@ export default function useDragAndDrop() {
     onDragLeave,
     onDragOver,
     onDrop,
+    nodeList,
   }
 }
