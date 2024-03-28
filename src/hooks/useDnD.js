@@ -1,5 +1,7 @@
 import { useVueFlow } from '@vue-flow/core'
 import { ref, watch } from 'vue'
+import { NodeType } from '../enums/NodeType'
+import * as NodeAttribute from '../components/nodes/attribute/NodeAttribute'
 let id = 0
 
 /**
@@ -7,6 +9,17 @@ let id = 0
  */
 function getId() {
   return `dndnode_${id++}`
+}
+
+function getNewNode(nodeType) {
+  switch (nodeType) {
+    case NodeType.DATABASE:
+      return NodeAttribute.Database
+    case NodeType.WEBSERVICE:
+      return NodeAttribute.WebService
+    default: 
+      return null
+  }
 }
 
 /**
@@ -20,14 +33,11 @@ const state = {
   draggedType: ref(null),
   isDragOver: ref(false),
   isDragging: ref(false),
-  nodeType: ref(''), //记忆当前节点类型
+  nodes: ref([]),
 }
 
 export default function useDragAndDrop() {
-  let typeList = {
-    database: ['组件名', '数据库连接类型', '数据库连接方式', '搜索语句'],
-  }
-  const { draggedType, isDragOver, isDragging, nodeType } = state
+  const { draggedType, isDragOver, isDragging, nodes} = state
 
   const { addNodes, screenToFlowCoordinate, onNodesInitialized, updateNode } =
     useVueFlow()
@@ -36,8 +46,7 @@ export default function useDragAndDrop() {
     document.body.style.userSelect = dragging ? 'none' : ''
   })
 
-  function onDragStart(event, type, newNodeType) {
-    nodeType.value = newNodeType
+  function onDragStart(event, type) {
     if (event.dataTransfer) {
       event.dataTransfer.setData('application/vueflow', type)
       event.dataTransfer.effectAllowed = 'move'
@@ -89,16 +98,11 @@ export default function useDragAndDrop() {
     })
 
     const nodeId = getId()
-    const newNode = {
-      id: nodeId,
-      type: draggedType.value,
-      position,
-      label: `[${nodeId}]`,
-      property: {},
-    }
-    for (let i in typeList[nodeType.value]) {
-      let key = typeList[nodeType.value][i]
-      newNode.property[key] = ''
+    var newNode = getNewNode(draggedType.value)
+    newNode = {
+        id: nodeId,
+        type: draggedType.value,
+        position: position,
     }
     /**
      * Align node position after drop, so it's centered to the mouse
@@ -116,13 +120,15 @@ export default function useDragAndDrop() {
       off()
     })
 
-    addNodes(newNode)
+    nodes.value.push(newNode)
+
   }
 
   return {
     draggedType,
     isDragOver,
     isDragging,
+    nodes,
     onDragStart,
     onDragLeave,
     onDragOver,

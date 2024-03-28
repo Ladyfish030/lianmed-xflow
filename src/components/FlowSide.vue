@@ -1,7 +1,8 @@
 <script setup>
-import useDragAndDrop from '../hooks/useDnD'
 import { Search } from '@element-plus/icons-vue'
 import { ref } from 'vue'
+import useDragAndDrop from '../hooks/useDnD'
+import { NodeType } from '../enums/NodeType'
 
 const { onDragStart } = useDragAndDrop()
 const input1 = ref('')
@@ -14,8 +15,6 @@ const input1 = ref('')
     <el-menu
       default-active="2"
       class="el-menu-vertical-demo"
-      @open="handleOpen"
-      @close="handleClose"
     >
       <div class="input-container">
         <el-input
@@ -31,7 +30,7 @@ const input1 = ref('')
         </template>
         <div
           :draggable="true"
-          @dragstart="onDragStart($event, 'input', 'database')"
+          @dragstart="onDragStart($event, NodeType.DATABASE)"
           class="node-container"
         >
           <el-button class="node" type="info" plain>
@@ -40,11 +39,11 @@ const input1 = ref('')
         </div>
         <div
           :draggable="true"
-          @dragstart="onDragStart($event, 'output')"
+          @dragstart="onDragStart($event, NodeType.WEBSERVICE)"
           class="node-container"
         >
           <el-button class="node" type="info" plain>
-            <el-icon><Grid /></el-icon>soap
+            <el-icon><Grid /></el-icon>webService
           </el-button>
         </div>
       </el-sub-menu>

@@ -1,25 +1,51 @@
 import { ref, reactive } from 'vue'
+import useDragAndDrop from '../hooks/useDnD'
+
 const drawer = ref(false)
-let propertyList = reactive([])
+const clickNode = ref({ id: '', type: '' })
+const isSave = ref(false)
+const saveComplete = ref(false)
+const { nodes } = useDragAndDrop()
+
 function nodeClickHandler(e) {
-  console.log('====================================')
-  console.log(e)
-  console.log(e.node.label)
-  propertyList = e.node.property
-  console.log('====================================')
-  console.log(propertyList)
-  console.log('====================================')
-  console.log('====================================')
   drawer.value = true
-  console.log('====================================')
-  console.log('画布上的节点被点击')
-  console.log('====================================')
+  clickNode.value.id = e.node.id
+  clickNode.value.type = e.node.type
+}
+
+function findClickedNode() {
+  const clickedNode = nodes.value.find(node => node.id === clickNode.value.id)
+  return clickedNode
 }
 
 const handleClose = (done) => {
-  done()
+  ElMessageBox.confirm('确定关闭配置栏？请注意保存配置信息')
+    .then(() => {
+      drawer.value = false
+      done()
+    })
+    .catch(() => {
+      // catch error
+    })
 }
-function cancelClick() {
-  drawer.value = false
+
+function saveAttribute() {
+  isSave.value = true
 }
-export { nodeClickHandler, drawer, handleClose, propertyList }
+
+function saveAttributeComplete() {
+  isSave.value = false
+  saveComplete.value = true
+}
+
+export {
+  nodeClickHandler,
+  findClickedNode,
+  drawer,
+  clickNode,
+  isSave,
+  saveComplete,
+  saveAttribute,
+  saveAttributeComplete,
+  handleClose
+}
