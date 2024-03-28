@@ -8,7 +8,7 @@ let id = 0
  * @returns {string} - A unique id.
  */
 function getId() {
-  return id++
+  return `dndnode_${id++}`
 }
 
 function getNewNode(nodeType) {
@@ -39,7 +39,7 @@ const state = {
 export default function useDragAndDrop() {
   const { draggedType, isDragOver, isDragging, nodes} = state
 
-  const { addNodes, screenToFlowCoordinate, onNodesInitialized, updateNode } =
+  const { screenToFlowCoordinate, onNodesInitialized, updateNode } =
     useVueFlow()
 
   watch(isDragging, (dragging) => {
@@ -129,6 +129,5 @@ export default function useDragAndDrop() {
     onDragLeave,
     onDragOver,
     onDrop,
-    nodeList,
   }
 }

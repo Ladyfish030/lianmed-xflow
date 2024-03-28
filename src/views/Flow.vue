@@ -29,14 +29,6 @@ import WebService from '@/components/nodes/WebService.vue'
 import useDragAndDrop from '../hooks/useDnD'
 import { nodeClickHandler } from '../hooks/useDrawer'
 import { NodeType } from '../enums/NodeType'
-import { edgeUpdate, edgeClick } from '../hooks/useEdge'
-import {
-  nodeClickHandler,
-  drawer,
-  handleClose,
-  propertyList,
-  nodePropertyChange,
-} from '../hooks/useDrawer'
 
 const { onConnect, addEdges } = useVueFlow()
 const { onDragOver, onDrop, onDragLeave, nodes } = useDragAndDrop()
@@ -51,7 +43,9 @@ function getCustomNodeComponent(type) {
       return null
   }
 }
-const flow = ref(null)
+
+onConnect(addEdges)
+// const flow = ref(null)
 // const nodes = ref([
 //   { id: '1', type: 'input', label: 'node', position: { x: 250, y: 0 } },
 //   {
@@ -136,58 +130,19 @@ const flow = ref(null)
 //   { id: 'e4a-4b2', source: '4a', target: '4b2' },
 //   { id: 'e4b1-4b2', source: '4b1', target: '4b2' },
 // ])
-const edges = ref([])
-Object.assign(nodes, nodeList)
-onConnect(addEdges)
-function test() {
-  //获得当前画布上所有的节点和线，到时候把这个传递给后端
-  console.log('此时画布上所有的边：')
-  console.log(flow.value.getEdges)
-  console.log('此时画布上所有的点：')
-  console.log(flow.value.getNodes)
-}
+// const edges = ref([])
+// Object.assign(nodes, nodeList)
+
+
+// function test() {
+//   //获得当前画布上所有的节点和线，到时候把这个传递给后端
+//   console.log('此时画布上所有的边：')
+//   console.log(flow.value.getEdges)
+//   console.log('此时画布上所有的点：')
+//   console.log(flow.value.getNodes)
+// }
 </script>
 
-<template>
-  <div class="dndflow" @drop="onDrop">
-    <FlowSide @click="test" />
-    <VueFlow
-      ref="flow"
-      :nodes="nodes"
-      :edges="edges"
-      @dragover="onDragOver"
-      @dragleave="onDragLeave"
-      @nodeClick="nodeClickHandler"
-      @edgeClick="edgeClick"
-      @edgesChange="edgeUpdate"
-    >
-      <DropzoneBackground
-        :style="{
-          backgroundColor: isDragOver ? '#e7f3ff' : 'transparent',
-          transition: 'background-color 0.2s ease',
-        }"
-      />
-      <MiniMap pannable />
-      <Controls position="top-right"> </Controls>
-    </VueFlow>
-  </div>
-  <el-drawer
-    v-model="drawer"
-    title="组件属性配置"
-    direction="rtl"
-    :before-close="handleClose"
-    class="my-drawer"
-  >
-    <el-input
-      v-for="(index, item) in propertyList"
-      v-model="propertyList[item]"
-      @input="nodePropertyChange"
-      placeholder="请输入内容"
-    >
-      <template #prepend>{{ item }}</template>
-    </el-input>
-  </el-drawer>
-</template>
 <style scoped>
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.33.4/dist/style.css';
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.33.4/dist/theme-default.css';
@@ -256,17 +211,5 @@ function test() {
     flex-direction: row;
     gap: 5px;
   }
-}
-</style>
-<style>
-.my-drawer {
-  line-height: 50px;
-}
-.el-drawer__body {
-  border-top: black solid 1px;
-}
-.el-drawer__title {
-  font-weight: bold;
-  font-size: 25px;
 }
 </style>
