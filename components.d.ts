@@ -9,6 +9,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     BaseHeader: typeof import('./src/components/BaseHeader.vue')['default']
     BaseSide: typeof import('./src/components/BaseSide.vue')['default']
+    Database: typeof import('./src/components/nodes/Database.vue')['default']
+    DatabaseDrawer: typeof import('./src/components/nodes/drawer/DatabaseDrawer.vue')['default']
     DropzoneBackground: typeof import('./src/components/DropzoneBackground.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -22,8 +24,11 @@ declare module 'vue' {
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
+    FlowDrawer: typeof import('./src/components/FlowDrawer.vue')['default']
     FlowSide: typeof import('./src/components/FlowSide.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    WebService: typeof import('./src/components/nodes/WebService.vue')['default']
+    WebServiceDrawer: typeof import('./src/components/nodes/drawer/WebServiceDrawer.vue')['default']
   }
 }

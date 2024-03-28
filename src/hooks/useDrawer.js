@@ -1,28 +1,51 @@
 import { ref, reactive } from 'vue'
-const drawer = ref(false)
-let node = {}
-let propertyList = reactive([])
-function nodeClickHandler(e) {
-  node = e.node
-  propertyList = e.node.property
-  // let nodeType = e.node.nodeType //database
+import useDragAndDrop from '../hooks/useDnD'
 
+const drawer = ref(false)
+const clickNode = ref({ id: '', type: '' })
+const isSave = ref(false)
+const saveComplete = ref(false)
+const { nodes } = useDragAndDrop()
+
+function nodeClickHandler(e) {
   drawer.value = true
+  clickNode.value.id = e.node.id
+  clickNode.value.type = e.node.type
+}
+
+function findClickedNode() {
+  const clickedNode = nodes.value.find(node => node.id === clickNode.value.id)
+  return clickedNode
 }
 
 const handleClose = (done) => {
-  done()
+  ElMessageBox.confirm('确定关闭配置栏？请注意保存配置信息')
+    .then(() => {
+      drawer.value = false
+      done()
+    })
+    .catch(() => {
+      // catch error
+    })
 }
-function cancelClick() {
-  drawer.value = false
+
+function saveAttribute() {
+  isSave.value = true
 }
-function nodePropertyChange() {
-  node.label = propertyList['组件名'] == '' ? node.id : propertyList['组件名']
+
+function saveAttributeComplete() {
+  isSave.value = false
+  saveComplete.value = true
 }
+
 export {
   nodeClickHandler,
+  findClickedNode,
   drawer,
-  handleClose,
-  propertyList,
-  nodePropertyChange,
+  clickNode,
+  isSave,
+  saveComplete,
+  saveAttribute,
+  saveAttributeComplete,
+  handleClose
 }
