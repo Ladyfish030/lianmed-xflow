@@ -12,7 +12,10 @@ const input1 = ref('')
   <div class="component-library">
     <span class="description">组件库</span>
     <el-divider class="divider" />
-    <el-menu default-active="1" class="el-menu-vertical-demo">
+    <el-menu
+      default-active="1"
+      class="el-menu-vertical-demo"
+    >
       <div class="input-container">
         <el-input
           v-model="input1"
@@ -50,7 +53,7 @@ const input1 = ref('')
         </template>
         <div
           :draggable="true"
-          @dragstart="onDragStart($event, 'input', 'conditionalBranch')"
+          @dragstart="onDragStart($event, NodeType.CONDITIONALBRANCH)"
           class="node-container"
         >
           <el-button class="node" type="info" plain>
@@ -59,7 +62,7 @@ const input1 = ref('')
         </div>
         <div
           :draggable="true"
-          @dragstart="onDragStart($event, 'default', 'childFlow')"
+          @dragstart="onDragStart($event, NodeType.CHILDFLOW)"
           class="node-container"
         >
           <el-button class="node" type="info" plain>
@@ -68,7 +71,7 @@ const input1 = ref('')
         </div>
         <div
           :draggable="true"
-          @dragstart="onDragStart($event, 'default', 'foreach')"
+          @dragstart="onDragStart($event, NodeType.FOREACH)"
           class="node-container"
         >
           <el-button class="node" type="info" plain>

@@ -1,3 +1,26 @@
+<template>
+  <div class="dndflow" @drop="addNode">
+    <FlowSide />
+    <VueFlow
+      v-model:nodes="nodes"
+      @dragover="onDragOver"
+      @dragleave="onDragLeave"
+      @nodeClick="nodeClickHandler"
+      @edgeClick="edgeClick"
+      @node-drag-stop="nodeDragStop($event.nodes[0])"
+    >
+      <DropzoneBackground />
+      <MiniMap pannable />
+      <Controls position="top-right" />
+
+      <template #[`node-${node.type}`] v-for="node in nodes" :key="node.id">
+        <component :is="getCustomNodeComponent(node.type)" />
+      </template>
+    </VueFlow>
+  </div>
+  <FlowDrawer />
+</template>
+
 <script setup>
 import { ref, reactive } from 'vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
@@ -5,125 +28,38 @@ import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
 import DropzoneBackground from '../components/DropzoneBackground.vue'
 import FlowSide from '../components/FlowSide.vue'
+import FlowDrawer from '../components/FlowDrawer.vue'
+import Database from '@/components/nodes/Database.vue'
+import WebService from '@/components/nodes/WebService.vue'
+import ConditionalBranch from '@/components/nodes/ConditionalBranch.vue'
+import ForEach from '@/components/nodes/ForEach.vue'
 import useDragAndDrop from '../hooks/useDnD'
+import { nodeClickHandler } from '../hooks/useDrawer'
+import { NodeType } from '../enums/NodeType'
 import { edgeUpdate, edgeClick } from '../hooks/useEdge'
-import {
-  nodeClickHandler,
-  findClickedNode,
-  drawer,
-  clickNode,
-  isSave,
-  saveComplete,
-  saveAttribute,
-  saveAttributeComplete,
-  handleClose,
-} from '../hooks/useDrawer'
 
-const { onConnect, addEdges, setViewport } = useVueFlow()
-
-const { onDragOver, onDrop, onDragLeave, isDragOver, nodeList } =
-  useDragAndDrop()
-const flow = ref(null)
-// const nodes = ref([
-//   { id: '1', type: 'input', label: 'node', position: { x: 250, y: 0 } },
-//   {
-//     id: '2',
-//     label: 'parent node22222222222',
-//     position: { x: 100, y: 100 },
-//     style: {
-//       backgroundColor: 'rgba(16, 185, 129, 0.5)',
-//       width: '200px',
-//       height: '200px',
-//     },
-//   },
-//   {
-//     id: '2a',
-//     label: 'child node',
-//     position: { x: 10, y: 50 },
-//     parentNode: '2',
-//   },
-//   {
-//     id: '4',
-//     label: 'parent node111111111',
-//     position: { x: 320, y: 175 },
-//     style: {
-//       backgroundColor: 'rgba(16, 185, 129, 0.5)',
-//       width: '400px',
-//       height: '300px',
-//     },
-//   },
-//   {
-//     id: '4a',
-//     label: 'child nodemrtgrfeda',
-//     position: { x: 15, y: 65 },
-//     extent: 'parent',
-//     parentNode: '4',
-//   },
-//   {
-//     id: '4b',
-//     label: 'nested parent node',
-//     position: { x: 15, y: 120 },
-//     style: {
-//       backgroundColor: 'rgba(139, 92, 246, 0.5)',
-//       height: '150px',
-//       width: '270px',
-//     },
-//     parentNode: '4',
-//   },
-//   {
-//     id: '4b1',
-//     label: 'nested child node',
-//     position: { x: 20, y: 40 },
-//     parentNode: '4b',
-//   },
-//   {
-//     id: '4b2',
-//     label: 'nested child node',
-//     position: { x: 100, y: 100 },
-//     parentNode: '4b',
-//   },
-//   {
-//     id: '4c',
-//     label: 'child node',
-//     position: { x: 200, y: 65 },
-//     parentNode: '4',
-//   },
-//   {
-//     id: '999',
-//     type: 'input',
-//     label: 'Drag me to extend area!',
-//     position: { x: 20, y: 100 },
-//     class: 'light',
-// expandParent: true,
-//     parentNode: '2',
-//   },
-// ])
-
-// const edges = ref([
-//   { id: 'e1-2', source: '1', target: '2' },
-//   { id: 'e1-4', source: '1', target: '4' },
-//   { id: 'e1-4c', source: '1', target: '4c' },
-//   { id: 'e2a-4a', source: '2a', target: '4a' },
-//   { id: 'e4a-4b1', source: '4a', target: '4b1' },
-//   { id: 'e4a-4b2', source: '4a', target: '4b2' },
-//   { id: 'e4b1-4b2', source: '4b1', target: '4b2' },
-// ])
-const nodes = ref([])
-const edges = ref([])
+const { onConnect, addEdges } = useVueFlow()
+const { onDragOver, onDrop, onDragLeave, nodes } = useDragAndDrop()
 const parentNodePosition = reactive([])
-Object.assign(nodes, nodeList)
-onConnect(addEdges)
-function test() {
-  //获得当前画布上所有的节点和线，到时候把这个传递给后端
-  console.log('此时画布上所有的边：')
-  console.log(flow.value.getEdges)
-  console.log('此时画布上所有的点：')
-  console.log(flow.value.getNodes)
+
+function getCustomNodeComponent(type) {
+  switch (type) {
+    case NodeType.DATABASE:
+      return Database
+    case NodeType.WEBSERVICE:
+      return WebService
+    case NodeType.CONDITIONALBRANCH:
+      return ConditionalBranch
+    case NodeType.FOREACH:
+      return ForEach
+    default:
+      return null
+  }
 }
 function addNode(e) {
-  let nodeList = flow.value.getNodes
-  for (let item of nodeList) {
-    if (item.nodeType == 'childFlow' || item.nodeType == 'foreach') {
+  console.log(nodes.value)
+  for (let item of nodes.value) {
+    if (item.type == NodeType.CHILDFLOW || item.type == NodeType.FOREACH) {
       let pos = {
         xMin: item.position.x,
         xMax: item.position.x + item.dimensions.width,
@@ -135,9 +71,11 @@ function addNode(e) {
     }
   }
   onDrop(e)
-  nodeDragStop(flow.value.getNodes[flow.value.getNodes.length - 1])
+  nodeDragStop(nodes.value[nodes.value.length - 1])
 }
 function nodeDragStop(node) {
+  console.log(parentNodePosition)
+  console.log('nodeDragStop')
   let { x, y } = node.position
   for (let item of parentNodePosition) {
     if (x >= item.xMin && x <= item.xMax && y >= item.yMin && y <= item.yMax) {
@@ -145,41 +83,9 @@ function nodeDragStop(node) {
     }
   }
 }
+onConnect(addEdges)
 </script>
 
-<template>
-  <div class="dndflow" @drop="addNode">
-    <FlowSide @click="test" @addNode="addNode" />
-    <VueFlow
-      ref="flow"
-      :nodes="nodes"
-      :edges="edges"
-      @dragover="onDragOver"
-      @dragleave="onDragLeave"
-      @nodeClick="nodeClickHandler"
-      @edgeClick="edgeClick"
-      @edgesChange="edgeUpdate"
-      @node-drag-stop="nodeDragStop($event.nodes[0])"
-    >
-      <DropzoneBackground
-        :style="{
-          backgroundColor: isDragOver ? '#e7f3ff' : 'transparent',
-          transition: 'background-color 0.2s ease',
-        }"
-      />
-      <MiniMap pannable />
-      <Controls position="top-right"> </Controls>
-    </VueFlow>
-  </div>
-  <el-drawer
-    v-model="drawer"
-    title="组件属性配置"
-    direction="rtl"
-    :before-close="handleClose"
-    class="my-drawer"
-  >
-  </el-drawer>
-</template>
 <style scoped>
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.33.4/dist/style.css';
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.33.4/dist/theme-default.css';
@@ -248,17 +154,5 @@ function nodeDragStop(node) {
     flex-direction: row;
     gap: 5px;
   }
-}
-</style>
-<style>
-.my-drawer {
-  line-height: 50px;
-}
-.el-drawer__body {
-  border-top: black solid 1px;
-}
-.el-drawer__title {
-  font-weight: bold;
-  font-size: 25px;
 }
 </style>

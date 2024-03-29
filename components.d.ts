@@ -9,6 +9,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     BaseHeader: typeof import('./src/components/BaseHeader.vue')['default']
     BaseSide: typeof import('./src/components/BaseSide.vue')['default']
+    ConditionalBranch: typeof import('./src/components/nodes/ConditionalBranch.vue')['default']
+    ConditionalBranchDrawer: typeof import('./src/components/nodes/drawer/ConditionalBranchDrawer.vue')['default']
     Database: typeof import('./src/components/nodes/Database.vue')['default']
     DatabaseDrawer: typeof import('./src/components/nodes/drawer/DatabaseDrawer.vue')['default']
     DropzoneBackground: typeof import('./src/components/DropzoneBackground.vue')['default']
@@ -26,8 +28,11 @@ declare module 'vue' {
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     FlowDrawer: typeof import('./src/components/FlowDrawer.vue')['default']
     FlowSide: typeof import('./src/components/FlowSide.vue')['default']
+    ForEach: typeof import('./src/components/nodes/ForEach.vue')['default']
+    ForEachDrawer: typeof import('./src/components/nodes/drawer/ForEachDrawer.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Soap: typeof import('./src/components/nodes/Soap.vue')['default']
     WebService: typeof import('./src/components/nodes/WebService.vue')['default']
     WebServiceDrawer: typeof import('./src/components/nodes/drawer/WebServiceDrawer.vue')['default']
   }

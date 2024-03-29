@@ -8,13 +8,14 @@ const saveComplete = ref(false)
 const { nodes } = useDragAndDrop()
 
 function nodeClickHandler(e) {
+  console.log("点击了一个节点")
   drawer.value = true
   clickNode.value.id = e.node.id
   clickNode.value.type = e.node.type
 }
 
 function findClickedNode() {
-  const clickedNode = nodes.value.find((node) => node.id === clickNode.value.id)
+  const clickedNode = nodes.value.find(node => node.id === clickNode.value.id)
   return clickedNode
 }
 
@@ -47,5 +48,5 @@ export {
   saveComplete,
   saveAttribute,
   saveAttributeComplete,
-  handleClose,
+  handleClose
 }
