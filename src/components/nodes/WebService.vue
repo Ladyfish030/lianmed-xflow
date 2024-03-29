@@ -5,7 +5,7 @@
     <el-icon size="20px">
       <Coin />
     </el-icon>
-    <span class="database-text">WebService</span>
+    <span class="span-text">WebService</span>
   </div>
 </template>
 
@@ -31,7 +31,7 @@ import { Handle, Position } from '@vue-flow/core'
   background-color: white;
 }
 
-.database-text {
+.span-text {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;

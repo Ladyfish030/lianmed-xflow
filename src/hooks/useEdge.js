@@ -1,10 +1,11 @@
 import { ref, reactive } from 'vue'
+import { NodeType } from '../enums/NodeType'
 
 function edgeUpdate(e) {
   if (
     e[0] &&
     e[0].item &&
-    e[0].item.sourceNode.nodeType == 'conditionalBranch'
+    e[0].item.sourceNode.type == NodeType.CONDITIONALBRANCH
   ) {
     e[0].item.label = 'Y'
     e[0].item.labelBgPadding = [8, 4]

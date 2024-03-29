@@ -1,12 +1,27 @@
 import { useVueFlow } from '@vue-flow/core'
-import { reactive, ref, watch } from 'vue'
+import { ref, watch, reactive } from 'vue'
+import { NodeType } from '../enums/NodeType'
+import * as NodeAttribute from '../components/nodes/attribute/NodeAttribute'
 let id = 0
 
 /**
  * @returns {string} - A unique id.
  */
 function getId() {
-  return id++
+  return `dndnode_${id++}`
+}
+
+function getNewNode(newNodeType) {
+  switch (newNodeType) {
+    case NodeType.DATABASE:
+      return NodeAttribute.Database
+    case NodeType.WEBSERVICE:
+      return NodeAttribute.WebService
+    case NodeType.CONDITIONALBRANCH:
+      return NodeAttribute.ConditionalBranch
+    default: 
+      return null
+  }
 }
 
 /**
@@ -20,26 +35,21 @@ const state = {
   draggedType: ref(null),
   isDragOver: ref(false),
   isDragging: ref(false),
-  nodeType: ref(''), //记忆当前节点类型
-  nodeLabel: ref(''),
+  newNodeType: ref(''),
+  nodes: ref([]),
 }
 
 export default function useDragAndDrop() {
-  const nodeList = reactive([])
-  let typeList = {
-    database: ['组件名', '数据库连接类型', '数据库连接方式', '搜索语句'],
-  }
-  const { draggedType, isDragOver, isDragging, nodeType } = state
+  const { draggedType, isDragOver, isDragging, newNodeType, nodes} = state
 
-  const { addNodes, screenToFlowCoordinate, onNodesInitialized, updateNode } =
+  const { screenToFlowCoordinate, onNodesInitialized, updateNode } =
     useVueFlow()
 
   watch(isDragging, (dragging) => {
     document.body.style.userSelect = dragging ? 'none' : ''
   })
 
-  function onDragStart(event, type, newNodeType) {
-    nodeType.value = newNodeType
+  function onDragStart(event, type) {
     if (event.dataTransfer) {
       event.dataTransfer.setData('application/vueflow', type)
       event.dataTransfer.effectAllowed = 'move'
@@ -47,6 +57,7 @@ export default function useDragAndDrop() {
 
     draggedType.value = type
     isDragging.value = true
+    newNodeType.value = type
 
     document.addEventListener('drop', onDragEnd)
   }
@@ -91,25 +102,11 @@ export default function useDragAndDrop() {
     })
 
     const nodeId = getId()
-    const newNode = reactive({
-      id: nodeId,
-      type: draggedType.value,
-      position,
-      label: `[${nodeId}]`,
-      property: {},
-      nodeType: nodeType.value,
-      expandParent: true,
-    })
-    if (nodeType.value == 'childFlow' || nodeType.value == 'foreach') {
-      newNode.style = {
-        backgroundColor: 'rgba(16, 185, 129, 0.5)',
-        width: '200px',
-        height: '200px',
-      }
-    }
-    for (let i in typeList[nodeType.value]) {
-      let key = typeList[nodeType.value][i]
-      newNode.property[key] = ''
+    var newNode = getNewNode(newNodeType.value)
+    newNode = {
+        id: nodeId,
+        type: newNodeType.value,
+        position: position,
     }
     const { off } = onNodesInitialized(() => {
       updateNode(nodeId, (node) => ({
@@ -122,18 +119,18 @@ export default function useDragAndDrop() {
       off()
     })
 
-    addNodes(newNode)
-    nodeList.push(newNode)
+    nodes.value.push(newNode)
+
   }
 
   return {
     draggedType,
     isDragOver,
     isDragging,
+    nodes,
     onDragStart,
     onDragLeave,
     onDragOver,
     onDrop,
-    nodeList,
   }
 }
