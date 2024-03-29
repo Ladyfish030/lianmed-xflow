@@ -94,7 +94,7 @@ const flow = ref(null)
 //     label: 'Drag me to extend area!',
 //     position: { x: 20, y: 100 },
 //     class: 'light',
-//     expandParent: true,
+// expandParent: true,
 //     parentNode: '2',
 //   },
 // ])
