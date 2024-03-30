@@ -19,7 +19,7 @@ function getNewNode(newNodeType) {
       return NodeAttribute.WebService
     case NodeType.CONDITIONALBRANCH:
       return NodeAttribute.ConditionalBranch
-    default: 
+    default:
       return null
   }
 }
@@ -40,7 +40,7 @@ const state = {
 }
 
 export default function useDragAndDrop() {
-  const { draggedType, isDragOver, isDragging, newNodeType, nodes} = state
+  const { draggedType, isDragOver, isDragging, newNodeType, nodes } = state
 
   const { screenToFlowCoordinate, onNodesInitialized, updateNode } =
     useVueFlow()
@@ -96,6 +96,7 @@ export default function useDragAndDrop() {
    * @param {DragEvent} event
    */
   function onDrop(event) {
+    // console.log('onDrop')
     const position = screenToFlowCoordinate({
       x: event.clientX,
       y: event.clientY,
@@ -104,9 +105,10 @@ export default function useDragAndDrop() {
     const nodeId = getId()
     var newNode = getNewNode(newNodeType.value)
     newNode = {
-        id: nodeId,
-        type: newNodeType.value,
-        position: position,
+      id: nodeId,
+      type: newNodeType.value,
+      position: position,
+      expandParent: true,
     }
     const { off } = onNodesInitialized(() => {
       updateNode(nodeId, (node) => ({
@@ -120,7 +122,6 @@ export default function useDragAndDrop() {
     })
 
     nodes.value.push(newNode)
-
   }
 
   return {

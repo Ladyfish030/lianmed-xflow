@@ -32,7 +32,6 @@ declare module 'vue' {
     ForEachDrawer: typeof import('./src/components/nodes/drawer/ForEachDrawer.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Soap: typeof import('./src/components/nodes/Soap.vue')['default']
     WebService: typeof import('./src/components/nodes/WebService.vue')['default']
     WebServiceDrawer: typeof import('./src/components/nodes/drawer/WebServiceDrawer.vue')['default']
   }

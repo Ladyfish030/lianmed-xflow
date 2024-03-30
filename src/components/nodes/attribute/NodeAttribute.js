@@ -6,15 +6,14 @@ const Database = {
     name: '',
     type: '',
     url: '',
-    sqlCommand: ''
+    sqlCommand: '',
   },
   position: {
     x: 0,
-    y: 0
+    y: 0,
   },
   parentNode: '',
-  expandParent:true
-};
+}
 
 // 定义 WebService 数据结构
 const WebService = {
@@ -22,15 +21,14 @@ const WebService = {
   type: '',
   data: {
     path: '',
-    method: ''
+    method: '',
   },
   position: {
     x: 0,
-    y: 0
+    y: 0,
   },
   parentNode: '',
-  expandParent:true
-};
+}
 
 // 定义 条件分支 数据结构
 const ConditionalBranch = {
@@ -39,10 +37,9 @@ const ConditionalBranch = {
   condition: '',
   position: {
     x: 0,
-    y: 0
+    y: 0,
   },
   parentNode: '',
-  expandParent:true
-};
+}
 
-export { Database, WebService, ConditionalBranch };
+export { Database, WebService, ConditionalBranch }

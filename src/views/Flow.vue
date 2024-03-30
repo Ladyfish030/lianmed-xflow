@@ -7,14 +7,19 @@
       @dragleave="onDragLeave"
       @nodeClick="nodeClickHandler"
       @edgeClick="edgeClick"
-      @node-drag-stop="nodeDragStop($event.nodes[0])"
+      @nodeDragStop="nodeDragStop($event.nodes[0])"
     >
       <DropzoneBackground />
       <MiniMap pannable />
       <Controls position="top-right" />
 
       <template #[`node-${node.type}`] v-for="node in nodes" :key="node.id">
-        <component :is="getCustomNodeComponent(node.type)" />
+        <component
+          :is="getCustomNodeComponent(node.type)"
+          @deleteNode="deleteNode"
+          :adding="adding"
+          :nodeId="node.id"
+        />
       </template>
     </VueFlow>
   </div>
@@ -40,8 +45,21 @@ import { edgeUpdate, edgeClick } from '../hooks/useEdge'
 
 const { onConnect, addEdges } = useVueFlow()
 const { onDragOver, onDrop, onDragLeave, nodes } = useDragAndDrop()
-const parentNodePosition = reactive([])
-
+let parentNodePosition = []
+let nodesLen = nodes.value.length //用来记录之前node的个数，以此判断销毁组件的时候是重新渲染还是删除事件
+function deleteNode(e) {
+  if (nodes.value.length < nodesLen) {
+    // console.log('进来删除节点了', e)
+    // console.log(parentNodePosition)
+    for (let i = 0, len = parentNodePosition; i < len; i++) {
+      if (parentNodePosition[i].id == e) {
+        parentNodePosition.remove(i)
+        break
+      }
+    }
+    nodesLen = nodes.value.length
+  }
+}
 function getCustomNodeComponent(type) {
   switch (type) {
     case NodeType.DATABASE:
@@ -57,7 +75,8 @@ function getCustomNodeComponent(type) {
   }
 }
 function addNode(e) {
-  console.log(nodes.value)
+  // console.log('addNode')
+  parentNodePosition = []
   for (let item of nodes.value) {
     if (item.type == NodeType.CHILDFLOW || item.type == NodeType.FOREACH) {
       let pos = {
@@ -70,16 +89,55 @@ function addNode(e) {
       parentNodePosition.push(pos)
     }
   }
+
   onDrop(e)
   nodeDragStop(nodes.value[nodes.value.length - 1])
+  nodesLen = nodes.value.length
 }
+// function addNode(e) {
+//   let len = nodes.value.length
+//   if (len > 0) {
+//     let item = nodes.value[len - 1]
+//     if (item.type == NodeType.CHILDFLOW || item.type == NodeType.FOREACH) {
+//       let pos = {
+//         xMin: item.position.x,
+//         xMax: item.position.x + item.dimensions.width,
+//         yMin: item.position.y,
+//         yMax: item.position.y + item.dimensions.height,
+//         id: item.id,
+//       }
+//       parentNodePosition.push(pos)
+//     }
+//     onDrop(e)
+//     nodeDragStop(item)
+//   } else {
+//     onDrop(e)
+//   }
+// }
 function nodeDragStop(node) {
-  console.log(parentNodePosition)
-  console.log('nodeDragStop')
+  // console.log('nodeDragStop')
   let { x, y } = node.position
   for (let item of parentNodePosition) {
-    if (x >= item.xMin && x <= item.xMax && y >= item.yMin && y <= item.yMax) {
+    if (
+      !node.parentNode &&
+      x >= item.xMin &&
+      x <= item.xMax &&
+      y >= item.yMin &&
+      y <= item.yMax
+    ) {
+      node.position.x -= item.xMin
+      node.position.y -= item.yMin
       node.parentNode = item.id
+    }
+    if (
+      node.id == item.id &&
+      (node.type == NodeType.CHILDFLOW || node.type == NodeType.FOREACH)
+    ) {
+      item.xMin = node.position.x
+      item.xMax = node.position.x + node.dimensions.width
+      item.yMin = node.position.y
+      item.yMax = node.position.y + node.dimensions.height
+      break
     }
   }
 }
