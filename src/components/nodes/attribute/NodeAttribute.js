@@ -12,6 +12,10 @@ const Database = {
     x: 0,
     y: 0,
   },
+  dimensions: {
+    width: 70,
+    height: 70,
+  },
   parentNode: '',
 }
 
@@ -27,19 +31,59 @@ const WebService = {
     x: 0,
     y: 0,
   },
-  parentNode: '',
-}
-
-// 定义 条件分支 数据结构
-const ConditionalBranch = {
-  id: '',
-  type: '',
-  condition: '',
-  position: {
-    x: 0,
-    y: 0,
+  dimensions: {
+    width: 70,
+    height: 70,
   },
   parentNode: '',
 }
 
-export { Database, WebService, ConditionalBranch }
+// 定义 条件分支 数据结构
+const Choice = {
+  id: '',
+  type: '',
+  position: {
+    x: 0,
+    y: 0,
+  },
+  dimensions: {
+    width: 160,
+    height: 250,
+  },
+  parentNode: '',
+}
+
+// 定义 条件分支When 数据结构
+const ChoiceWhen = {
+  id: '',
+  type: '',
+  data: {
+    expression: ''
+  },
+  position: {
+    x: 0,
+    y: 0,
+  },
+  dimensions: {
+    width: 110,
+    height: 110,
+  },
+  parentNode: '',
+}
+
+// 定义 条件分支Default 数据结构
+const ChoiceDefault = {
+  id: '',
+  type: '',
+  position: {
+    x: 0,
+    y: 0,
+  },
+  dimensions: {
+    width: 110,
+    height: 110,
+  },
+  parentNode: '',
+}
+
+export { Database, WebService, Choice, ChoiceWhen, ChoiceDefault }

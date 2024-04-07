@@ -8,7 +8,7 @@ const saveComplete = ref(false)
 const { nodes } = useDragAndDrop()
 
 function nodeClickHandler(e) {
-  console.log("点击了一个节点")
+  console.log("点击节点")
   drawer.value = true
   clickNode.value.id = e.node.id
   clickNode.value.type = e.node.type
@@ -23,6 +23,8 @@ const handleClose = (done) => {
   ElMessageBox.confirm('确定关闭配置栏？请注意保存配置信息')
     .then(() => {
       drawer.value = false
+      clickNode.value.id = ''
+      clickNode.value.type = ''
       done()
     })
     .catch(() => {

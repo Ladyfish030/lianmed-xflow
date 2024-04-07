@@ -1,7 +1,9 @@
 export enum NodeType {
     DATABASE = 'database',
     WEBSERVICE = 'webService',
-    CONDITIONALBRANCH = 'conditionalBranch',
+    CHOICE = 'choice',
+    CHOICEWHEN = 'choiceWhen',
+    CHOICEDEFAULT = 'choiceDefault',
     CHILDFLOW = 'childFlow',
     FOREACH = 'forEach'
 }

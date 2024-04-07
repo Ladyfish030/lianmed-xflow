@@ -1,7 +1,7 @@
 <template>
   <div class="component-container">
-    <Handle :position="Position.Top" />
-    <Handle :position="Position.Bottom" />
+    <Handle type="target" :position="Position.Top" />
+    <Handle type="source" :position="Position.Bottom" />
     <h4 class="span-text">For-Each</h4>
   </div>
 </template>

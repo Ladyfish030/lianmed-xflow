@@ -10,16 +10,4 @@ import { Background } from '@vue-flow/background'
   </div>
 </template>
 <style>
-.vue-flow__node-default,
-.vue-flow__node-input,
-.vue-flow__node-output {
-  width: 150px;
-  line-height: 15px;
-  padding: 15px;
-  background-color: whitesmoke;
-  border-radius: 8px;
-  cursor: grab;
-  -webkit-box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.25);
-  box-shadow: 5px 5px 10px 2px #00000040;
-}
 </style>

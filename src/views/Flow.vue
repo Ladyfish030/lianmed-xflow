@@ -1,13 +1,17 @@
 <template>
-  <div class="dndflow" @drop="addNode">
+  <div class="dndflow" @drop="onDrop">
     <FlowSide />
     <VueFlow
       v-model:nodes="nodes"
+      v-model:edges="edges"
       @dragover="onDragOver"
       @dragleave="onDragLeave"
-      @nodeClick="nodeClickHandler"
-      @edgeClick="edgeClick"
-      @nodeDragStop="nodeDragStop($event.nodes[0])"
+      @connect="addEdge"
+      @node-double-click="nodeClickHandler"
+      @edge-click="edgeClick"
+      @node-drag-stop="nodeDragStop"
+      @node-context-menu="nodeContextMenu"
+      :zoomOnDoubleClick="false"
     >
       <DropzoneBackground />
       <MiniMap pannable />
@@ -16,9 +20,7 @@
       <template #[`node-${node.type}`] v-for="node in nodes" :key="node.id">
         <component
           :is="getCustomNodeComponent(node.type)"
-          @deleteNode="deleteNode"
-          :adding="adding"
-          :nodeId="node.id"
+          :node="node"
         />
       </template>
     </VueFlow>
@@ -34,70 +36,59 @@ import { MiniMap } from '@vue-flow/minimap'
 import DropzoneBackground from '../components/DropzoneBackground.vue'
 import FlowSide from '../components/FlowSide.vue'
 import FlowDrawer from '../components/FlowDrawer.vue'
+
 import Database from '@/components/nodes/Database.vue'
 import WebService from '@/components/nodes/WebService.vue'
-import ConditionalBranch from '@/components/nodes/ConditionalBranch.vue'
+import Choice from '@/components/nodes/Choice.vue'
+import ChoiceWhen from '@/components/nodes/ChoiceWhen.vue'
+import ChoiceDefault from '@/components/nodes/ChoiceDefault.vue'
 import ForEach from '@/components/nodes/ForEach.vue'
+
+import { NodeType } from '../enums/NodeType'
 import useDragAndDrop from '../hooks/useDnD'
 import { nodeClickHandler } from '../hooks/useDrawer'
-import { NodeType } from '../enums/NodeType'
-import { edgeUpdate, edgeClick } from '../hooks/useEdge'
+import { edgeClick, addEdge, edges } from '../hooks/useEdge'
+import { nodeContextMenu } from '../hooks/useNode'
 
-const { onConnect, addEdges } = useVueFlow()
-const { onDragOver, onDrop, onDragLeave, nodes } = useDragAndDrop()
-let parentNodePosition = []
-let nodesLen = nodes.value.length //用来记录之前node的个数，以此判断销毁组件的时候是重新渲染还是删除事件
-function deleteNode(e) {
-  if (nodes.value.length < nodesLen) {
-    // console.log('进来删除节点了', e)
-    // console.log(parentNodePosition)
-    for (let i = 0, len = parentNodePosition; i < len; i++) {
-      if (parentNodePosition[i].id == e) {
-        parentNodePosition.remove(i)
-        break
-      }
-    }
-    nodesLen = nodes.value.length
-  }
-}
+const { onDragOver, onDrop, onDragLeave, nodes, nodeDragStop } = useDragAndDrop()
+// let parentNodePosition = []
+// let nodesLen = nodes.value.length //用来记录之前node的个数，以此判断销毁组件的时候是重新渲染还是删除事件
+
+// function deleteNode(e) {
+//   console.log("删除了一个节点")
+//   if (nodes.value.length < nodesLen) {
+//     for (let i = 0, len = parentNodePosition; i < len; i++) {
+//       if (parentNodePosition[i].id == e) {
+//         parentNodePosition.remove(i)
+//         break
+//       }
+//     }
+//     nodesLen = nodes.value.length
+//   }
+// }
+
 function getCustomNodeComponent(type) {
   switch (type) {
     case NodeType.DATABASE:
       return Database
     case NodeType.WEBSERVICE:
       return WebService
-    case NodeType.CONDITIONALBRANCH:
-      return ConditionalBranch
+    case NodeType.CHOICE:
+      return Choice
+    case NodeType.CHOICEWHEN:
+      return ChoiceWhen
+    case NodeType.CHOICEDEFAULT:
+      return ChoiceDefault
     case NodeType.FOREACH:
       return ForEach
     default:
       return null
   }
 }
-function addNode(e) {
-  // console.log('addNode')
-  parentNodePosition = []
-  for (let item of nodes.value) {
-    if (item.type == NodeType.CHILDFLOW || item.type == NodeType.FOREACH) {
-      let pos = {
-        xMin: item.position.x,
-        xMax: item.position.x + item.dimensions.width,
-        yMin: item.position.y,
-        yMax: item.position.y + item.dimensions.height,
-        id: item.id,
-      }
-      parentNodePosition.push(pos)
-    }
-  }
 
-  onDrop(e)
-  nodeDragStop(nodes.value[nodes.value.length - 1])
-  nodesLen = nodes.value.length
-}
 // function addNode(e) {
-//   let len = nodes.value.length
-//   if (len > 0) {
-//     let item = nodes.value[len - 1]
+//   parentNodePosition = []
+//   for (let item of nodes.value) {
 //     if (item.type == NodeType.CHILDFLOW || item.type == NodeType.FOREACH) {
 //       let pos = {
 //         xMin: item.position.x,
@@ -108,40 +99,11 @@ function addNode(e) {
 //       }
 //       parentNodePosition.push(pos)
 //     }
-//     onDrop(e)
-//     nodeDragStop(item)
-//   } else {
-//     onDrop(e)
 //   }
+//   onDrop(e)
+//   nodeDragStop(nodes.value[nodes.value.length - 1])
+//   nodesLen = nodes.value.length
 // }
-function nodeDragStop(node) {
-  // console.log('nodeDragStop')
-  let { x, y } = node.position
-  for (let item of parentNodePosition) {
-    if (
-      !node.parentNode &&
-      x >= item.xMin &&
-      x <= item.xMax &&
-      y >= item.yMin &&
-      y <= item.yMax
-    ) {
-      node.position.x -= item.xMin
-      node.position.y -= item.yMin
-      node.parentNode = item.id
-    }
-    if (
-      node.id == item.id &&
-      (node.type == NodeType.CHILDFLOW || node.type == NodeType.FOREACH)
-    ) {
-      item.xMin = node.position.x
-      item.xMax = node.position.x + node.dimensions.width
-      item.yMin = node.position.y
-      item.yMax = node.position.y + node.dimensions.height
-      break
-    }
-  }
-}
-onConnect(addEdges)
 </script>
 
 <style scoped>
@@ -173,7 +135,6 @@ onConnect(addEdges)
   display: -ms-flexbox;
   display: flex;
   margin: 0;
-  text-transform: uppercase;
   font-family: 'Microsoft YaHei';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

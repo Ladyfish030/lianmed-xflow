@@ -34,7 +34,7 @@ const input1 = ref('')
           class="node-container"
         >
           <el-button class="node" type="info" plain>
-            <el-icon><Grid /></el-icon>database
+            <el-icon><Grid /></el-icon>Database
           </el-button>
         </div>
         <div
@@ -43,7 +43,7 @@ const input1 = ref('')
           class="node-container"
         >
           <el-button class="node" type="info" plain>
-            <el-icon><Grid /></el-icon>webService
+            <el-icon><Grid /></el-icon>WebService
           </el-button>
         </div>
       </el-sub-menu>
@@ -53,11 +53,11 @@ const input1 = ref('')
         </template>
         <div
           :draggable="true"
-          @dragstart="onDragStart($event, NodeType.CONDITIONALBRANCH)"
+          @dragstart="onDragStart($event, NodeType.CHOICE)"
           class="node-container"
         >
           <el-button class="node" type="info" plain>
-            <el-icon><Grid /></el-icon>条件分支
+            <el-icon><Grid /></el-icon>Choice
           </el-button>
         </div>
         <div
@@ -66,7 +66,7 @@ const input1 = ref('')
           class="node-container"
         >
           <el-button class="node" type="info" plain>
-            <el-icon><Grid /></el-icon>子流程flow
+            <el-icon><Grid /></el-icon>Sub Flow
           </el-button>
         </div>
         <div
@@ -75,7 +75,7 @@ const input1 = ref('')
           class="node-container"
         >
           <el-button class="node" type="info" plain>
-            <el-icon><Grid /></el-icon>for-each
+            <el-icon><Grid /></el-icon>For Each
           </el-button>
         </div>
       </el-sub-menu>

@@ -1,12 +1,10 @@
+import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
-import { ref, watch, reactive } from 'vue'
 import { NodeType } from '../enums/NodeType'
 import * as NodeAttribute from '../components/nodes/attribute/NodeAttribute'
+
 let id = 0
 
-/**
- * @returns {string} - A unique id.
- */
 function getId() {
   return `dndnode_${id++}`
 }
@@ -17,13 +15,16 @@ function getNewNode(newNodeType) {
       return NodeAttribute.Database
     case NodeType.WEBSERVICE:
       return NodeAttribute.WebService
-    case NodeType.CONDITIONALBRANCH:
-      return NodeAttribute.ConditionalBranch
+    case NodeType.CHOICE:
+      return NodeAttribute.Choice
+    case NodeType.CHOICEWHEN:
+      return NodeAttribute.ChoiceWhen
+    case NodeType.CHOICEDEFAULT:
+      return NodeAttribute.ChoiceDefault
     default:
       return null
   }
 }
-
 /**
  * In a real world scenario you'd want to avoid creating refs in a global scope like this as they might not be cleaned up properly.
  * @type {{draggedType: Ref<string|null>, isDragOver: Ref<boolean>, isDragging: Ref<boolean>}}
@@ -36,14 +37,12 @@ const state = {
   isDragOver: ref(false),
   isDragging: ref(false),
   newNodeType: ref(''),
-  nodes: ref([]),
+  nodes: ref([])
 }
 
 export default function useDragAndDrop() {
   const { draggedType, isDragOver, isDragging, newNodeType, nodes } = state
-
-  const { screenToFlowCoordinate, onNodesInitialized, updateNode } =
-    useVueFlow()
+  const { screenToFlowCoordinate, onNodesInitialized, updateNode } = useVueFlow()
 
   watch(isDragging, (dragging) => {
     document.body.style.userSelect = dragging ? 'none' : ''
@@ -96,7 +95,6 @@ export default function useDragAndDrop() {
    * @param {DragEvent} event
    */
   function onDrop(event) {
-    // console.log('onDrop')
     const position = screenToFlowCoordinate({
       x: event.clientX,
       y: event.clientY,
@@ -107,21 +105,59 @@ export default function useDragAndDrop() {
     newNode = {
       id: nodeId,
       type: newNodeType.value,
-      position: position,
-      expandParent: true,
+      position: {
+        x: position.x - newNode.dimensions.width / 2,
+        y: position.y - newNode.dimensions.height / 2
+      },
+      dimensions: newNode.dimensions
     }
-    const { off } = onNodesInitialized(() => {
-      updateNode(nodeId, (node) => ({
-        position: {
-          x: node.position.x - node.dimensions.width / 2,
-          y: node.position.y - node.dimensions.height / 2,
-        },
-      }))
-
-      off()
-    })
 
     nodes.value.push(newNode)
+
+    if (newNode.type == NodeType.CHOICE) {
+      initChoice(newNode)
+    }
+  }
+
+  function initChoice(node) {
+    var whenNode = getNewNode(NodeType.CHOICEWHEN)
+    whenNode = {
+      id: getId(),
+      type: NodeType.CHOICEWHEN,
+      position: {
+        x: node.dimensions.width - whenNode.dimensions.width - 10,
+        y: 10
+      },
+      dimensions: whenNode.dimensions,
+      parentNode: node.id,
+      expandParent: true,
+      draggable: false
+    }
+    nodes.value.push(whenNode)
+
+    var defaultNode = getNewNode(NodeType.CHOICEDEFAULT)
+    defaultNode = {
+      id: getId(),
+      type: NodeType.CHOICEDEFAULT,
+      position: {
+        x: node.dimensions.width - defaultNode.dimensions.width - 10,
+        y: node.dimensions.height - defaultNode.dimensions.height - 10
+      },
+      dimensions: defaultNode.dimensions,
+      parentNode: node.id,
+      expandParent: true,
+      draggable: false
+    }
+    nodes.value.push(defaultNode)
+
+  }
+
+  function nodeDragStop(e) {
+    const dragNode = e.event == undefined ? e : e.nodes[0]
+    console.log('dragNode:', dragNode)
+  }
+
+  function adjustingNode(position, nodeType) {
   }
 
   return {
@@ -133,5 +169,6 @@ export default function useDragAndDrop() {
     onDragLeave,
     onDragOver,
     onDrop,
+    nodeDragStop
   }
 }
