@@ -9,20 +9,24 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { isSave, saveAttributeComplete, findClickedNode } from '../../../hooks/useDrawer'
+import { useVueFlow } from '@vue-flow/core'
+import { isSave, saveAttributeComplete, clickNode } from '../../../hooks/useDrawer'
 
-const clickedNode = findClickedNode()
-const expression = ref(clickedNode?.data.expression || '')
+const expression = ref(clickNode?.value.data.expression || '')
+
+const { updateNode } = useVueFlow()
 
 watch(isSave, (newValue, oldValue) => {
-    if (oldValue === false && newValue === true) {
-        const clickedNode = findClickedNode()
-
-        if (clickedNode) {
-            clickedNode.data.expression = expression.value
+  if (oldValue === false && newValue === true) {
+    updateNode(clickNode.value.id,
+      {
+        data:
+        {
+          expression: expression.value,
         }
-        saveAttributeComplete()
-    }
+      })
+    saveAttributeComplete()
+  }
 })
 </script>
 

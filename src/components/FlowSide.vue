@@ -151,9 +151,9 @@ const input1 = ref('')
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  margin-bottom: 5px;
 }
 .node {
-  margin-bottom: 5px;
   width: 80%;
   -webkit-box-pack: left;
   -ms-flex-pack: left;

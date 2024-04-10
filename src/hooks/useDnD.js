@@ -21,6 +21,8 @@ function getNewNode(newNodeType) {
       return NodeAttribute.ChoiceWhen
     case NodeType.CHOICEDEFAULT:
       return NodeAttribute.ChoiceDefault
+    case NodeType.FOREACH:
+      return NodeAttribute.ForEach
     default:
       return null
   }
@@ -30,19 +32,16 @@ function getNewNode(newNodeType) {
  * @type {{draggedType: Ref<string|null>, isDragOver: Ref<boolean>, isDragging: Ref<boolean>}}
  */
 const state = {
-  /**
-   * The type of the node being dragged.
-   */
+  draggedId: ref(null),
   draggedType: ref(null),
   isDragOver: ref(false),
   isDragging: ref(false),
   newNodeType: ref(''),
-  nodes: ref([])
 }
 
 export default function useDragAndDrop() {
-  const { draggedType, isDragOver, isDragging, newNodeType, nodes } = state
-  const { screenToFlowCoordinate, onNodesInitialized, updateNode } = useVueFlow()
+  const { draggedId, draggedType, isDragOver, isDragging, newNodeType } = state
+  const { screenToFlowCoordinate, addNodes } = useVueFlow()
 
   watch(isDragging, (dragging) => {
     document.body.style.userSelect = dragging ? 'none' : ''
@@ -105,15 +104,18 @@ export default function useDragAndDrop() {
     newNode = {
       id: nodeId,
       type: newNodeType.value,
+      data: newNode.data,
       position: {
         x: position.x - newNode.dimensions.width / 2,
         y: position.y - newNode.dimensions.height / 2
       },
-      dimensions: newNode.dimensions
+      dimensions: newNode.dimensions,
+      style: {
+        width: `${newNode.dimensions.width}px`,
+        height: `${newNode.dimensions.height}px`
+      }
     }
-
-    nodes.value.push(newNode)
-
+    addNodes(newNode)
     if (newNode.type == NodeType.CHOICE) {
       initChoice(newNode)
     }
@@ -121,54 +123,70 @@ export default function useDragAndDrop() {
 
   function initChoice(node) {
     var whenNode = getNewNode(NodeType.CHOICEWHEN)
+    const whenNodeId = getId()
     whenNode = {
-      id: getId(),
+      id: whenNodeId,
       type: NodeType.CHOICEWHEN,
+      data: whenNode.data,
       position: {
         x: node.dimensions.width - whenNode.dimensions.width - 10,
         y: 10
       },
       dimensions: whenNode.dimensions,
+      style: {
+        width: `${whenNode.dimensions.width}px`,
+        height: `${whenNode.dimensions.height}px`
+      },
       parentNode: node.id,
       expandParent: true,
       draggable: false
     }
-    nodes.value.push(whenNode)
+    addNodes(whenNode)
 
     var defaultNode = getNewNode(NodeType.CHOICEDEFAULT)
+    const defaultNodeId = getId()
     defaultNode = {
-      id: getId(),
+      id: defaultNodeId,
       type: NodeType.CHOICEDEFAULT,
       position: {
         x: node.dimensions.width - defaultNode.dimensions.width - 10,
         y: node.dimensions.height - defaultNode.dimensions.height - 10
       },
       dimensions: defaultNode.dimensions,
+      style: {
+        width: `${defaultNode.dimensions.width}px`,
+        height: `${defaultNode.dimensions.height}px`
+      },
       parentNode: node.id,
       expandParent: true,
       draggable: false
     }
-    nodes.value.push(defaultNode)
+    addNodes(defaultNode)
 
   }
 
-  function nodeDragStop(e) {
+  function onNodeDragStart(e) {
     const dragNode = e.event == undefined ? e : e.nodes[0]
-    console.log('dragNode:', dragNode)
+    isDragging.value = true
+    draggedId.value = dragNode.id
   }
 
-  function adjustingNode(position, nodeType) {
+  function onNodeDragStop(e) {
+    const dragNode = e.event == undefined ? e : e.nodes[0]
+    isDragging.value = false
+    draggedId.value = null
   }
 
   return {
+    draggedId,
     draggedType,
     isDragOver,
     isDragging,
-    nodes,
     onDragStart,
     onDragLeave,
     onDragOver,
     onDrop,
-    nodeDragStop
+    onNodeDragStart,
+    onNodeDragStop,
   }
 }

@@ -1,30 +1,19 @@
-import { ref, reactive } from 'vue'
-import useDragAndDrop from '../hooks/useDnD'
+import { ref } from 'vue'
 
 const drawer = ref(false)
-const clickNode = ref({ id: '', type: '' })
+const clickNode = ref({})
 const isSave = ref(false)
 const saveComplete = ref(false)
-const { nodes } = useDragAndDrop()
 
-function nodeClickHandler(e) {
-  console.log("点击节点")
+function nodeClickHandler() {
   drawer.value = true
-  clickNode.value.id = e.node.id
-  clickNode.value.type = e.node.type
-}
-
-function findClickedNode() {
-  const clickedNode = nodes.value.find(node => node.id === clickNode.value.id)
-  return clickedNode
 }
 
 const handleClose = (done) => {
   ElMessageBox.confirm('确定关闭配置栏？请注意保存配置信息')
     .then(() => {
       drawer.value = false
-      clickNode.value.id = ''
-      clickNode.value.type = ''
+      clickNode.value = {}
       done()
     })
     .catch(() => {
@@ -43,7 +32,6 @@ function saveAttributeComplete() {
 
 export {
   nodeClickHandler,
-  findClickedNode,
   drawer,
   clickNode,
   isSave,

@@ -1,5 +1,5 @@
 <template>
-  <div class="component-container" :style="{ width: `${node.dimensions.width}px`, height: `${node.dimensions.height}px` }">
+  <div class="component-container" :style="{ opacity: isDragged ? '0.5' : '1' }">
     <Handle type="target" :position="Position.Left" />
     <Handle type="source" :position="Position.Right" />
     <ChoiceIcon />
@@ -9,11 +9,25 @@
 <script setup>
 import { Handle, Position } from '@vue-flow/core'
 import ChoiceIcon from '@/assets/svg/ChoiceIcon.vue'
-import { defineProps } from 'vue'
+import { ref, watch, getCurrentInstance } from 'vue'
+import useDragAndDrop from '@/hooks/useDnD'
 
-const props = defineProps({
-    node: Object
+const instance = getCurrentInstance()
+const nodeId = instance.attrs.id
+const isDragged = ref(false)
+const { isDragging, draggedId } = useDragAndDrop()
+
+watch(isDragging, (newValue, oldValue) => {
+  if (oldValue === false && newValue === true) {
+    if (draggedId.value === nodeId) {
+      isDragged.value = true
+    }
+  }
+  else {
+    isDragged.value = false
+  }
 })
+
 </script>
 
 <style scoped>
@@ -26,6 +40,7 @@ const props = defineProps({
   align-items: center;
   border: 1px solid #b1b3b8;
   border-radius: 5px;
-  background-color: #ecf5ff
+  background-color: #ecf5ff;
+  height: 100%;
 }
 </style>

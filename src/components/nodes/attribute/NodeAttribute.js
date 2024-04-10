@@ -42,6 +42,7 @@ const WebService = {
 const Choice = {
   id: '',
   type: '',
+  data: '',
   position: {
     x: 0,
     y: 0,
@@ -75,6 +76,7 @@ const ChoiceWhen = {
 const ChoiceDefault = {
   id: '',
   type: '',
+  data: '',
   position: {
     x: 0,
     y: 0,
@@ -86,4 +88,20 @@ const ChoiceDefault = {
   parentNode: '',
 }
 
-export { Database, WebService, Choice, ChoiceWhen, ChoiceDefault }
+// 定义 ForEach 数据结构
+const ForEach = {
+  id: '',
+  type: '',
+  data: '',
+  position: {
+    x: 0,
+    y: 0,
+  },
+  dimensions: {
+    width: 100,
+    height: 100,
+  },
+  parentNode: '',
+}
+
+export { Database, WebService, Choice, ChoiceWhen, ChoiceDefault, ForEach }

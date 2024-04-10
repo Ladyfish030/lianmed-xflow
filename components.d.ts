@@ -24,6 +24,7 @@ declare module 'vue' {
     DropzoneBackground: typeof import('./src/components/DropzoneBackground.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCard: typeof import('element-plus/es')['ElCard']
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElDivider: typeof import('element-plus/es')['ElDivider']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
@@ -33,9 +34,11 @@ declare module 'vue' {
     ElMain: typeof import('element-plus/es')['ElMain']
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
+    ElPopover: typeof import('element-plus/es')['ElPopover']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElText: typeof import('element-plus/es')['ElText']
     FlowDrawer: typeof import('./src/components/FlowDrawer.vue')['default']
+    FlowNodeMenu: typeof import('./src/components/FlowNodeMenu.vue')['default']
     FlowSide: typeof import('./src/components/FlowSide.vue')['default']
     ForEach: typeof import('./src/components/nodes/ForEach.vue')['default']
     ForEachDrawer: typeof import('./src/components/nodes/drawer/ForEachDrawer.vue')['default']
@@ -43,5 +46,8 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     WebService: typeof import('./src/components/nodes/WebService.vue')['default']
     WebServiceDrawer: typeof import('./src/components/nodes/drawer/WebServiceDrawer.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vPopover: typeof import('element-plus/es')['ElPopoverDirective']
   }
 }

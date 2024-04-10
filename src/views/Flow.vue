@@ -1,35 +1,30 @@
 <template>
   <div class="dndflow" @drop="onDrop">
     <FlowSide />
-    <VueFlow
-      v-model:nodes="nodes"
-      v-model:edges="edges"
-      @dragover="onDragOver"
-      @dragleave="onDragLeave"
-      @connect="addEdge"
-      @node-double-click="nodeClickHandler"
-      @edge-click="edgeClick"
-      @node-drag-stop="nodeDragStop"
-      @node-context-menu="nodeContextMenu"
-      :zoomOnDoubleClick="false"
+    <VueFlow 
+    v-model:nodes="nodes"
+    v-model:edges="edges"
+    :node-types="nodeTypes"
+    @dragover="onDragOver" 
+    @dragleave="onDragLeave" 
+    @connect="onConnect"
+    @node-double-click="onNodeDoubleClick"
+    @node-drag-start="onNodeDragStart"
+    @node-drag-stop="onNodeDragStop"
+    @node-context-menu="onNodeContextMenu" 
+    :zoomOnDoubleClick="false"
+    @contextmenu="onContextmenu"
     >
       <DropzoneBackground />
       <MiniMap pannable />
       <Controls position="top-right" />
-
-      <template #[`node-${node.type}`] v-for="node in nodes" :key="node.id">
-        <component
-          :is="getCustomNodeComponent(node.type)"
-          :node="node"
-        />
-      </template>
     </VueFlow>
+    <FlowDrawer />
   </div>
-  <FlowDrawer />
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, markRaw } from 'vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
@@ -46,64 +41,31 @@ import ForEach from '@/components/nodes/ForEach.vue'
 
 import { NodeType } from '../enums/NodeType'
 import useDragAndDrop from '../hooks/useDnD'
-import { nodeClickHandler } from '../hooks/useDrawer'
-import { edgeClick, addEdge, edges } from '../hooks/useEdge'
-import { nodeContextMenu } from '../hooks/useNode'
+import { nodeClickHandler, clickNode } from '../hooks/useDrawer'
+import { onConnect, edges } from '../hooks/useEdge'
+import { nodes } from '../hooks/useNode'
+import { onNodeContextMenu } from '../hooks/useMenu'
 
-const { onDragOver, onDrop, onDragLeave, nodes, nodeDragStop } = useDragAndDrop()
-// let parentNodePosition = []
-// let nodesLen = nodes.value.length //用来记录之前node的个数，以此判断销毁组件的时候是重新渲染还是删除事件
+const { onDragOver, onDrop, onDragLeave, onNodeDragStart, onNodeDragStop } = useDragAndDrop()
+const { findNode } = useVueFlow()
 
-// function deleteNode(e) {
-//   console.log("删除了一个节点")
-//   if (nodes.value.length < nodesLen) {
-//     for (let i = 0, len = parentNodePosition; i < len; i++) {
-//       if (parentNodePosition[i].id == e) {
-//         parentNodePosition.remove(i)
-//         break
-//       }
-//     }
-//     nodesLen = nodes.value.length
-//   }
-// }
-
-function getCustomNodeComponent(type) {
-  switch (type) {
-    case NodeType.DATABASE:
-      return Database
-    case NodeType.WEBSERVICE:
-      return WebService
-    case NodeType.CHOICE:
-      return Choice
-    case NodeType.CHOICEWHEN:
-      return ChoiceWhen
-    case NodeType.CHOICEDEFAULT:
-      return ChoiceDefault
-    case NodeType.FOREACH:
-      return ForEach
-    default:
-      return null
-  }
+const nodeTypes = {
+  [NodeType.DATABASE] : markRaw(Database),
+  [NodeType.WEBSERVICE]: markRaw(WebService),
+  [NodeType.CHOICE]: markRaw(Choice),
+  [NodeType.CHOICEWHEN]: markRaw(ChoiceWhen),
+  [NodeType.CHOICEDEFAULT]: markRaw(ChoiceDefault),
+  [NodeType.FOREACH]: markRaw(ForEach),
 }
 
-// function addNode(e) {
-//   parentNodePosition = []
-//   for (let item of nodes.value) {
-//     if (item.type == NodeType.CHILDFLOW || item.type == NodeType.FOREACH) {
-//       let pos = {
-//         xMin: item.position.x,
-//         xMax: item.position.x + item.dimensions.width,
-//         yMin: item.position.y,
-//         yMax: item.position.y + item.dimensions.height,
-//         id: item.id,
-//       }
-//       parentNodePosition.push(pos)
-//     }
-//   }
-//   onDrop(e)
-//   nodeDragStop(nodes.value[nodes.value.length - 1])
-//   nodesLen = nodes.value.length
-// }
+function onNodeDoubleClick(e) {
+  clickNode.value = findNode(e.node.id)
+  nodeClickHandler()
+}
+
+function onContextmenu(e) {
+  // console.log("hhhhhhh:", e)
+}
 </script>
 
 <style scoped>

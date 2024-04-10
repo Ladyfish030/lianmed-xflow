@@ -1,17 +1,12 @@
 <template>
-  <div class="component-container"
-    :style="{ width: `${node.dimensions.width}px`, height: `${node.dimensions.height}px` }">
+  <div class="component-container">
     <span class="span-text">Default</span>
     <el-divider class="divider" />
   </div>
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
 
-const props = defineProps({
-  node: Object
-})
 </script>
 
 <style scoped>
@@ -20,6 +15,7 @@ const props = defineProps({
   border-radius: 3px;
   background-color: white;
   position: relative;
+  height: 100%;
 }
 
 .span-text {

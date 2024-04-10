@@ -21,24 +21,28 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { isSave, saveAttributeComplete, findClickedNode } from '../../../hooks/useDrawer'
+import { useVueFlow } from '@vue-flow/core'
+import { isSave, saveAttributeComplete, clickNode } from '../../../hooks/useDrawer'
 
-const clickedNode = findClickedNode()
-const name = ref(clickedNode?.data.name || '')
-const type = ref(clickedNode?.data.type || '')
-const url = ref(clickedNode?.data.url || '')
-const sqlCommand = ref(clickedNode?.data.sqlCommand || '')
+const name = ref(clickNode?.value.data.name || '')
+const type = ref(clickNode?.value.data.type || '')
+const url = ref(clickNode?.value.data.url || '')
+const sqlCommand = ref(clickNode?.value.data.sqlCommand || '')
+
+const { updateNode } = useVueFlow()
 
 watch(isSave, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
-    const clickedNode = findClickedNode()
-
-    if (clickedNode) {
-      clickedNode.data.name = name.value
-      clickedNode.data.type = type.value
-      clickedNode.data.url = url.value
-      clickedNode.data.sqlCommand = sqlCommand.value
-    }
+    updateNode(clickNode.value.id,
+      {
+        data:
+        {
+          name: name.value,
+          type: type.value,
+          url: url.value,
+          sqlCommand: sqlCommand.value
+        }
+      })
     saveAttributeComplete()
   }
 })

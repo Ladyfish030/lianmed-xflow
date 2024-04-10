@@ -1,40 +1,43 @@
 <template>
-  <div class="component-container">
-    <Handle type="target" :position="Position.Top" />
-    <Handle type="source" :position="Position.Bottom" />
-    <h4 class="span-text">For-Each</h4>
+  <div class="component-container" :style="{ opacity: isDragged ? '0.5' : '1' }">
+    <Handle type="target" :position="Position.Left" />
+    <Handle type="source" :position="Position.Right" />
+    <ForEachIcon />
   </div>
 </template>
 
 <script setup>
 import { Handle, Position } from '@vue-flow/core'
-import { onBeforeUnmount } from 'vue'
-const props = defineProps(['nodeId'])
-const emit = defineEmits(['deleteNode'])
-onBeforeUnmount(() => {
-  emit('deleteNode', props.nodeId)
+import ForEachIcon from '@/assets/svg/ForEachIcon.vue'
+import { ref, watch, getCurrentInstance } from 'vue'
+import useDragAndDrop from '@/hooks/useDnD'
+
+const instance = getCurrentInstance()
+const nodeId = instance.attrs.id
+const isDragged = ref(false)
+const { isDragging, draggedId } = useDragAndDrop()
+
+watch(isDragging, (newValue, oldValue) => {
+  if (oldValue === false && newValue === true) {
+    if (draggedId.value === nodeId) {
+      isDragged.value = true
+    }
+  }
+  else {
+    isDragged.value = false
+  }
 })
 </script>
 
 <style scoped>
 .component-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
+  flex-direction: column; 
   justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
-  border: 1px solid black;
+  border: 1px solid #b1b3b8;
   border-radius: 5px;
   background-color: white;
-}
-
-.span-text {
-  font-size: 10px;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
+  height: 100%;
 }
 </style>

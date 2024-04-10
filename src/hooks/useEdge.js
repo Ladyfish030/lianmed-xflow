@@ -15,13 +15,12 @@ function isEdgeExist(source, target) {
     return false
 }
 
-function addEdge(params) {
+function onConnect(params) {
   if (isEdgeExist(params.source, params.target)) {
     return null
   }
   const edgeId = getId()
-  var newEdge = {}
-  newEdge = {
+  const newEdge = {
     id: edgeId,
     source: params.source,
     target: params.target,
@@ -36,14 +35,4 @@ function findEdgeById(edgeId) {
   return edge
 }
 
-function edgeClick(e) {
-  const edge = findEdgeById(e.edge.id)
-  if (edge.label === 'YES') {
-    edge.label = 'NO'
-  }
-  else if (edge.label === 'NO') { 
-    edge.label = 'YES'
-  } 
-}
-
-export { edgeClick, addEdge, edges }
+export { findEdgeById, onConnect, edges }

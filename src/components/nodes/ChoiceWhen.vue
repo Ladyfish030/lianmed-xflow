@@ -1,6 +1,5 @@
 <template>
-    <div class="component-container"
-        :style="{ width: `${node.dimensions.width}px`, height: `${node.dimensions.height}px` }">
+    <div class="component-container">
         <el-text class="span-text" truncated>
             {{ expression }}
         </el-text>
@@ -9,23 +8,21 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
-import { ref, watch } from 'vue'
-import { saveComplete, findClickedNode } from '@/hooks/useDrawer'
+import { ref, watch, getCurrentInstance } from 'vue'
+import { findNodeById } from '../../hooks/useNode'
+import { saveComplete, clickNode } from '../../hooks/useDrawer'
 
-const props = defineProps({
-    node: Object
-})
-
-const expression = ref(props?.node.data.expression || 'When')
+const instance = getCurrentInstance()
+const nodeId = instance.attrs.id
+const node = findNodeById(nodeId)
+const expression = ref(node?.data.expression || 'When')
 
 watch(saveComplete, (newValue, oldValue) => {
-    if (oldValue === false && newValue === true) {
-        const clickedNode = findClickedNode()
-        if (clickedNode.id == props.node.id) {
-            expression.value = clickedNode.data.expression
-        }
+  if (oldValue === false && newValue === true) {
+      if (clickNode.value.id === nodeId) {
+        expression.value = findNodeById(nodeId).data.expression
     }
+  }
 })
 </script>
 
@@ -35,6 +32,7 @@ watch(saveComplete, (newValue, oldValue) => {
     border-radius: 3px;
     background-color: white;
     position: relative;
+    height: 100%;
 }
 
 .span-text {

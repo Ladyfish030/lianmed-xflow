@@ -1,14 +1,10 @@
-import useDragAndDrop from '../hooks/useDnD'
+import { ref } from 'vue'
 
-const { nodes } = useDragAndDrop()
-
-function nodeContextMenu(event) {
-    console.log(event)
-}
+const nodes = ref([])
 
 function findNodeById(nodeId) {
     const node = nodes.value.find(node => node.id === nodeId)
     return node
 }
 
-export { findNodeById, nodeContextMenu }
+export { findNodeById, nodes }
