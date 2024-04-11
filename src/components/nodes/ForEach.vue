@@ -1,15 +1,9 @@
 <template>
-  <el-popover placement="right" ref="popover" trigger="contextmenu" :width="100" :visible="visible">
-    <FlowNodeMenu />
-    <template #reference>
-      <div class="component-container" :style="{ opacity: isDragged ? '0.5' : '1' }">
-        <Handle type="target" :position="Position.Left" />
-        <Handle type="source" :position="Position.Right" />
-        <ForEachIcon />
-      </div>
-    </template>
-  </el-popover>
-
+  <div class="component-container" :style="{ opacity: isDragged ? '0.5' : '1' }">
+    <Handle type="target" :position="Position.Left" />
+    <Handle type="source" :position="Position.Right" />
+    <ForEachIcon />
+  </div>
 </template>
 
 <script setup>

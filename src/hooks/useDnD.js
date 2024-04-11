@@ -113,7 +113,8 @@ export default function useDragAndDrop() {
       style: {
         width: `${newNode.dimensions.width}px`,
         height: `${newNode.dimensions.height}px`
-      }
+      },
+      adsorption: newNode.adsorption,
     }
     addNodes(newNode)
     if (newNode.type == NodeType.CHOICE) {
@@ -139,7 +140,8 @@ export default function useDragAndDrop() {
       },
       parentNode: node.id,
       expandParent: true,
-      draggable: false
+      draggable: false,
+      adsorption: whenNode.adsorption,
     }
     addNodes(whenNode)
 
@@ -159,7 +161,8 @@ export default function useDragAndDrop() {
       },
       parentNode: node.id,
       expandParent: true,
-      draggable: false
+      draggable: false,
+      adsorption: defaultNode.adsorption,
     }
     addNodes(defaultNode)
 

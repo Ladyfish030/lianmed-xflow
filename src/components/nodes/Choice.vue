@@ -1,20 +1,9 @@
 <template>
-  <el-popover 
-    placement="right"
-    ref="popover" 
-    trigger="contextmenu"
-    :width="100"
-    :visible="visible"
-  >
-    <FlowNodeMenu />
-    <template #reference>
-      <div class="component-container" :style="{ opacity: isDragged ? '0.5' : '1' }">
+  <div class="component-container" :style="{ opacity: isDragged ? '0.5' : '1' }">
     <Handle type="target" :position="Position.Left" />
     <Handle type="source" :position="Position.Right" />
     <ChoiceIcon />
   </div>
-    </template>
-  </el-popover>
 </template>
 
 <script setup>
@@ -23,7 +12,6 @@ import { ref, watch, getCurrentInstance } from 'vue'
 import useDragAndDrop from '@/hooks/useDnD'
 import { menuClickNode } from '@/hooks/useMenu'
 import ChoiceIcon from '@/assets/svg/ChoiceIcon.vue'
-import FlowNodeMenu from '@/components/FlowNodeMenu.vue'
 
 const instance = getCurrentInstance()
 const nodeId = instance.attrs.id

@@ -13,13 +13,19 @@ import { nodeMenuVisible, menuClickNode, menuPosition } from '../hooks/useMenu'
 import { NodeType } from '../enums/NodeType'
 import DatabaseMenu from '../components/nodes/menu/DatabaseMenu.vue'
 import WebServiceMenu from '../components/nodes/menu/WebServiceMenu.vue'
+import ChoiceMenu from '../components/nodes/menu/ChoiceMenu.vue'
+import ForEachMenu from '../components/nodes/menu/ForEachMenu.vue'
 
 const currentDrawer = computed(() => {
     switch (menuClickNode.value.type) {
     case NodeType.DATABASE:
       return DatabaseMenu
-      case NodeType.WEBSERVICE:
+    case NodeType.WEBSERVICE:
       return WebServiceMenu
+    case NodeType.CHOICE:
+      return ChoiceMenu
+    case NodeType.FOREACH:
+      return ForEachMenu    
     default:
       return null
   }
