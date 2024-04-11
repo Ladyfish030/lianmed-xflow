@@ -17,6 +17,7 @@ const Database = {
     height: 70,
   },
   parentNode: '',
+  adsorption: false,
 }
 
 // 定义 WebService 数据结构
@@ -36,6 +37,7 @@ const WebService = {
     height: 70,
   },
   parentNode: '',
+  adsorption: false,
 }
 
 // 定义 条件分支 数据结构
@@ -52,6 +54,7 @@ const Choice = {
     height: 250,
   },
   parentNode: '',
+  adsorption: false,
 }
 
 // 定义 条件分支When 数据结构
@@ -59,7 +62,7 @@ const ChoiceWhen = {
   id: '',
   type: '',
   data: {
-    expression: ''
+    expression: '',
   },
   position: {
     x: 0,
@@ -70,6 +73,7 @@ const ChoiceWhen = {
     height: 110,
   },
   parentNode: '',
+  adsorption: false,
 }
 
 // 定义 条件分支Default 数据结构
@@ -86,6 +90,7 @@ const ChoiceDefault = {
     height: 110,
   },
   parentNode: '',
+  adsorption: false,
 }
 
 // 定义 ForEach 数据结构
@@ -102,6 +107,7 @@ const ForEach = {
     height: 100,
   },
   parentNode: '',
+  adsorption: true,
 }
 
 export { Database, WebService, Choice, ChoiceWhen, ChoiceDefault, ForEach }

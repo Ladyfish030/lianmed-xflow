@@ -1,19 +1,18 @@
 <template>
   <div class="dndflow" @drop="onDrop">
     <FlowSide />
-    <VueFlow 
-    v-model:nodes="nodes"
-    v-model:edges="edges"
-    :node-types="nodeTypes"
-    @dragover="onDragOver" 
-    @dragleave="onDragLeave" 
-    @connect="onConnect"
-    @node-double-click="onNodeDoubleClick"
-    @node-drag-start="onNodeDragStart"
-    @node-drag-stop="onNodeDragStop"
-    @node-context-menu="onNodeContextMenu" 
-    :zoomOnDoubleClick="false"
-    @contextmenu="onContextmenu"
+    <VueFlow
+      v-model:nodes="nodes"
+      v-model:edges="edges"
+      :node-types="nodeTypes"
+      @dragover="onDragOver"
+      @dragleave="onDragLeave"
+      @connect="onConnect"
+      @node-double-click="onNodeDoubleClick"
+      @node-drag-start="onNodeDragStart"
+      @node-drag-stop="onNodeDragStop"
+      @node-context-menu="onNodeContextMenu"
+      :zoomOnDoubleClick="false"
     >
       <DropzoneBackground />
       <MiniMap pannable />
@@ -45,26 +44,23 @@ import { nodeClickHandler, clickNode } from '../hooks/useDrawer'
 import { onConnect, edges } from '../hooks/useEdge'
 import { nodes } from '../hooks/useNode'
 import { onNodeContextMenu } from '../hooks/useMenu'
+import { removeParentNode } from '../hooks/useAdsorption'
 
-const { onDragOver, onDrop, onDragLeave, onNodeDragStart, onNodeDragStop } = useDragAndDrop()
+const { onDragOver, onDrop, onDragLeave, onNodeDragStart, onNodeDragStop } =
+  useDragAndDrop()
 const { findNode } = useVueFlow()
 
 const nodeTypes = {
-  [NodeType.DATABASE] : markRaw(Database),
+  [NodeType.DATABASE]: markRaw(Database),
   [NodeType.WEBSERVICE]: markRaw(WebService),
   [NodeType.CHOICE]: markRaw(Choice),
   [NodeType.CHOICEWHEN]: markRaw(ChoiceWhen),
   [NodeType.CHOICEDEFAULT]: markRaw(ChoiceDefault),
   [NodeType.FOREACH]: markRaw(ForEach),
 }
-
 function onNodeDoubleClick(e) {
   clickNode.value = findNode(e.node.id)
   nodeClickHandler()
-}
-
-function onContextmenu(e) {
-  // console.log("hhhhhhh:", e)
 }
 </script>
 

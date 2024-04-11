@@ -1,10 +1,14 @@
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { NodeType } from '../enums/NodeType'
+import {
+  dragAdsorption,
+  removeParentNode,
+  updateParentNode,
+} from './useAdsorption.js'
 import * as NodeAttribute from '../components/nodes/attribute/NodeAttribute'
 
 let id = 0
-
 function getId() {
   return `dndnode_${id++}`
 }
@@ -107,14 +111,20 @@ export default function useDragAndDrop() {
       data: newNode.data,
       position: {
         x: position.x - newNode.dimensions.width / 2,
-        y: position.y - newNode.dimensions.height / 2
+        y: position.y - newNode.dimensions.height / 2,
       },
       dimensions: newNode.dimensions,
       style: {
         width: `${newNode.dimensions.width}px`,
-        height: `${newNode.dimensions.height}px`
-      }
+        height: `${newNode.dimensions.height}px`,
+      },
     }
+    if (newNode.type == NodeType.FOREACH) {
+      newNode.adsorption = true
+      newNode.childNodes = []
+    }
+    dragAdsorption(newNode)
+    updateParentNode(newNode)
     addNodes(newNode)
     if (newNode.type == NodeType.CHOICE) {
       initChoice(newNode)
@@ -130,16 +140,16 @@ export default function useDragAndDrop() {
       data: whenNode.data,
       position: {
         x: node.dimensions.width - whenNode.dimensions.width - 10,
-        y: 10
+        y: 10,
       },
       dimensions: whenNode.dimensions,
       style: {
         width: `${whenNode.dimensions.width}px`,
-        height: `${whenNode.dimensions.height}px`
+        height: `${whenNode.dimensions.height}px`,
       },
       parentNode: node.id,
       expandParent: true,
-      draggable: false
+      draggable: false,
     }
     addNodes(whenNode)
 
@@ -150,19 +160,18 @@ export default function useDragAndDrop() {
       type: NodeType.CHOICEDEFAULT,
       position: {
         x: node.dimensions.width - defaultNode.dimensions.width - 10,
-        y: node.dimensions.height - defaultNode.dimensions.height - 10
+        y: node.dimensions.height - defaultNode.dimensions.height - 10,
       },
       dimensions: defaultNode.dimensions,
       style: {
         width: `${defaultNode.dimensions.width}px`,
-        height: `${defaultNode.dimensions.height}px`
+        height: `${defaultNode.dimensions.height}px`,
       },
       parentNode: node.id,
       expandParent: true,
-      draggable: false
+      draggable: false,
     }
     addNodes(defaultNode)
-
   }
 
   function onNodeDragStart(e) {
@@ -175,6 +184,10 @@ export default function useDragAndDrop() {
     const dragNode = e.event == undefined ? e : e.nodes[0]
     isDragging.value = false
     draggedId.value = null
+    if (dragNode) {
+      dragAdsorption(dragNode)
+      updateParentNode(dragNode)
+    }
   }
 
   return {

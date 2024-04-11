@@ -1,5 +1,8 @@
 <template>
-  <div class="component-container" :style="{ opacity: isDragged ? '0.5' : '1' }">
+  <div
+    class="component-container"
+    :style="{ opacity: isDragged ? '0.5' : '1' }"
+  >
     <Handle type="target" :position="Position.Left" />
     <Handle type="source" :position="Position.Right" />
     <ForEachIcon />
@@ -22,8 +25,7 @@ watch(isDragging, (newValue, oldValue) => {
     if (draggedId.value === nodeId) {
       isDragged.value = true
     }
-  }
-  else {
+  } else {
     isDragged.value = false
   }
 })
@@ -32,7 +34,7 @@ watch(isDragging, (newValue, oldValue) => {
 <style scoped>
 .component-container {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   border: 1px solid #b1b3b8;
