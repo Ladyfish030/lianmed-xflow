@@ -22,18 +22,18 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
-import { isSave, saveAttributeComplete, clickNode } from '../../../hooks/useDrawer'
+import { isSave, saveAttributeComplete, drawerClickNode } from '../../../hooks/useDrawer'
 
-const name = ref(clickNode?.value.data.name || '')
-const type = ref(clickNode?.value.data.type || '')
-const url = ref(clickNode?.value.data.url || '')
-const sqlCommand = ref(clickNode?.value.data.sqlCommand || '')
+const name = ref(drawerClickNode?.value.data.name || '')
+const type = ref(drawerClickNode?.value.data.type || '')
+const url = ref(drawerClickNode?.value.data.url || '')
+const sqlCommand = ref(drawerClickNode?.value.data.sqlCommand || '')
 
 const { updateNode } = useVueFlow()
 
 watch(isSave, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
-    updateNode(clickNode.value.id,
+    updateNode(drawerClickNode.value.id,
       {
         data:
         {

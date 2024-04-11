@@ -1,9 +1,15 @@
 <template>
-  <div class="component-container" :style="{ opacity: isDragged ? '0.5' : '1' }">
-    <Handle type="target" :position="Position.Left" />
-    <Handle type="source" :position="Position.Right" />
-    <ForEachIcon />
-  </div>
+  <el-popover placement="right" ref="popover" trigger="contextmenu" :width="100" :visible="visible">
+    <FlowNodeMenu />
+    <template #reference>
+      <div class="component-container" :style="{ opacity: isDragged ? '0.5' : '1' }">
+        <Handle type="target" :position="Position.Left" />
+        <Handle type="source" :position="Position.Right" />
+        <ForEachIcon />
+      </div>
+    </template>
+  </el-popover>
+
 </template>
 
 <script setup>
@@ -11,11 +17,24 @@ import { Handle, Position } from '@vue-flow/core'
 import ForEachIcon from '@/assets/svg/ForEachIcon.vue'
 import { ref, watch, getCurrentInstance } from 'vue'
 import useDragAndDrop from '@/hooks/useDnD'
+import { menuClickNode } from '@/hooks/useMenu'
+import FlowNodeMenu from '@/components/FlowNodeMenu.vue'
 
 const instance = getCurrentInstance()
 const nodeId = instance.attrs.id
 const isDragged = ref(false)
 const { isDragging, draggedId } = useDragAndDrop()
+
+const visible = ref(false)
+
+watch(menuClickNode, (newValue, oldValue) => {
+  if (newValue.id === nodeId) {
+    visible.value = true
+  }
+  else {
+    visible.value = false
+  }
+})
 
 watch(isDragging, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
@@ -32,12 +51,16 @@ watch(isDragging, (newValue, oldValue) => {
 <style scoped>
 .component-container {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   border: 1px solid #b1b3b8;
   border-radius: 5px;
   background-color: white;
   height: 100%;
+}
+
+.component-container:hover {
+  background-color: #f4f4f5;
 }
 </style>

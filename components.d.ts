@@ -21,6 +21,7 @@ declare module 'vue' {
     CustomEdge: typeof import('./src/components/edges/CustomEdge.vue')['default']
     Database: typeof import('./src/components/nodes/Database.vue')['default']
     DatabaseDrawer: typeof import('./src/components/nodes/drawer/DatabaseDrawer.vue')['default']
+    DatabaseMenu: typeof import('./src/components/nodes/menu/DatabaseMenu.vue')['default']
     DropzoneBackground: typeof import('./src/components/DropzoneBackground.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -46,6 +47,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     WebService: typeof import('./src/components/nodes/WebService.vue')['default']
     WebServiceDrawer: typeof import('./src/components/nodes/drawer/WebServiceDrawer.vue')['default']
+    WebServiceMenu: typeof import('./src/components/nodes/menu/WebServiceMenu.vue')['default']
   }
   export interface ComponentCustomProperties {
     vPopover: typeof import('element-plus/es')['ElPopoverDirective']
