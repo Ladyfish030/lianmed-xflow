@@ -25,11 +25,11 @@ import { computed } from 'vue'
 import DatabaseDrawer from '../components/nodes/drawer/DatabaseDrawer.vue'
 import WebServiceDrawer from '../components/nodes/drawer/WebServiceDrawer.vue'
 import ChoiceWhenDrawer from '../components/nodes/drawer/ChoiceWhenDrawer.vue'
-import { drawer, clickNode, handleClose, saveAttribute, saveComplete } from '../hooks/useDrawer'
+import { drawer, drawerClickNode, handleClose, saveAttribute, saveComplete } from '../hooks/useDrawer'
 import { NodeType } from '../enums/NodeType'
 
 const currentDrawer = computed(() => {
-    switch (clickNode.value.type) {
+    switch (drawerClickNode.value.type) {
     case NodeType.DATABASE:
       return DatabaseDrawer
     case NodeType.WEBSERVICE:

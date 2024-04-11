@@ -54,7 +54,7 @@ const Choice = {
     height: 250,
   },
   parentNode: '',
-  adsorption: false,
+  adsorption: true,
 }
 
 // 定义 条件分支When 数据结构
@@ -73,7 +73,7 @@ const ChoiceWhen = {
     height: 110,
   },
   parentNode: '',
-  adsorption: false,
+  adsorption: true,
 }
 
 // 定义 条件分支Default 数据结构
@@ -90,7 +90,7 @@ const ChoiceDefault = {
     height: 110,
   },
   parentNode: '',
-  adsorption: false,
+  adsorption: true,
 }
 
 // 定义 ForEach 数据结构

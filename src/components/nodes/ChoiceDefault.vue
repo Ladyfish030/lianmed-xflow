@@ -18,6 +18,10 @@
   height: 100%;
 }
 
+.component-container:hover {
+  background-color: #f4f4f5;
+}
+
 .span-text {
   position: absolute;
     top: 10px;

@@ -7,4 +7,7 @@ function findNodeById(nodeId) {
     return node
 }
 
-export { findNodeById, nodes }
+export {
+    nodes,
+    findNodeById,
+}

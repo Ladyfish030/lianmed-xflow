@@ -8,14 +8,26 @@
 
 <script setup>
 import { Handle, Position } from '@vue-flow/core'
-import ChoiceIcon from '@/assets/svg/ChoiceIcon.vue'
 import { ref, watch, getCurrentInstance } from 'vue'
 import useDragAndDrop from '@/hooks/useDnD'
+import { menuClickNode } from '@/hooks/useMenu'
+import ChoiceIcon from '@/assets/svg/ChoiceIcon.vue'
 
 const instance = getCurrentInstance()
 const nodeId = instance.attrs.id
 const isDragged = ref(false)
 const { isDragging, draggedId } = useDragAndDrop()
+
+const visible = ref(false)
+
+watch(menuClickNode, (newValue, oldValue) => {
+  if (newValue.id === nodeId) {
+    visible.value = true
+  }
+  else {
+    visible.value = false
+  }
+})
 
 watch(isDragging, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
@@ -42,5 +54,9 @@ watch(isDragging, (newValue, oldValue) => {
   border-radius: 5px;
   background-color: #ecf5ff;
   height: 100%;
+}
+
+.component-container:hover {
+  background-color: #d9ecff;
 }
 </style>

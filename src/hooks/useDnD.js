@@ -116,11 +116,11 @@ export default function useDragAndDrop() {
       dimensions: newNode.dimensions,
       style: {
         width: `${newNode.dimensions.width}px`,
-        height: `${newNode.dimensions.height}px`,
+        height: `${newNode.dimensions.height}px`
       },
+      adsorption: newNode.adsorption,
     }
     if (newNode.type == NodeType.FOREACH) {
-      newNode.adsorption = true
       newNode.childNodes = []
     }
     dragAdsorption(newNode)
@@ -150,6 +150,7 @@ export default function useDragAndDrop() {
       parentNode: node.id,
       expandParent: true,
       draggable: false,
+      adsorption: whenNode.adsorption,
     }
     addNodes(whenNode)
 
@@ -170,6 +171,7 @@ export default function useDragAndDrop() {
       parentNode: node.id,
       expandParent: true,
       draggable: false,
+      adsorption: defaultNode.adsorption,
     }
     addNodes(defaultNode)
   }

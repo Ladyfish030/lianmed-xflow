@@ -1,11 +1,11 @@
 import { ref } from 'vue'
 
 const drawer = ref(false)
-const clickNode = ref({})
+const drawerClickNode = ref({})
 const isSave = ref(false)
 const saveComplete = ref(false)
 
-function nodeClickHandler() {
+function onNodeDoubleClick() {
   drawer.value = true
 }
 
@@ -13,7 +13,7 @@ const handleClose = (done) => {
   ElMessageBox.confirm('确定关闭配置栏？请注意保存配置信息')
     .then(() => {
       drawer.value = false
-      clickNode.value = {}
+      drawerClickNode.value = {}
       done()
     })
     .catch(() => {
@@ -31,9 +31,9 @@ function saveAttributeComplete() {
 }
 
 export {
-  nodeClickHandler,
+  onNodeDoubleClick,
   drawer,
-  clickNode,
+  drawerClickNode,
   isSave,
   saveComplete,
   saveAttribute,

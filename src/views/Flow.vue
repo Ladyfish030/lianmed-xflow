@@ -8,28 +8,34 @@
       @dragover="onDragOver"
       @dragleave="onDragLeave"
       @connect="onConnect"
-      @node-double-click="onNodeDoubleClick"
-      @node-drag-start="onNodeDragStart"
+      @node-double-click="nodeDoubleClickHandler"
+      @node-drag-start="nodeDragStartHandler"
       @node-drag-stop="onNodeDragStop"
       @node-context-menu="onNodeContextMenu"
+      @click="clickHandler"
+      @dblclick="doubleClickHandler"
+      @contextmenu.prevent.self
       :zoomOnDoubleClick="false"
+      :delete-key-code="null"
     >
       <DropzoneBackground />
       <MiniMap pannable />
       <Controls position="top-right" />
+      <FlowNodeMenu />
     </VueFlow>
     <FlowDrawer />
   </div>
 </template>
 
 <script setup>
-import { ref, markRaw } from 'vue'
+import { ref, watch, markRaw } from 'vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
 import DropzoneBackground from '../components/DropzoneBackground.vue'
 import FlowSide from '../components/FlowSide.vue'
 import FlowDrawer from '../components/FlowDrawer.vue'
+import FlowNodeMenu from '@/components/FlowNodeMenu.vue'
 
 import Database from '@/components/nodes/Database.vue'
 import WebService from '@/components/nodes/WebService.vue'
@@ -40,15 +46,13 @@ import ForEach from '@/components/nodes/ForEach.vue'
 
 import { NodeType } from '../enums/NodeType'
 import useDragAndDrop from '../hooks/useDnD'
-import { nodeClickHandler, clickNode } from '../hooks/useDrawer'
+import { onNodeDoubleClick, drawerClickNode } from '../hooks/useDrawer'
 import { onConnect, edges } from '../hooks/useEdge'
 import { nodes } from '../hooks/useNode'
-import { onNodeContextMenu } from '../hooks/useMenu'
-import { removeParentNode } from '../hooks/useAdsorption'
+import { onNodeContextMenu, nodeMenuVisible, deleteNode, deleteNodeConfirm } from '../hooks/useMenu'
 
-const { onDragOver, onDrop, onDragLeave, onNodeDragStart, onNodeDragStop } =
-  useDragAndDrop()
-const { findNode } = useVueFlow()
+const { onDragOver, onDrop, onDragLeave, onNodeDragStart, onNodeDragStop } = useDragAndDrop()
+const { findNode, removeNodes } = useVueFlow()
 
 const nodeTypes = {
   [NodeType.DATABASE]: markRaw(Database),
@@ -58,10 +62,33 @@ const nodeTypes = {
   [NodeType.CHOICEDEFAULT]: markRaw(ChoiceDefault),
   [NodeType.FOREACH]: markRaw(ForEach),
 }
-function onNodeDoubleClick(e) {
-  clickNode.value = findNode(e.node.id)
-  nodeClickHandler()
+
+function nodeDoubleClickHandler(e) {
+  drawerClickNode.value = findNode(e.node.id)
+  onNodeDoubleClick()
 }
+
+function nodeDragStartHandler(e) {
+  nodeMenuVisible.value = false
+  onNodeDragStart(e)
+}
+
+function clickHandler(e) {
+  console.log("所有边：", edges)
+  nodeMenuVisible.value = false
+}
+
+function doubleClickHandler(e) {
+  nodeMenuVisible.value = false
+}
+
+watch(deleteNodeConfirm, (newValue, oldValue) => {
+  if (oldValue === false && newValue === true) {
+    removeNodes(deleteNode.value.id, true, true)
+    deleteNode.value = null
+    deleteNodeConfirm.value = false
+  }
+})
 </script>
 
 <style scoped>

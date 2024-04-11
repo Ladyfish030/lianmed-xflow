@@ -1,11 +1,37 @@
 import { ref } from 'vue'
 
-const clickedNode = ref(null)
+const nodeMenuVisible = ref(false)
+const menuClickNode = ref(null)
+const menuPosition = ref({ x: 0, y: 0 })
+const deleteNode = ref(null)
+const deleteNodeConfirm = ref(false)
 
 function onNodeContextMenu(e) {
-  // console.log("点击：", e)
-  clickedNode.value = e.node
-  console.log(clickedNode)
+  nodeMenuVisible.value = true
+  menuClickNode.value = e.node
+  menuPosition.value = {
+    x: e.event.layerX,
+    y: e.event.layerY,
+  }
 }
 
-export { clickedNode, onNodeContextMenu }
+const deleteNodeHandler = (done) => {
+  ElMessageBox.confirm('确定删除该节点？')
+    .then(() => {
+      deleteNodeConfirm.value = true
+      done()
+    })
+    .catch(() => {
+      // catch error
+    })
+}
+
+export {
+  nodeMenuVisible,
+  menuClickNode,
+  menuPosition,
+  deleteNode,
+  deleteNodeConfirm,
+  onNodeContextMenu,
+  deleteNodeHandler,
+}
