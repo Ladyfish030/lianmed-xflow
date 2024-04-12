@@ -11,7 +11,6 @@ declare module 'vue' {
     BaseSide: typeof import('./src/components/BaseSide.vue')['default']
     Choice: typeof import('./src/components/nodes/Choice.vue')['default']
     ChoiceDefault: typeof import('./src/components/nodes/ChoiceDefault.vue')['default']
-    ChoiceDrawer: typeof import('./src/components/nodes/drawer/ChoiceDrawer.vue')['default']
     ChoiceMenu: typeof import('./src/components/nodes/menu/ChoiceMenu.vue')['default']
     ChoiceWhen: typeof import('./src/components/nodes/ChoiceWhen.vue')['default']
     ChoiceWhenDrawer: typeof import('./src/components/nodes/drawer/ChoiceWhenDrawer.vue')['default']

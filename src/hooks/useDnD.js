@@ -1,11 +1,7 @@
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { NodeType } from '../enums/NodeType'
-import {
-  dragAdsorption,
-  removeParentNode,
-  updateParentNode,
-} from './useAdsorption.js'
+import { dragAdsorption, updateParentNode } from './useAdsorption.js'
 import * as NodeAttribute from '../components/nodes/attribute/NodeAttribute'
 
 let id = 0
@@ -114,13 +110,14 @@ export default function useDragAndDrop() {
         y: position.y - newNode.dimensions.height / 2,
       },
       dimensions: newNode.dimensions,
+      initDimensions: newNode.initDimensions,
       style: {
         width: `${newNode.dimensions.width}px`,
-        height: `${newNode.dimensions.height}px`
+        height: `${newNode.dimensions.height}px`,
       },
       adsorption: newNode.adsorption,
     }
-    if (newNode.type == NodeType.FOREACH) {
+    if (newNode.adsorption) {
       newNode.childNodes = []
     }
     dragAdsorption(newNode)

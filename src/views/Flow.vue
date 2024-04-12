@@ -49,9 +49,15 @@ import useDragAndDrop from '../hooks/useDnD'
 import { onNodeDoubleClick, drawerClickNode } from '../hooks/useDrawer'
 import { onConnect, edges } from '../hooks/useEdge'
 import { nodes } from '../hooks/useNode'
-import { onNodeContextMenu, nodeMenuVisible, deleteNode, deleteNodeConfirm } from '../hooks/useMenu'
-
-const { onDragOver, onDrop, onDragLeave, onNodeDragStart, onNodeDragStop } = useDragAndDrop()
+import {
+  onNodeContextMenu,
+  nodeMenuVisible,
+  deleteNode,
+  deleteNodeConfirm,
+} from '../hooks/useMenu'
+import { removeNodeAdsorption } from '../hooks/useAdsorption'
+const { onDragOver, onDrop, onDragLeave, onNodeDragStart, onNodeDragStop } =
+  useDragAndDrop()
 const { findNode, removeNodes } = useVueFlow()
 
 const nodeTypes = {
@@ -74,7 +80,7 @@ function nodeDragStartHandler(e) {
 }
 
 function clickHandler(e) {
-  console.log("所有边：", edges)
+  console.log('所有边：', edges)
   nodeMenuVisible.value = false
 }
 
@@ -84,6 +90,7 @@ function doubleClickHandler(e) {
 
 watch(deleteNodeConfirm, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
+    removeNodeAdsorption(deleteNode.value.id)
     removeNodes(deleteNode.value.id, true, true)
     deleteNode.value = null
     deleteNodeConfirm.value = false
