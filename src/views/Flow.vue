@@ -91,11 +91,6 @@ function nodeContextMenuHandler(e) {
   onNodeContextMenu(e)
 }
 
-function clickHandler(e) { 
-  nodeMenuVisible.value = false
-  edgeMenuVisible.value = false
-}
-
 function edgeContextMenuHandler(e) {
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
