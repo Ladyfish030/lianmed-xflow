@@ -60,6 +60,7 @@ import {
   deleteNode,
   deleteNodeConfirm,
 } from '../hooks/useMenu'
+import { removeNodeAdsorption } from '../hooks/useAdsorption'
 
 const { onDragOver, onDrop, onDragLeave, onNodeDragStart, onNodeDragStop } = useDragAndDrop()
 const { findNode, removeNodes } = useVueFlow()
@@ -84,10 +85,15 @@ function nodeDragStartHandler(e) {
   onNodeDragStart(e)
 }
 
-function nodeContextMenuHandler(e) {
+function nodeContextMenuHandler(e) { 
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
   onNodeContextMenu(e)
+}
+
+function clickHandler(e) { 
+  nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
 }
 
 function edgeContextMenuHandler(e) {
@@ -104,11 +110,11 @@ function clickHandler(e) {
 function doubleClickHandler(e) {
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
-  console.log("所有节点：", nodes)
 }
 
 watch(deleteNodeConfirm, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
+    removeNodeAdsorption(deleteNode.value.id)
     removeNodes(deleteNode.value.id, true, true)
     deleteNode.value = null
     deleteNodeConfirm.value = false

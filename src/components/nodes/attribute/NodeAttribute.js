@@ -16,6 +16,10 @@ const Database = {
     width: 70,
     height: 70,
   },
+  initDimensions: {
+    width: 70,
+    height: 70,
+  },
   parentNode: '',
   adsorption: false,
 }
@@ -36,6 +40,10 @@ const WebService = {
     width: 70,
     height: 70,
   },
+  initDimensions: {
+    width: 70,
+    height: 70,
+  },
   parentNode: '',
   adsorption: false,
 }
@@ -50,6 +58,10 @@ const Choice = {
     y: 0,
   },
   dimensions: {
+    width: 160,
+    height: 250,
+  },
+  initDimensions: {
     width: 160,
     height: 250,
   },
@@ -73,6 +85,10 @@ const ChoiceWhen = {
     width: 110,
     height: 110,
   },
+  initDimensions: {
+    width: 110,
+    height: 110,
+  },
   parentNode: '',
   adsorption: true,
   childNodes: [],
@@ -91,6 +107,10 @@ const ChoiceDefault = {
     width: 110,
     height: 110,
   },
+  initDimensions: {
+    width: 110,
+    height: 110,
+  },
   parentNode: '',
   adsorption: true,
   childNodes: [],
@@ -106,6 +126,10 @@ const ForEach = {
     y: 0,
   },
   dimensions: {
+    width: 100,
+    height: 100,
+  },
+  initDimensions: {
     width: 100,
     height: 100,
   },
