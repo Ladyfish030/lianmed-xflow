@@ -45,7 +45,7 @@ const state = {
 
 export default function useDragAndDrop() {
   const { draggedId, draggedType, isDragOver, isDragging, newNodeType } = state
-  const { screenToFlowCoordinate, addNodes } = useVueFlow()
+  const { screenToFlowCoordinate, addNodes, updateNode } = useVueFlow()
 
   watch(isDragging, (dragging) => {
     document.body.style.userSelect = dragging ? 'none' : ''
@@ -119,16 +119,15 @@ export default function useDragAndDrop() {
         height: `${newNode.dimensions.height}px`
       },
       adsorption: newNode.adsorption,
+      childNodes: newNode.childNodes,
     }
-    if (newNode.type == NodeType.FOREACH) {
-      newNode.childNodes = []
-    }
-    dragAdsorption(newNode)
-    updateParentNode(newNode)
     addNodes(newNode)
     if (newNode.type == NodeType.CHOICE) {
       initChoice(newNode)
     }
+
+    dragAdsorption(newNode)
+    updateParentNode(newNode)
   }
 
   function initChoice(node) {
@@ -151,6 +150,7 @@ export default function useDragAndDrop() {
       expandParent: true,
       draggable: false,
       adsorption: whenNode.adsorption,
+      childNodes: whenNode.childNodes,
     }
     addNodes(whenNode)
 
@@ -172,8 +172,11 @@ export default function useDragAndDrop() {
       expandParent: true,
       draggable: false,
       adsorption: defaultNode.adsorption,
+      childNodes: defaultNode.childNodes,
     }
     addNodes(defaultNode)
+
+    updateNode(node.id, {childNodes:[whenNode.id, defaultNode.id]})
   }
 
   function onNodeDragStart(e) {

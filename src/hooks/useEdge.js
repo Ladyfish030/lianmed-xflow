@@ -24,7 +24,6 @@ function onConnect(params) {
     id: edgeId,
     source: params.source,
     target: params.target,
-    type: 'straight',
     animated: true,
   }
   edges.value.push(newEdge)
@@ -35,4 +34,13 @@ function findEdgeById(edgeId) {
   return edge
 }
 
-export { findEdgeById, onConnect, edges }
+function removeEdgeById(edgeId) {
+  edges.value = edges.value.filter(edge => edge.id !== edgeId)
+}
+
+export {
+  edges,
+  onConnect, 
+  findEdgeById,
+  removeEdgeById,
+}

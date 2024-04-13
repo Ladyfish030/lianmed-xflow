@@ -11,7 +11,8 @@
       @node-double-click="nodeDoubleClickHandler"
       @node-drag-start="nodeDragStartHandler"
       @node-drag-stop="onNodeDragStop"
-      @node-context-menu="onNodeContextMenu"
+      @node-context-menu="nodeContextMenuHandler"
+      @edge-context-menu="edgeContextMenuHandler"
       @click="clickHandler"
       @dblclick="doubleClickHandler"
       @contextmenu.prevent.self
@@ -22,6 +23,7 @@
       <MiniMap pannable />
       <Controls position="top-right" />
       <FlowNodeMenu />
+      <FlowEdgeMenu />
     </VueFlow>
     <FlowDrawer />
   </div>
@@ -36,6 +38,7 @@ import DropzoneBackground from '../components/DropzoneBackground.vue'
 import FlowSide from '../components/FlowSide.vue'
 import FlowDrawer from '../components/FlowDrawer.vue'
 import FlowNodeMenu from '@/components/FlowNodeMenu.vue'
+import FlowEdgeMenu from '@/components/FlowEdgeMenu.vue'
 
 import Database from '@/components/nodes/Database.vue'
 import WebService from '@/components/nodes/WebService.vue'
@@ -49,7 +52,14 @@ import useDragAndDrop from '../hooks/useDnD'
 import { onNodeDoubleClick, drawerClickNode } from '../hooks/useDrawer'
 import { onConnect, edges } from '../hooks/useEdge'
 import { nodes } from '../hooks/useNode'
-import { onNodeContextMenu, nodeMenuVisible, deleteNode, deleteNodeConfirm } from '../hooks/useMenu'
+import {
+  onNodeContextMenu,
+  onEdgeContextMenu,
+  nodeMenuVisible,
+  edgeMenuVisible,
+  deleteNode,
+  deleteNodeConfirm,
+} from '../hooks/useMenu'
 
 const { onDragOver, onDrop, onDragLeave, onNodeDragStart, onNodeDragStop } = useDragAndDrop()
 const { findNode, removeNodes } = useVueFlow()
@@ -70,16 +80,31 @@ function nodeDoubleClickHandler(e) {
 
 function nodeDragStartHandler(e) {
   nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
   onNodeDragStart(e)
 }
 
-function clickHandler(e) {
-  console.log("所有边：", edges)
+function nodeContextMenuHandler(e) {
   nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
+  onNodeContextMenu(e)
+}
+
+function edgeContextMenuHandler(e) {
+  nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
+  onEdgeContextMenu(e)
+}
+
+function clickHandler(e) {
+  nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
 }
 
 function doubleClickHandler(e) {
   nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
+  console.log("所有节点：", nodes)
 }
 
 watch(deleteNodeConfirm, (newValue, oldValue) => {

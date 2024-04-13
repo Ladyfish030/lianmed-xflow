@@ -11,7 +11,7 @@
 
 <script setup>
 import { Handle, Position } from '@vue-flow/core'
-import { ref, watch, onBeforeMount, onBeforeUnmount, getCurrentInstance } from 'vue'
+import { ref, watch, getCurrentInstance } from 'vue'
 import useDragAndDrop from '@/hooks/useDnD'
 import DatabaseIcon from '@/assets/svg/DatabaseIcon.vue'
 
@@ -30,14 +30,6 @@ watch(isDragging, (newValue, oldValue) => {
     isDragged.value = false
   }
 })
-
-onBeforeMount(() => {
-  console.log("database渲染:")
-})
-
-onBeforeUnmount(() => {
-  console.log("database销毁:")
-})
 </script>
 
 <style scoped>
@@ -50,6 +42,10 @@ onBeforeUnmount(() => {
   border-radius: 5px;
   background-color: white;
   height: 100%;
+}
+
+.component-container:hover {
+  background-color: #f4f4f5;
 }
 
 .content {

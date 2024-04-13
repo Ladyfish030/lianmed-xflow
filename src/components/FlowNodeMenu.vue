@@ -3,7 +3,7 @@
       class="menu-container" 
       :style="{ left: menuPosition.x + 'px', top: menuPosition.y + 'px' }"
     >
-      <component :is="currentDrawer" />
+      <component :is="currentMenu" />
     </div>
 </template>
 
@@ -16,7 +16,7 @@ import WebServiceMenu from '../components/nodes/menu/WebServiceMenu.vue'
 import ChoiceMenu from '../components/nodes/menu/ChoiceMenu.vue'
 import ForEachMenu from '../components/nodes/menu/ForEachMenu.vue'
 
-const currentDrawer = computed(() => {
+const currentMenu = computed(() => {
     switch (menuClickNode.value.type) {
     case NodeType.DATABASE:
       return DatabaseMenu

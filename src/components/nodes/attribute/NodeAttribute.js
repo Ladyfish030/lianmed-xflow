@@ -54,7 +54,8 @@ const Choice = {
     height: 250,
   },
   parentNode: '',
-  adsorption: true,
+  adsorption: false,
+  childNodes: [],
 }
 
 // 定义 条件分支When 数据结构
@@ -74,6 +75,7 @@ const ChoiceWhen = {
   },
   parentNode: '',
   adsorption: true,
+  childNodes: [],
 }
 
 // 定义 条件分支Default 数据结构
@@ -91,6 +93,7 @@ const ChoiceDefault = {
   },
   parentNode: '',
   adsorption: true,
+  childNodes: [],
 }
 
 // 定义 ForEach 数据结构
@@ -108,6 +111,7 @@ const ForEach = {
   },
   parentNode: '',
   adsorption: true,
+  childNodes: [],
 }
 
 export { Database, WebService, Choice, ChoiceWhen, ChoiceDefault, ForEach }

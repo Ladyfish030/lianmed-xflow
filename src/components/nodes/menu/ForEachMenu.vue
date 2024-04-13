@@ -1,12 +1,12 @@
 <template>
     <div class="container">
-        <div @click="" class="button-container">
+        <div @click="copyHandler" class="button-container">
             <el-icon :size="20">
                 <CopyDocument />
             </el-icon>
             <span>复制</span>
         </div>
-        <div @click="" class="button-container">
+        <div @click="pasteHandler" class="button-container">
             <PasteIcon />
             <span>粘贴</span>
         </div>
@@ -21,7 +21,13 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { menuClickNode, deleteNode, deleteNodeHandler } from '@/hooks/useMenu'
+import {
+    menuClickNode,
+    deleteNode,
+    deleteNodeHandler,
+    copyNode,
+    pasteNodeHandler,
+} from '@/hooks/useMenu'
 import PasteIcon from '@/assets/svg/PasteIcon.vue'
 
 function deleteHandler() {
@@ -29,6 +35,13 @@ function deleteHandler() {
     deleteNodeHandler()
 }
 
+function copyHandler() {
+    copyNode.value = menuClickNode.value
+}
+
+function pasteHandler() {
+    pasteNodeHandler()
+}
 </script>
 
 <style scoped>
