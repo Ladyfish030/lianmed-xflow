@@ -118,13 +118,12 @@ export default function useDragAndDrop() {
       adsorption: newNode.adsorption,
       childNodes: newNode.childNodes,
     }
+    dragAdsorption(newNode)
+    updateParentNode(newNode)
     addNodes(newNode)
     if (newNode.type == NodeType.CHOICE) {
       initChoice(newNode)
     }
-
-    dragAdsorption(newNode)
-    updateParentNode(newNode)
   }
 
   function initChoice(node) {
