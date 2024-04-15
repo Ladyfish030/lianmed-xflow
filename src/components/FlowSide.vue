@@ -62,7 +62,7 @@ const input1 = ref('')
         </div>
         <div
           :draggable="true"
-          @dragstart="onDragStart($event, NodeType.CHILDFLOW)"
+          @dragstart="onDragStart($event, NodeType.SUBFLOW)"
           class="node-container"
         >
           <el-button class="node" type="info" plain>

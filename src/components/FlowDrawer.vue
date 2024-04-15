@@ -25,6 +25,7 @@ import { computed } from 'vue'
 import DatabaseDrawer from '../components/nodes/drawer/DatabaseDrawer.vue'
 import WebServiceDrawer from '../components/nodes/drawer/WebServiceDrawer.vue'
 import ChoiceWhenDrawer from '../components/nodes/drawer/ChoiceWhenDrawer.vue'
+import SubFlowDrawer from '../components/nodes/drawer/SubFlowDrawer.vue'
 import { drawer, drawerClickNode, handleClose, saveAttribute, saveComplete } from '../hooks/useDrawer'
 import { NodeType } from '../enums/NodeType'
 
@@ -36,6 +37,8 @@ const currentDrawer = computed(() => {
       return WebServiceDrawer
     case NodeType.CHOICEWHEN:
       return ChoiceWhenDrawer
+    case NodeType.SUBFLOW:
+      return SubFlowDrawer
     default:
       return null
   }

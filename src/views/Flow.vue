@@ -10,6 +10,7 @@
       @connect="onConnect"
       @node-double-click="nodeDoubleClickHandler"
       @node-drag-start="nodeDragStartHandler"
+      @node-drag="nodeDragHandler"
       @node-drag-stop="onNodeDragStop"
       @node-context-menu="nodeContextMenuHandler"
       @edge-context-menu="edgeContextMenuHandler"
@@ -46,6 +47,7 @@ import Choice from '@/components/nodes/Choice.vue'
 import ChoiceWhen from '@/components/nodes/ChoiceWhen.vue'
 import ChoiceDefault from '@/components/nodes/ChoiceDefault.vue'
 import ForEach from '@/components/nodes/ForEach.vue'
+import SubFlow from '@/components/nodes/SubFlow.vue'
 
 import { NodeType } from '../enums/NodeType'
 import useDragAndDrop from '../hooks/useDnD'
@@ -72,6 +74,7 @@ const nodeTypes = {
   [NodeType.CHOICEWHEN]: markRaw(ChoiceWhen),
   [NodeType.CHOICEDEFAULT]: markRaw(ChoiceDefault),
   [NodeType.FOREACH]: markRaw(ForEach),
+  [NodeType.SUBFLOW]: markRaw(SubFlow)
 }
 
 function nodeDoubleClickHandler(e) {
@@ -83,6 +86,10 @@ function nodeDragStartHandler(e) {
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
   onNodeDragStart(e)
+}
+
+function nodeDragHandler(e) {
+  // console.log("e:", e)
 }
 
 function nodeContextMenuHandler(e) { 

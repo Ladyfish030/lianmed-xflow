@@ -15,6 +15,7 @@ import DatabaseMenu from '../components/nodes/menu/DatabaseMenu.vue'
 import WebServiceMenu from '../components/nodes/menu/WebServiceMenu.vue'
 import ChoiceMenu from '../components/nodes/menu/ChoiceMenu.vue'
 import ForEachMenu from '../components/nodes/menu/ForEachMenu.vue'
+import SubFlowMenu from '../components/nodes/menu/SubFlowMenu.vue'
 
 const currentMenu = computed(() => {
     switch (menuClickNode.value.type) {
@@ -26,6 +27,8 @@ const currentMenu = computed(() => {
       return ChoiceMenu
     case NodeType.FOREACH:
       return ForEachMenu    
+    case NodeType.SUBFLOW:
+      return SubFlowMenu
     default:
       return null
   }

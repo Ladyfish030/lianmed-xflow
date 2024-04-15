@@ -23,6 +23,8 @@ function getNewNode(newNodeType) {
       return NodeAttribute.ChoiceDefault
     case NodeType.FOREACH:
       return NodeAttribute.ForEach
+    case NodeType.SUBFLOW:
+      return NodeAttribute.SubFlow
     default:
       return null
   }
@@ -116,7 +118,9 @@ export default function useDragAndDrop() {
         height: `${newNode.dimensions.height}px`,
       },
       adsorption: newNode.adsorption,
-      childNodes: newNode.childNodes,
+    }
+    if (newNode.adsorption) {
+      newNode.childNodes = []
     }
     dragAdsorption(newNode)
     updateParentNode(newNode)

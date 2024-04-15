@@ -138,4 +138,36 @@ const ForEach = {
   childNodes: [],
 }
 
-export { Database, WebService, Choice, ChoiceWhen, ChoiceDefault, ForEach }
+// 定义 Sub Flow 数据结构
+const SubFlow = {
+  id: '',
+  type: '',
+  data: {
+    name: '',
+  },
+  position: {
+    x: 0,
+    y: 0,
+  },
+  dimensions: {
+    width: 150,
+    height: 100,
+  },
+  initDimensions: {
+    width: 150,
+    height: 100,
+  },
+  parentNode: '',
+  adsorption: true,
+  childNodes: [],
+}
+
+export {
+  Database,
+  WebService,
+  Choice,
+  ChoiceWhen,
+  ChoiceDefault,
+  ForEach,
+  SubFlow,
+}
