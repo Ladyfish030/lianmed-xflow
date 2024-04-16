@@ -28,6 +28,8 @@ function getNewNode(newNodeType) {
       return NodeAttribute.ChoiceDefault
     case NodeType.FOREACH:
       return NodeAttribute.ForEach
+    case NodeType.SUBFLOW:
+      return NodeAttribute.SubFlow
     default:
       return null
   }
@@ -46,7 +48,7 @@ const state = {
 
 export default function useDragAndDrop() {
   const { draggedId, draggedType, isDragOver, isDragging, newNodeType } = state
-  const { screenToFlowCoordinate, addNodes } = useVueFlow()
+  const { screenToFlowCoordinate, addNodes, updateNode } = useVueFlow()
 
   watch(isDragging, (dragging) => {
     document.body.style.userSelect = dragging ? 'none' : ''
@@ -190,6 +192,7 @@ export default function useDragAndDrop() {
       parentNode: parentNode.id,
       draggable: false,
       adsorption: whenNode.adsorption,
+      childNodes: whenNode.childNodes,
     }
     whenNode.childNodes = []
     console.log(parentNode.style.height)

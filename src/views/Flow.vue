@@ -10,8 +10,10 @@
       @connect="onConnect"
       @node-double-click="nodeDoubleClickHandler"
       @node-drag-start="nodeDragStartHandler"
+      @node-drag="nodeDragHandler"
       @node-drag-stop="onNodeDragStop"
-      @node-context-menu="onNodeContextMenu"
+      @node-context-menu="nodeContextMenuHandler"
+      @edge-context-menu="edgeContextMenuHandler"
       @click="clickHandler"
       @dblclick="doubleClickHandler"
       @contextmenu.prevent.self
@@ -22,6 +24,7 @@
       <MiniMap pannable />
       <Controls position="top-right" />
       <FlowNodeMenu />
+      <FlowEdgeMenu />
     </VueFlow>
     <FlowDrawer />
   </div>
@@ -36,6 +39,7 @@ import DropzoneBackground from '../components/DropzoneBackground.vue'
 import FlowSide from '../components/FlowSide.vue'
 import FlowDrawer from '../components/FlowDrawer.vue'
 import FlowNodeMenu from '@/components/FlowNodeMenu.vue'
+import FlowEdgeMenu from '@/components/FlowEdgeMenu.vue'
 
 import Database from '@/components/nodes/Database.vue'
 import WebService from '@/components/nodes/WebService.vue'
@@ -43,6 +47,7 @@ import Choice from '@/components/nodes/Choice.vue'
 import ChoiceWhen from '@/components/nodes/ChoiceWhen.vue'
 import ChoiceDefault from '@/components/nodes/ChoiceDefault.vue'
 import ForEach from '@/components/nodes/ForEach.vue'
+import SubFlow from '@/components/nodes/SubFlow.vue'
 
 import { NodeType } from '../enums/NodeType'
 import useDragAndDrop from '../hooks/useDnD'
@@ -51,7 +56,9 @@ import { onConnect, edges } from '../hooks/useEdge'
 import { nodes } from '../hooks/useNode'
 import {
   onNodeContextMenu,
+  onEdgeContextMenu,
   nodeMenuVisible,
+  edgeMenuVisible,
   deleteNode,
   deleteNodeConfirm,
 } from '../hooks/useMenu'
@@ -75,6 +82,7 @@ const nodeTypes = {
   [NodeType.CHOICEWHEN]: markRaw(ChoiceWhen),
   [NodeType.CHOICEDEFAULT]: markRaw(ChoiceDefault),
   [NodeType.FOREACH]: markRaw(ForEach),
+  [NodeType.SUBFLOW]: markRaw(SubFlow),
 }
 function nodeDoubleClickHandler(e) {
   drawerClickNode.value = findNode(e.node.id)
@@ -83,16 +91,37 @@ function nodeDoubleClickHandler(e) {
 
 function nodeDragStartHandler(e) {
   nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
   onNodeDragStart(e)
 }
 
 function clickHandler() {
   console.log('所有边：', edges)
+}
+function nodeDragHandler(e) {
+  // console.log("e:", e)
+}
+
+function nodeContextMenuHandler(e) {
   nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
+  onNodeContextMenu(e)
+}
+
+function edgeContextMenuHandler(e) {
+  nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
+  onEdgeContextMenu(e)
+}
+
+function clickHandler(e) {
+  nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
 }
 
 function doubleClickHandler(e) {
   nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
 }
 watch(deleteNodeConfirm, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
@@ -172,10 +201,5 @@ emitter.on('addWhenNode', (id) => addWhenNode(id))
     flex-direction: row;
     gap: 5px;
   }
-}
-</style>
-<style>
-.vue-flow__edges {
-  z-index: 2000;
 }
 </style>

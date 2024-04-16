@@ -7,7 +7,12 @@ function findNodeById(nodeId) {
     return node
 }
 
+function addNode(newNode) {
+    nodes.value.push(newNode)
+}
+
 export {
     nodes,
     findNodeById,
+    addNode,
 }

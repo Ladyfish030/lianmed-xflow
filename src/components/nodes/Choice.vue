@@ -14,7 +14,6 @@
 import { Handle, Position } from '@vue-flow/core'
 import { ref, watch, getCurrentInstance, defineProps } from 'vue'
 import useDragAndDrop from '@/hooks/useDnD'
-import { menuClickNode } from '@/hooks/useMenu'
 import ChoiceIcon from '@/assets/svg/ChoiceIcon.vue'
 import emitter from '@/utils/emitter'
 const props = defineProps(['id'])
@@ -24,6 +23,7 @@ const isDragged = ref(false)
 const { isDragging, draggedId } = useDragAndDrop()
 
 const visible = ref(false)
+
 watch(menuClickNode, (newValue, oldValue) => {
   if (newValue.id === nodeId) {
     visible.value = true

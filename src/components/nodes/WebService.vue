@@ -11,7 +11,7 @@
 
 <script setup>
 import { Handle, Position } from '@vue-flow/core'
-import { ref, watch, onBeforeMount, onBeforeUnmount, getCurrentInstance } from 'vue'
+import { ref, watch, getCurrentInstance } from 'vue'
 import useDragAndDrop from '@/hooks/useDnD'
 import { menuClickNode } from '@/hooks/useMenu'
 import WebServiceIcon from '@/assets/svg/WebServiceIcon.vue'
@@ -40,14 +40,6 @@ watch(isDragging, (newValue, oldValue) => {
   else {
     isDragged.value = false
   }
-})
-
-onBeforeMount(() => {
-  console.log("webService渲染:")
-})
-
-onBeforeUnmount(() => {
-  console.log("webService销毁:")
 })
 </script>
 

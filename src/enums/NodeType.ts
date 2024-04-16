@@ -4,6 +4,6 @@ export enum NodeType {
     CHOICE = 'choice',
     CHOICEWHEN = 'choiceWhen',
     CHOICEDEFAULT = 'choiceDefault',
-    CHILDFLOW = 'childFlow',
-    FOREACH = 'forEach'
+    FOREACH = 'forEach',
+    SUBFLOW = 'subFlow',
 }

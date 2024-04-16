@@ -14,24 +14,11 @@ import { Handle, Position } from '@vue-flow/core'
 import ForEachIcon from '@/assets/svg/ForEachIcon.vue'
 import { ref, watch, getCurrentInstance } from 'vue'
 import useDragAndDrop from '@/hooks/useDnD'
-import { menuClickNode } from '@/hooks/useMenu'
-import FlowNodeMenu from '@/components/FlowNodeMenu.vue'
 
 const instance = getCurrentInstance()
 const nodeId = instance.attrs.id
 const isDragged = ref(false)
 const { isDragging, draggedId } = useDragAndDrop()
-
-const visible = ref(false)
-
-watch(menuClickNode, (newValue, oldValue) => {
-  if (newValue.id === nodeId) {
-    visible.value = true
-  }
-  else {
-    visible.value = false
-  }
-})
 
 watch(isDragging, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
