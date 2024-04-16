@@ -56,8 +56,16 @@ import {
   deleteNodeConfirm,
 } from '../hooks/useMenu'
 import { removeNodeAdsorption } from '../hooks/useAdsorption'
-const { onDragOver, onDrop, onDragLeave, onNodeDragStart, onNodeDragStop } =
-  useDragAndDrop()
+import emitter from '@/utils/emitter'
+
+const {
+  onDragOver,
+  onDrop,
+  onDragLeave,
+  onNodeDragStart,
+  onNodeDragStop,
+  addWhenNode,
+} = useDragAndDrop()
 const { findNode, removeNodes } = useVueFlow()
 
 const nodeTypes = {
@@ -68,7 +76,6 @@ const nodeTypes = {
   [NodeType.CHOICEDEFAULT]: markRaw(ChoiceDefault),
   [NodeType.FOREACH]: markRaw(ForEach),
 }
-
 function nodeDoubleClickHandler(e) {
   drawerClickNode.value = findNode(e.node.id)
   onNodeDoubleClick()
@@ -79,7 +86,7 @@ function nodeDragStartHandler(e) {
   onNodeDragStart(e)
 }
 
-function clickHandler(e) {
+function clickHandler() {
   console.log('所有边：', edges)
   nodeMenuVisible.value = false
 }
@@ -87,7 +94,6 @@ function clickHandler(e) {
 function doubleClickHandler(e) {
   nodeMenuVisible.value = false
 }
-
 watch(deleteNodeConfirm, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
     removeNodeAdsorption(deleteNode.value.id)
@@ -96,6 +102,7 @@ watch(deleteNodeConfirm, (newValue, oldValue) => {
     deleteNodeConfirm.value = false
   }
 })
+emitter.on('addWhenNode', (id) => addWhenNode(id))
 </script>
 
 <style scoped>
@@ -165,5 +172,10 @@ watch(deleteNodeConfirm, (newValue, oldValue) => {
     flex-direction: row;
     gap: 5px;
   }
+}
+</style>
+<style>
+.vue-flow__edges {
+  z-index: 2000;
 }
 </style>

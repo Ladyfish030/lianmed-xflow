@@ -58,15 +58,16 @@ const Choice = {
     y: 0,
   },
   dimensions: {
-    width: 160,
-    height: 250,
+    width: 180,
+    height: 170,
   },
   initDimensions: {
-    width: 160,
-    height: 250,
+    width: 180,
+    height: 170,
   },
   parentNode: '',
-  adsorption: true,
+  adsorption: false,
+  defaultNode: '',
 }
 
 // 定义 条件分支When 数据结构
