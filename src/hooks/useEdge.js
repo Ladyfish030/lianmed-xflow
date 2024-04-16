@@ -60,12 +60,7 @@ function findEdgeById(edgeId) {
 }
 
 function removeEdgeById(edgeId) {
-  edges.value = edges.value.filter(edge => edge.id !== edgeId)
+  edges.value = edges.value.filter((edge) => edge.id !== edgeId)
 }
 
-export {
-  edges,
-  onConnect, 
-  findEdgeById,
-  removeEdgeById,
-}
+export { edges, onConnect, findEdgeById, removeEdgeById, updateEdge }

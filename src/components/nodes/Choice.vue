@@ -22,16 +22,6 @@ const nodeId = instance.attrs.id
 const isDragged = ref(false)
 const { isDragging, draggedId } = useDragAndDrop()
 
-const visible = ref(false)
-
-watch(menuClickNode, (newValue, oldValue) => {
-  if (newValue.id === nodeId) {
-    visible.value = true
-  } else {
-    visible.value = false
-  }
-})
-
 watch(isDragging, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
     if (draggedId.value === nodeId) {

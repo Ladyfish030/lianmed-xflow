@@ -42,7 +42,6 @@ function dragAdsorption(node, pos) {
 }
 //删除节点
 function removeNodeAdsorption(deleteNodeId) {
-  console.log('删除节点')
   let node = findNodeById(deleteNodeId)
   if (node.parentNode) {
     let parentNode = findNodeById(node.parentNode)
@@ -111,7 +110,6 @@ function updateParentNode(node, parentNode) {
     }
     parentNodePosition.push(pos)
   }
-  console.log(parentNodePosition)
 }
 function updateChildNodeAdsorptionPos(node) {
   let childNodes = node.childNodes
@@ -139,7 +137,6 @@ function updateChildNodeAdsorptionPos(node) {
       }
     }
   }
-  console.log(parentNodePosition)
 }
 //由于子节点的position是相对父节点的，该函数可以拿到子节点争取的position
 function getTruePos(node, parentNode) {
@@ -227,7 +224,6 @@ function updateParentNodeStyle1(node, parentNode, changeWidth) {
 function updateAddNodeStyleExceptChoice(node, parentNode, changeStyle) {
   if (parentNode.type == NodeType.CHOICE) {
     //choice的高度更新操作
-    console.log('choice的高度更新操作')
     updateAddNodeStyleHeightChoice(node, parentNode, changeStyle)
     updateParentNodeHeight(parentNode, node)
     return
@@ -277,7 +273,6 @@ function updateAddNodeStyleExceptChoice(node, parentNode, changeStyle) {
   }
 }
 function updateAddNodeStyleHeightChoice(node, parentNode, changeStyle) {
-  console.log('进来更新choice的高度')
   let childNodes = parentNode.childNodes
   let len = childNodes.length
   if (changeStyle.height != 0) {
@@ -346,7 +341,6 @@ function updateParentNodeHeight(parentNode, node) {
   }
 }
 function updateDeleteParentNodeHeight(parentNode, node) {
-  console.log('updateDeleteParentNodeHeight')
   let change
   if (parentNode.type == NodeType.CHOICE) {
     change = updateNodeStyleWidthChoice(parentNode)
@@ -368,7 +362,6 @@ function updateDeleteParentNodeHeight(parentNode, node) {
   }
 }
 function updateNodeStyleHeightExceptChoice(parentNode, node) {
-  console.log('更新最高高度')
   let childNodes = parentNode.childNodes
   let maxHeight = 0
   let childNode

@@ -95,9 +95,6 @@ function nodeDragStartHandler(e) {
   onNodeDragStart(e)
 }
 
-function clickHandler() {
-  console.log('所有边：', edges)
-}
 function nodeDragHandler(e) {
   // console.log("e:", e)
 }

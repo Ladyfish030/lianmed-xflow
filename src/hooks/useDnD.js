@@ -101,7 +101,6 @@ export default function useDragAndDrop() {
    * @param {DragEvent} event
    */
   function onDrop(event) {
-    console.log('onDrop', event)
     const position = screenToFlowCoordinate({
       x: event.clientX,
       y: event.clientY,
@@ -195,7 +194,6 @@ export default function useDragAndDrop() {
       childNodes: whenNode.childNodes,
     }
     whenNode.childNodes = []
-    console.log(parentNode.style.height)
     parentNode.style.height =
       parseInt(parentNode.style.height) + whenNode.dimensions.height + 20 + 'px'
     addNodes(whenNode)
