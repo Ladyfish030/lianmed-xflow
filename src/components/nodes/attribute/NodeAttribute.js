@@ -162,6 +162,27 @@ const SubFlow = {
   childNodes: [],
 }
 
+// 定义 Logger 数据结构
+const Logger = {
+  id: '',
+  type: '',
+  data: '',
+  position: {
+    x: 0,
+    y: 0,
+  },
+  dimensions: {
+    width: 70,
+    height: 70,
+  },
+  initDimensions: {
+    width: 70,
+    height: 70,
+  },
+  parentNode: '',
+  adsorption: false,
+}
+
 export {
   Database,
   WebService,
@@ -170,4 +191,5 @@ export {
   ChoiceDefault,
   ForEach,
   SubFlow,
+  Logger,
 }

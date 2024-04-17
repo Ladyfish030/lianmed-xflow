@@ -39,6 +39,8 @@ declare module 'vue' {
     ForEach: typeof import('./src/components/nodes/ForEach.vue')['default']
     ForEachDrawer: typeof import('./src/components/nodes/drawer/ForEachDrawer.vue')['default']
     ForEachMenu: typeof import('./src/components/nodes/menu/ForEachMenu.vue')['default']
+    Logger: typeof import('./src/components/nodes/Logger.vue')['default']
+    LoggerMenu: typeof import('./src/components/nodes/menu/LoggerMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SubFlow: typeof import('./src/components/nodes/SubFlow.vue')['default']
