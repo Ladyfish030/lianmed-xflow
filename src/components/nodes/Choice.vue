@@ -6,7 +6,10 @@
     <Handle type="target" :position="Position.Left" />
     <Handle type="source" :position="Position.Right" />
     <ChoiceIcon />
-    <el-button class="add-button" @click="addWhenNode">+</el-button>
+    <!-- <el-button class="add-button" @click="addWhenNode">+</el-button> -->
+    <el-button class="add-button" @click="addWhenNode" circle>
+      <el-icon size="20"><Plus /></el-icon>
+    </el-button>
   </div>
 </template>
 
@@ -60,5 +63,6 @@ function addWhenNode() {
   bottom: 5px;
   left: 50%;
   transform: translateX(-50%);
+  border-color: #b1b3b8;
 }
 </style>

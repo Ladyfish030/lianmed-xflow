@@ -14,6 +14,7 @@ declare module 'vue' {
     ChoiceMenu: typeof import('./src/components/nodes/menu/ChoiceMenu.vue')['default']
     ChoiceWhen: typeof import('./src/components/nodes/ChoiceWhen.vue')['default']
     ChoiceWhenDrawer: typeof import('./src/components/nodes/drawer/ChoiceWhenDrawer.vue')['default']
+    ChoiceWhenMenu: typeof import('./src/components/nodes/menu/ChoiceWhenMenu.vue')['default']
     CommonEdgeMenu: typeof import('./src/components/edges/menu/CommonEdgeMenu.vue')['default']
     Database: typeof import('./src/components/nodes/Database.vue')['default']
     DatabaseDrawer: typeof import('./src/components/nodes/drawer/DatabaseDrawer.vue')['default']

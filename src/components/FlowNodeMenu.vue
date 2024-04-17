@@ -14,6 +14,7 @@ import { NodeType } from '../enums/NodeType'
 import DatabaseMenu from '../components/nodes/menu/DatabaseMenu.vue'
 import WebServiceMenu from '../components/nodes/menu/WebServiceMenu.vue'
 import ChoiceMenu from '../components/nodes/menu/ChoiceMenu.vue'
+import ChoiceWhenMenu from '../components/nodes/menu/ChoiceWhenMenu.vue'
 import ForEachMenu from '../components/nodes/menu/ForEachMenu.vue'
 import SubFlowMenu from '../components/nodes/menu/SubFlowMenu.vue'
 import LoggerMenu from '../components/nodes/menu/LoggerMenu.vue'
@@ -26,6 +27,8 @@ const currentMenu = computed(() => {
       return WebServiceMenu
     case NodeType.CHOICE:
       return ChoiceMenu
+    case NodeType.CHOICEWHEN:
+      return ChoiceWhenMenu
     case NodeType.FOREACH:
       return ForEachMenu    
     case NodeType.SUBFLOW:
