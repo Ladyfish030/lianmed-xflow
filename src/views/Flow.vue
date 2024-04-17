@@ -48,6 +48,7 @@ import ChoiceWhen from '@/components/nodes/ChoiceWhen.vue'
 import ChoiceDefault from '@/components/nodes/ChoiceDefault.vue'
 import ForEach from '@/components/nodes/ForEach.vue'
 import SubFlow from '@/components/nodes/SubFlow.vue'
+import Logger from '@/components/nodes/Logger.vue'
 
 import { NodeType } from '../enums/NodeType'
 import useDragAndDrop from '../hooks/useDnD'
@@ -83,6 +84,7 @@ const nodeTypes = {
   [NodeType.CHOICEDEFAULT]: markRaw(ChoiceDefault),
   [NodeType.FOREACH]: markRaw(ForEach),
   [NodeType.SUBFLOW]: markRaw(SubFlow),
+  [NodeType.LOGGER]: markRaw(Logger)
 }
 function nodeDoubleClickHandler(e) {
   drawerClickNode.value = findNode(e.node.id)
@@ -152,6 +154,7 @@ emitter.on('addWhenNode', (id) => addWhenNode(id))
 
 .dndflow {
   height: 100%;
+  width: 100%;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -ms-flex-direction: column;

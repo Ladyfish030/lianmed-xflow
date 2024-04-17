@@ -83,6 +83,15 @@ const input1 = ref('')
         <template #title>
           <span class="menu-title">执行组件</span>
         </template>
+        <div
+          :draggable="true"
+          @dragstart="onDragStart($event, NodeType.LOGGER)"
+          class="node-container"
+        >
+          <el-button class="node" type="info" plain>
+            <el-icon><Grid /></el-icon>Logger
+          </el-button>
+        </div>
       </el-sub-menu>
     </el-menu>
   </div>

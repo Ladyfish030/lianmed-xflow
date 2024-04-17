@@ -30,6 +30,8 @@ function getNewNode(newNodeType) {
       return NodeAttribute.ForEach
     case NodeType.SUBFLOW:
       return NodeAttribute.SubFlow
+    case NodeType.LOGGER:
+      return NodeAttribute.Logger
     default:
       return null
   }

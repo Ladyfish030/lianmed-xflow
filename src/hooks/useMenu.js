@@ -52,8 +52,8 @@ function pasteNodeHandler() {
   var copyParentNode = deepCopy(parentNode)
   copyParentNode.id = getId()
   copyParentNode.position = {
-    x: copyParentNode.position.x - getRandomInt(120, 150),
-    y: copyParentNode.position.y - getRandomInt(-50, 50)
+    x: copyParentNode.position.x - copyParentNode.dimensions.width / 2,
+    y: copyParentNode.position.y - copyParentNode.dimensions.height - 10
   }
   copyParentNode.parentNode = null
   if (copyParentNode.childNodes && copyParentNode.childNodes.length > 0) {
@@ -85,10 +85,6 @@ function pasteNodeHandler() {
     }
     addNode(copyParentNode)
   }
-}
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function deepCopy(obj) {

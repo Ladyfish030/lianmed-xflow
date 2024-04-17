@@ -6,4 +6,5 @@ export enum NodeType {
     CHOICEDEFAULT = 'choiceDefault',
     FOREACH = 'forEach',
     SUBFLOW = 'subFlow',
+    LOGGER = 'logger',
 }
