@@ -64,8 +64,16 @@ import {
   deleteNodeConfirm,
 } from '../hooks/useMenu'
 import { removeNodeAdsorption } from '../hooks/useAdsorption'
+import emitter from '@/utils/emitter'
 
-const { onDragOver, onDrop, onDragLeave, onNodeDragStart, onNodeDragStop } = useDragAndDrop()
+const {
+  onDragOver,
+  onDrop,
+  onDragLeave,
+  onNodeDragStart,
+  onNodeDragStop,
+  addWhenNode,
+} = useDragAndDrop()
 const { findNode, removeNodes } = useVueFlow()
 
 const nodeTypes = {
@@ -78,7 +86,6 @@ const nodeTypes = {
   [NodeType.SUBFLOW]: markRaw(SubFlow),
   [NodeType.LOGGER]: markRaw(Logger)
 }
-
 function nodeDoubleClickHandler(e) {
   drawerClickNode.value = findNode(e.node.id)
   onNodeDoubleClick()
@@ -94,7 +101,7 @@ function nodeDragHandler(e) {
   // console.log("e:", e)
 }
 
-function nodeContextMenuHandler(e) { 
+function nodeContextMenuHandler(e) {
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
   onNodeContextMenu(e)
@@ -115,7 +122,6 @@ function doubleClickHandler(e) {
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
 }
-
 watch(deleteNodeConfirm, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
     removeNodeAdsorption(deleteNode.value.id)
@@ -124,6 +130,7 @@ watch(deleteNodeConfirm, (newValue, oldValue) => {
     deleteNodeConfirm.value = false
   }
 })
+emitter.on('addWhenNode', (id) => addWhenNode(id))
 </script>
 
 <style scoped>

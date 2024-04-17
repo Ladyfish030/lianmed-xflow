@@ -1,8 +1,13 @@
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { NodeType } from '../enums/NodeType'
-import { dragAdsorption, updateParentNode } from './useAdsorption.js'
+import {
+  dragAdsorption,
+  updateParentNode,
+  updateNodePosAddWhenNode,
+} from './useAdsorption.js'
 import * as NodeAttribute from '../components/nodes/attribute/NodeAttribute'
+import { findNodeById, nodes } from './useNode.js'
 
 let id = 0
 function getId() {
@@ -124,15 +129,51 @@ export default function useDragAndDrop() {
     if (newNode.adsorption) {
       newNode.childNodes = []
     }
-    dragAdsorption(newNode)
-    updateParentNode(newNode)
-    addNodes(newNode)
-    if (newNode.type == NodeType.CHOICE) {
-      initChoice(newNode)
+    let pos = {
+      layerX: event.layerX,
+      layerY: event.layerY,
     }
+    dragAdsorption(newNode, pos)
+
+    if (newNode.adsorption) {
+      updateParentNode(newNode)
+    }
+    if (newNode.type == NodeType.CHOICE) {
+      newNode.childNodes = []
+      newNode.defaultNode = initChoice(newNode)
+    }
+    addNodes(newNode)
   }
 
   function initChoice(node) {
+    var defaultNode = getNewNode(NodeType.CHOICEDEFAULT)
+    const defaultNodeId = getId()
+    defaultNode = {
+      id: defaultNodeId,
+      type: NodeType.CHOICEDEFAULT,
+      position: {
+        x: 50,
+        y: 15,
+      },
+      dimensions: defaultNode.dimensions,
+      initDimensions: defaultNode.initDimensions,
+      style: {
+        width: `${defaultNode.dimensions.width}px`,
+        height: `${defaultNode.dimensions.height}px`,
+      },
+      parentNode: node.id,
+      draggable: false,
+      adsorption: defaultNode.adsorption,
+    }
+    defaultNode.childNodes = []
+    node.defaultNode = defaultNodeId
+    updateParentNode(defaultNode, node)
+    addNodes(defaultNode)
+    node.childNodes.push(defaultNodeId)
+    return defaultNodeId
+  }
+  function addWhenNode(parentNodeId) {
+    let parentNode = findNodeById(parentNodeId)
     var whenNode = getNewNode(NodeType.CHOICEWHEN)
     const whenNodeId = getId()
     whenNode = {
@@ -140,47 +181,27 @@ export default function useDragAndDrop() {
       type: NodeType.CHOICEWHEN,
       data: whenNode.data,
       position: {
-        x: node.dimensions.width - whenNode.dimensions.width - 10,
-        y: 10,
+        x: 50,
+        y: parseInt(parentNode.style.height) - 30,
       },
       dimensions: whenNode.dimensions,
+      initDimensions: whenNode.initDimensions,
       style: {
         width: `${whenNode.dimensions.width}px`,
         height: `${whenNode.dimensions.height}px`,
       },
-      parentNode: node.id,
-      expandParent: true,
+      parentNode: parentNode.id,
       draggable: false,
       adsorption: whenNode.adsorption,
       childNodes: whenNode.childNodes,
     }
+    whenNode.childNodes = []
+    parentNode.style.height =
+      parseInt(parentNode.style.height) + whenNode.dimensions.height + 20 + 'px'
     addNodes(whenNode)
-
-    var defaultNode = getNewNode(NodeType.CHOICEDEFAULT)
-    const defaultNodeId = getId()
-    defaultNode = {
-      id: defaultNodeId,
-      type: NodeType.CHOICEDEFAULT,
-      position: {
-        x: node.dimensions.width - defaultNode.dimensions.width - 10,
-        y: node.dimensions.height - defaultNode.dimensions.height - 10,
-      },
-      dimensions: defaultNode.dimensions,
-      style: {
-        width: `${defaultNode.dimensions.width}px`,
-        height: `${defaultNode.dimensions.height}px`,
-      },
-      parentNode: node.id,
-      expandParent: true,
-      draggable: false,
-      adsorption: defaultNode.adsorption,
-      childNodes: defaultNode.childNodes,
-    }
-    addNodes(defaultNode)
-
-    updateNode(node.id, {childNodes:[whenNode.id, defaultNode.id]})
+    parentNode.childNodes.push(whenNodeId)
+    updateNodePosAddWhenNode(whenNode, parentNode)
   }
-
   function onNodeDragStart(e) {
     const dragNode = e.event == undefined ? e : e.nodes[0]
     isDragging.value = true
@@ -192,8 +213,11 @@ export default function useDragAndDrop() {
     isDragging.value = false
     draggedId.value = null
     if (dragNode) {
-      dragAdsorption(dragNode)
-      updateParentNode(dragNode)
+      let pos = {
+        layerX: e.event.layerX,
+        layerY: e.event.layerY,
+      }
+      dragAdsorption(dragNode, pos)
     }
   }
 
@@ -208,5 +232,6 @@ export default function useDragAndDrop() {
     onDrop,
     onNodeDragStart,
     onNodeDragStop,
+    addWhenNode,
   }
 }
