@@ -68,8 +68,13 @@ function removeParentNode(node) {
         for (let item of childNodes) {
           removeParentNode(findNodeById(item))
         }
-        break
+        return
       }
+    }
+  } else if (node.type == NodeType.CHOICE) {
+    let childNodes = node.childNodes
+    for (let item of childNodes) {
+      removeParentNode(findNodeById(item))
     }
   }
 }
