@@ -42,13 +42,15 @@ function dragAdsorption(node, pos) {
 }
 //删除节点
 function removeNodeAdsorption(deleteNodeId) {
+  console.log('进来删除节点')
   let node = findNodeById(deleteNodeId)
   if (node.parentNode) {
     let parentNode = findNodeById(node.parentNode)
-    updateDeleteNodeStyleWidthExceptChoice(
+    updateDeleteNodeStyleWidthExceptChoiceHeightChoice(
       node,
       parentNode,
-      parseInt(node.style.width) + 20
+      parseInt(node.style.width) + 20,
+      parseInt(node.style.height) + 20
     )
     parentNode.childNodes.splice(
       parentNode.childNodes.findIndex((i) => i == deleteNodeId),
@@ -299,12 +301,30 @@ function updateAddNodeStyleHeightChoice(node, parentNode, changeStyle) {
     )
   }
 }
-//删除节点更新宽度
-function updateDeleteNodeStyleWidthExceptChoice(node, parentNode, width) {
+//删除choice节点更新高度 其他节点更新宽度
+function updateDeleteNodeStyleWidthExceptChoiceHeightChoice(
+  node,
+  parentNode,
+  width,
+  height
+) {
   if (parentNode.type == NodeType.CHOICE) {
-    return
+    height = updateDeleteNodeStyleHeightChoice(node, parentNode, height)
+    width = updateNodeStyleWidthChoice(parentNode)
+  } else {
+    height = updateNodeStyleHeightExceptChoice(parentNode, node)
+    width = updateDeleteNodeStyleWidthExceptChoice(node, parentNode, width)
   }
-
+  if (parentNode.parentNode) {
+    updateDeleteNodeStyleWidthExceptChoiceHeightChoice(
+      parentNode,
+      findNodeById(parentNode.parentNode),
+      width,
+      height
+    )
+  }
+}
+function updateDeleteNodeStyleWidthExceptChoice(node, parentNode, width) {
   let childNodes = parentNode.childNodes
   let len = childNodes.length
   if (len > 1 && node.id != childNodes[len - 1]) {
@@ -323,16 +343,31 @@ function updateDeleteNodeStyleWidthExceptChoice(node, parentNode, width) {
   } else {
     parentNode.style.width = parseInt(parentNode.style.width) - width + 'px'
   }
-
-  if (parentNode.parentNode) {
-    updateDeleteNodeStyleWidthExceptChoice(
-      parentNode,
-      findNodeById(parentNode.parentNode),
-      width
-    )
-  }
+  return width
 }
-function updateDeleteNodeStyleHeightChoice(node, parentNode) {}
+
+function updateDeleteNodeStyleHeightChoice(node, parentNode, height) {
+  let childNodes = parentNode.childNodes
+  let len = childNodes.length
+  if (len > 1 && node.id != childNodes[len - 1]) {
+    let index = childNodes.findIndex((i) => i == node.id) + 1
+    for (; index <= len - 1; index++) {
+      let childNode = findNodeById(childNodes[index])
+      childNode.position.y -= height
+    }
+  }
+  if (
+    parseInt(parentNode.style.height) - height <
+    parentNode.initDimensions.height
+  ) {
+    height =
+      parseInt(parentNode.style.height) - parentNode.initDimensions.height
+    parentNode.style.height = parentNode.initDimensions.height + 'px'
+  } else {
+    parentNode.style.height = parseInt(parentNode.style.height) - height + 'px'
+  }
+  return height
+}
 //节点更新choice更新宽度 其他节点更新高度
 function updateParentNodeHeight(parentNode, node) {
   let change
