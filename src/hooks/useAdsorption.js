@@ -436,7 +436,10 @@ function updateNodePosAddWhenNode(whenNode, parentNode) {
   }
   parentNodePosition.push(pos)
   if (parentNode.parentNode) {
-    updateParentNodeHeight(findNodeById(parentNode.parentNode), parentNode)
+    updateDeleteParentNodeHeight(
+      findNodeById(parentNode.parentNode),
+      parentNode
+    )
   }
 }
 function updateNodeStyleWidthChoice(parentNode) {
