@@ -18,6 +18,7 @@ import ChoiceWhenMenu from '../components/nodes/menu/ChoiceWhenMenu.vue'
 import ForEachMenu from '../components/nodes/menu/ForEachMenu.vue'
 import SubFlowMenu from '../components/nodes/menu/SubFlowMenu.vue'
 import LoggerMenu from '../components/nodes/menu/LoggerMenu.vue'
+import FlowReferenceMenu from '../components/nodes/menu/FlowReferenceMenu.vue'
 
 const currentMenu = computed(() => {
     switch (menuClickNode.value.type) {
@@ -35,6 +36,8 @@ const currentMenu = computed(() => {
       return SubFlowMenu
     case NodeType.LOGGER:
       return LoggerMenu
+    case NodeType.FLOWREFERENCE:
+      return FlowReferenceMenu
     default:
       return null
   }

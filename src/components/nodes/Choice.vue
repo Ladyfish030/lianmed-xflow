@@ -21,7 +21,7 @@ import ChoiceIcon from '@/assets/svg/ChoiceIcon.vue'
 import emitter from '@/utils/emitter'
 const props = defineProps(['id'])
 const instance = getCurrentInstance()
-const nodeId = instance.attrs.id
+const nodeId = instance.props.id
 const isDragged = ref(false)
 const { isDragging, draggedId } = useDragAndDrop()
 

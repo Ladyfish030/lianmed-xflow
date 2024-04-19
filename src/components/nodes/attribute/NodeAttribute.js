@@ -183,6 +183,29 @@ const Logger = {
   adsorption: false,
 }
 
+// 定义 Flow Reference 数据结构
+const FlowReference = {
+  id: '',
+  type: '',
+  data: {
+    flowName: '',
+  },
+  position: {
+    x: 0,
+    y: 0,
+  },
+  dimensions: {
+    width: 70,
+    height: 70,
+  },
+  initDimensions: {
+    width: 70,
+    height: 70,
+  },
+  parentNode: '',
+  adsorption: false,
+}
+
 export {
   Database,
   WebService,
@@ -192,4 +215,5 @@ export {
   ForEach,
   SubFlow,
   Logger,
+  FlowReference,
 }

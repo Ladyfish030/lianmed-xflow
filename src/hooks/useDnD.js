@@ -32,6 +32,8 @@ function getNewNode(newNodeType) {
       return NodeAttribute.SubFlow
     case NodeType.LOGGER:
       return NodeAttribute.Logger
+    case NodeType.FLOWREFERENCE:
+      return NodeAttribute.FlowReference
     default:
       return null
   }

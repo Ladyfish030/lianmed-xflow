@@ -11,8 +11,17 @@ function addNode(newNode) {
     nodes.value.push(newNode)
 }
 
+function findAncestorsNodeById(nodeId) {
+    var currentNode = findNodeById(nodeId)
+    while (currentNode.parentNode) {
+        currentNode = findNodeById(currentNode.parentNode)
+    }
+    return currentNode
+}
+
 export {
     nodes,
     findNodeById,
     addNode,
+    findAncestorsNodeById,
 }

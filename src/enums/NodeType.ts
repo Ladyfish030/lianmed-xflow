@@ -7,4 +7,5 @@ export enum NodeType {
     FOREACH = 'forEach',
     SUBFLOW = 'subFlow',
     LOGGER = 'logger',
+    FLOWREFERENCE = 'flowReference'
 }

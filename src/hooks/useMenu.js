@@ -1,5 +1,6 @@
 import { ref } from 'vue'
-import { addNode, findNodeById } from '../hooks/useNode'
+import { addNode, findNodeById, findAncestorsNodeById } from '../hooks/useNode'
+import { NodeType } from '../enums/NodeType'
 
 let id = 0
 function getId() {
@@ -17,7 +18,8 @@ const deleteNodeConfirm = ref(false)
 const copyNode = ref(null)
 
 function onNodeContextMenu(e) {
-  nodeMenuVisible.value = true
+  nodeMenuVisible.value = e.node.type === NodeType.CHOICEDEFAULT ? false : true
+  // nodeMenuVisible.value = true
   menuClickNode.value = e.node
   menuPosition.value = {
     x: e.event.layerX,
@@ -50,12 +52,14 @@ function pasteNodeHandler() {
 
   var parentNode = copyNode.value
   var copyParentNode = deepCopy(parentNode)
+  const ancestorsNode = findAncestorsNodeById(copyParentNode.id)
   copyParentNode.id = getId()
   copyParentNode.position = {
-    x: copyParentNode.position.x - copyParentNode.dimensions.width / 2,
-    y: copyParentNode.position.y - copyParentNode.dimensions.height - 10
+    x: ancestorsNode.position.x - copyParentNode.dimensions.width / 2,
+    y: ancestorsNode.position.y - copyParentNode.dimensions.height - 10
   }
   copyParentNode.parentNode = null
+  copyParentNode.draggable = true
   if (copyParentNode.childNodes && copyParentNode.childNodes.length > 0) {
     for (let i = 0; i < copyParentNode.childNodes.length; i++) {
       const nodeId = copyParentNode.childNodes[i]

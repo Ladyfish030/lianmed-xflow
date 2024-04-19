@@ -62,6 +62,15 @@ const input1 = ref('')
         </div>
         <div
           :draggable="true"
+          @dragstart="onDragStart($event, NodeType.FOREACH)"
+          class="node-container"
+        >
+          <el-button class="node" type="info" plain>
+            <el-icon><Grid /></el-icon>For Each
+          </el-button>
+        </div>
+        <div
+          :draggable="true"
           @dragstart="onDragStart($event, NodeType.SUBFLOW)"
           class="node-container"
         >
@@ -71,17 +80,17 @@ const input1 = ref('')
         </div>
         <div
           :draggable="true"
-          @dragstart="onDragStart($event, NodeType.FOREACH)"
+          @dragstart="onDragStart($event, NodeType.FLOWREFERENCE)"
           class="node-container"
         >
           <el-button class="node" type="info" plain>
-            <el-icon><Grid /></el-icon>For Each
+            <el-icon><Grid /></el-icon>Flow Reference
           </el-button>
         </div>
       </el-sub-menu>
       <el-sub-menu index="3">
         <template #title>
-          <span class="menu-title">执行组件</span>
+          <span class="menu-title">处理组件</span>
         </template>
         <div
           :draggable="true"
