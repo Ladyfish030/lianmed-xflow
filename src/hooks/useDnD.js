@@ -132,14 +132,10 @@ export default function useDragAndDrop() {
       newNode.childNodes = []
     }
     let pos = {
-      layerX: event.layerX,
-      layerY: event.layerY,
+      layerX: newNode.position.x,
+      layerY: newNode.position.y,
     }
     dragAdsorption(newNode, pos)
-
-    if (newNode.adsorption) {
-      updateParentNode(newNode)
-    }
     if (newNode.type == NodeType.CHOICE) {
       newNode.childNodes = []
       newNode.defaultNode = initChoice(newNode)
@@ -198,11 +194,11 @@ export default function useDragAndDrop() {
       childNodes: whenNode.childNodes,
     }
     whenNode.childNodes = []
-    parentNode.style.height =
-      parseInt(parentNode.style.height) + whenNode.dimensions.height + 20 + 'px'
+    // parentNode.style.height =
+    // parseInt(parentNode.style.height) + whenNode.dimensions.height + 20 + 'px'
     addNodes(whenNode)
-    parentNode.childNodes.push(whenNodeId)
     updateNodePosAddWhenNode(whenNode, parentNode)
+    parentNode.childNodes.push(whenNodeId)
   }
   function onNodeDragStart(e) {
     const dragNode = e.event == undefined ? e : e.nodes[0]
@@ -216,8 +212,8 @@ export default function useDragAndDrop() {
     draggedId.value = null
     if (dragNode) {
       let pos = {
-        layerX: e.event.layerX,
-        layerY: e.event.layerY,
+        layerX: dragNode.position.x,
+        layerY: dragNode.position.y,
       }
       dragAdsorption(dragNode, pos)
     }
