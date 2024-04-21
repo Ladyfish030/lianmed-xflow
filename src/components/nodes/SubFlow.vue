@@ -32,11 +32,11 @@ watch(isDragging, (newValue, oldValue) => {
 })
 
 watch(saveComplete, (newValue, oldValue) => {
-  if (oldValue === false && newValue === true) {
-      if (drawerClickNode.value.id === nodeId) {
-        name.value = findNodeById(nodeId).data.name
+    if (oldValue === false && newValue === true) {
+        if (drawerClickNode.value.id === nodeId) {
+            name.value = findNodeById(nodeId).data.name
+        }
     }
-  }
 })
 </script>
 
@@ -50,13 +50,15 @@ watch(saveComplete, (newValue, oldValue) => {
 }
 
 .component-container:hover {
-  background-color: #f4f4f5;
+    background-color: #f4f4f5;
 }
 
 .span-text {
     position: absolute;
     top: 10px;
     text-align: left;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     font-size: 11px;
     color: black;

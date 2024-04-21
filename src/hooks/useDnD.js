@@ -200,6 +200,7 @@ export default function useDragAndDrop() {
     updateNodePosAddWhenNode(whenNode, parentNode)
     parentNode.childNodes.push(whenNodeId)
   }
+  
   function onNodeDragStart(e) {
     const dragNode = e.event == undefined ? e : e.nodes[0]
     isDragging.value = true
