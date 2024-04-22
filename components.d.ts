@@ -35,6 +35,7 @@ declare module 'vue' {
     ElText: typeof import('element-plus/es')['ElText']
     FlowDrawer: typeof import('./src/components/FlowDrawer.vue')['default']
     FlowEdgeMenu: typeof import('./src/components/FlowEdgeMenu.vue')['default']
+    FlowMenu: typeof import('./src/components/FlowMenu.vue')['default']
     FlowNodeMenu: typeof import('./src/components/FlowNodeMenu.vue')['default']
     FlowReference: typeof import('./src/components/nodes/FlowReference.vue')['default']
     FlowReferenceDrawer: typeof import('./src/components/nodes/drawer/FlowReferenceDrawer.vue')['default']

@@ -3,9 +3,6 @@ import { addNode, findNodeById, findAncestorsNodeById } from '../hooks/useNode'
 import { NodeType } from '../enums/NodeType'
 
 let id = 0
-function getId() {
-  return `copynode_${id++}`
-}
 
 const nodeMenuVisible = ref(false)
 const edgeMenuVisible = ref(false)
@@ -16,6 +13,10 @@ const deleteNode = ref(null)
 const deleteEdge = ref(null)
 const deleteNodeConfirm = ref(false)
 const copyNode = ref(null)
+
+function getId() {
+  return `copynode_${id++}`
+}
 
 function onNodeContextMenu(e) {
   nodeMenuVisible.value = e.node.type === NodeType.CHOICEDEFAULT ? false : true
@@ -48,8 +49,15 @@ const deleteNodeHandler = (done) => {
 }
 
 function pasteNodeHandler() {
-  const queue = []
+  if (copyNode.value == null) {
+    ElMessage({
+      message: '请先选择要复制的节点',
+      type: 'warning',
+    })
+    return
+  }
 
+  const queue = []
   var parentNode = copyNode.value
   var copyParentNode = deepCopy(parentNode)
   const ancestorsNode = findAncestorsNodeById(copyParentNode.id)

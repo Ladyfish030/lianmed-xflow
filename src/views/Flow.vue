@@ -122,6 +122,7 @@ function doubleClickHandler(e) {
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
 }
+
 watch(deleteNodeConfirm, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
     removeNodeAdsorption(deleteNode.value.id)
@@ -130,6 +131,7 @@ watch(deleteNodeConfirm, (newValue, oldValue) => {
     deleteNodeConfirm.value = false
   }
 })
+
 emitter.on('addWhenNode', (id) => addWhenNode(id))
 </script>
 

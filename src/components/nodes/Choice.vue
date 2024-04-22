@@ -58,10 +58,13 @@ function addWhenNode() {
 .component-container:hover {
   background-color: #d9ecff;
 }
+
 .add-button {
   position: absolute;
   bottom: 5px;
   left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
   transform: translateX(-50%);
   border-color: #b1b3b8;
 }
