@@ -24,6 +24,7 @@
       <Controls position="top-right" />
       <FlowNodeMenu />
       <FlowEdgeMenu />
+      <SaveRestoreControls></SaveRestoreControls>
     </VueFlow>
     <FlowDrawer />
   </div>
@@ -34,6 +35,7 @@ import { ref, watch, markRaw } from 'vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
+import SaveRestoreControls from '../components/SaveRestoreControls.vue'
 import DropzoneBackground from '../components/DropzoneBackground.vue'
 import FlowSide from '../components/FlowSide.vue'
 import FlowDrawer from '../components/FlowDrawer.vue'

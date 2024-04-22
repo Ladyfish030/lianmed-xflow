@@ -218,7 +218,13 @@ export default function useDragAndDrop() {
       dragAdsorption(dragNode, pos)
     }
   }
-
+  function getIdRestore() {
+    return id
+  }
+  function setIdRestore(value) {
+    id = value + 1
+    console.log(id)
+  }
   return {
     draggedId,
     draggedType,
@@ -231,5 +237,7 @@ export default function useDragAndDrop() {
     onNodeDragStart,
     onNodeDragStop,
     addWhenNode,
+    getIdRestore,
+    setIdRestore,
   }
 }

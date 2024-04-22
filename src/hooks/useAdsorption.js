@@ -177,7 +177,7 @@ function updateParentNodeStyle(node, parentNode, width, height) {
     width = updateWidthExceptChoice(node, parentNode, width)
   }
   if (parentNode.parentNode) {
-    console.log(parentNode)
+    // console.log(parentNode)
     updateParentNodeStyle(
       parentNode,
       findNodeById(parentNode.parentNode),
@@ -392,9 +392,18 @@ function updateDeleteParentNodeStyle(node, parentNode, width, height) {
     )
   }
 }
+function getParentPos() {
+  return parentNodePosition
+}
+function setParentPos(value) {
+  console.log(value)
+  parentNodePosition = value || []
+}
 export {
   dragAdsorption,
   removeNodeAdsorption,
   updateParentNode,
   updateNodePosAddWhenNode,
+  getParentPos,
+  setParentPos,
 }
