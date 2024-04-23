@@ -24,8 +24,8 @@ function onRestore() {
 
   if (flow) {
     fromObject(flow)
-    setParentPos(JSON.parse(localStorage.getItem(parentPos)))
-    setIdRestore(parseInt(localStorage.getItem('nodeId')))
+    setParentPos(JSON.parse(localStorage.getItem(parentPos)) || [])
+    setIdRestore(parseInt(localStorage.getItem('nodeId')) || 0)
     ElNotification({
       title: '提示',
       message: h('i', { style: 'color: teal' }, '载入草稿成功'),
