@@ -47,7 +47,6 @@ declare module 'vue' {
     ForEachMenu: typeof import('./src/components/nodes/menu/ForEachMenu.vue')['default']
     Logger: typeof import('./src/components/nodes/Logger.vue')['default']
     LoggerMenu: typeof import('./src/components/nodes/menu/LoggerMenu.vue')['default']
-    Restore: typeof import('./src/components/Restore.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SaveRestoreControls: typeof import('./src/components/SaveRestoreControls.vue')['default']
