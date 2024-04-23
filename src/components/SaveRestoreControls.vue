@@ -33,31 +33,45 @@ function onSave() {
 
 function onRestore() {
   const flow = JSON.parse(localStorage.getItem(flowKey))
-
   if (flow) {
-    fromObject(flow)
-    setParentPos(JSON.parse(localStorage.getItem(parentPos)))
-    setIdRestore(parseInt(localStorage.getItem('nodeId')))
-    setCopyIdRestore(parseInt(localStorage.getItem('copyNodeId')))
-    ElMessage({
-      message: '载入草稿成功',
-      type: 'success',
-    })
-    return
-  }
+    ElMessageBox.confirm('确定载入草稿？这将会覆盖当前数据')
+      .then(() => {
+        fromObject(flow)
+        setParentPos(JSON.parse(localStorage.getItem(parentPos)))
+        setIdRestore(parseInt(localStorage.getItem('nodeId')))
+        setCopyIdRestore(parseInt(localStorage.getItem('copyNodeId')))
 
-  ElMessage({
-    message: '草稿箱为空',
-    type: 'warning',
-  })
+        ElMessage({
+          message: '载入草稿成功',
+          type: 'success',
+        })
+        return
+      })
+      .catch(() => {
+        // catch error
+      })
+  }
+  else {
+    ElMessage({
+      message: '草稿箱为空',
+      type: 'warning',
+    })
+  }
 }
 
 function onClear() {
-  localStorage.clear()
-  ElMessage({
-      message: '清空草稿成功',
-      type: 'success',
-  })
+  ElMessageBox.confirm('确定清空草稿箱？')
+    .then(() => {
+      localStorage.clear()
+      ElMessage({
+        message: '清空草稿成功',
+        type: 'success',
+      })
+      return
+    })
+    .catch(() => {
+      // catch error
+    })
 }
 </script>
 

@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { addNode, findNodeById, findAbsolutePositionByNodeId } from '../hooks/useNode'
-import { dragAdsorption } from './useAdsorption'
+import { dragAdsorption, updateParentNode, updateNodePosAddWhenNode } from './useAdsorption'
+import { NodeType } from '../enums/NodeType'
 
 let id = 0
 
@@ -14,8 +15,7 @@ const menuToFlowCoordinatePosition = ref({ x: 0, y: 0 })
 const deleteNode = ref(null)
 const deleteEdge = ref(null)
 const deleteNodeConfirm = ref(false)
-const copyNode = ref(null)
-var temporaryCopyNode = null
+var copyNodes = []
 
 function getId() {
   return `copynode_${id++}`
@@ -47,8 +47,33 @@ function onFlowContextMenu(e) {
   }
 }
 
+function findCopyNodeById(nodeId) {
+  const node = copyNodes.find(node => node.id === nodeId)
+  return node
+}
+
+function copyNodeHandler() {
+  copyNodes = []
+  var currentNode = deepCopy(menuClickNode.value)
+  const queue = []
+  queue.push(currentNode)
+  while (queue.length > 0) {
+    currentNode = queue.shift()
+    copyNodes.push(currentNode)
+    if (currentNode.childNodes && currentNode.childNodes.length > 0) {
+      for (let i = 0; i < currentNode.childNodes.length; i++) {
+        const nodeId = currentNode.childNodes[i]
+        const childNode = findNodeById(nodeId)
+        const copyChildNode = deepCopy(childNode)
+        queue.push(copyChildNode)
+      }
+    }
+  }
+  console.log("copyNodes:", copyNodes)
+}
+
 function pasteNodeHandler() {
-  if (copyNode.value == null) {
+  if (copyNodes.length == 0) {
     ElMessage({
       message: '请先选择要复制的节点',
       type: 'warning',
@@ -65,8 +90,7 @@ function pasteNodeHandler() {
 
 function pasteNodeOnFlow() {
   const queue = []
-  var parentNode = copyNode.value
-  var copyParentNode = deepCopy(parentNode)
+  var copyParentNode = deepCopy(copyNodes[0])
   copyParentNode.id = getId()
   copyParentNode.position = menuToFlowCoordinatePosition.value
   copyParentNode.parentNode = null
@@ -74,45 +98,7 @@ function pasteNodeOnFlow() {
   if (copyParentNode.childNodes && copyParentNode.childNodes.length > 0) {
     for (let i = 0; i < copyParentNode.childNodes.length; i++) {
       const nodeId = copyParentNode.childNodes[i]
-      const childNode = findNodeById(nodeId)
-      const copyChildNode = deepCopy(childNode)
-      copyChildNode.id = getId()
-      copyChildNode.parentNode = copyParentNode.id
-      queue.push(copyChildNode)
-      copyParentNode.childNodes[i] = copyChildNode.id
-    }
-  }
-  addNode(copyParentNode)
-
-  while (queue.length > 0) {
-    parentNode = queue.shift()
-    copyParentNode = deepCopy(parentNode)
-    if (copyParentNode.childNodes && copyParentNode.childNodes.length > 0) {
-      for (let i = 0; i < copyParentNode.childNodes.length; i++) {
-        const nodeId = copyParentNode.childNodes[i]
-        const childNode = findNodeById(nodeId)
-        const copyChildNode = deepCopy(childNode)
-        copyChildNode.id = getId()
-        copyChildNode.parentNode = copyParentNode.id
-        queue.push(copyChildNode)
-        copyParentNode.childNodes[i] = copyChildNode.id
-      }
-    }
-    addNode(copyParentNode)
-  }
-}
-
-function pasteNodeIntoNode() {
-  const queue = []
-  var parentNode = copyNode.value
-  var copyParentNode = deepCopy(parentNode)
-  copyParentNode.id = getId()
-  copyParentNode.parentNode = null
-  copyParentNode.draggable = true
-  if (copyParentNode.childNodes && copyParentNode.childNodes.length > 0) {
-    for (let i = 0; i < copyParentNode.childNodes.length; i++) {
-      const nodeId = copyParentNode.childNodes[i]
-      const childNode = findNodeById(nodeId)
+      const childNode = findCopyNodeById(nodeId)
       const copyChildNode = deepCopy(childNode)
       copyChildNode.id = getId()
       copyChildNode.parentNode = copyParentNode.id
@@ -124,12 +110,57 @@ function pasteNodeIntoNode() {
   var temporaryParentNode = copyParentNode
 
   while (queue.length > 0) {
-    parentNode = queue.shift()
+    var parentNode = queue.shift()
     copyParentNode = deepCopy(parentNode)
     if (copyParentNode.childNodes && copyParentNode.childNodes.length > 0) {
       for (let i = 0; i < copyParentNode.childNodes.length; i++) {
         const nodeId = copyParentNode.childNodes[i]
-        const childNode = findNodeById(nodeId)
+        const childNode = findCopyNodeById(nodeId)
+        const copyChildNode = deepCopy(childNode)
+        copyChildNode.id = getId()
+        copyChildNode.parentNode = copyParentNode.id
+        queue.push(copyChildNode)
+        copyParentNode.childNodes[i] = copyChildNode.id
+      }
+    }
+    addNode(copyParentNode)
+  }
+
+  temporaryParentNode = findNodeById(temporaryParentNode.id)
+  let pos = {
+    layerX: temporaryParentNode.position.x,
+    layerY: temporaryParentNode.position.y
+  }
+  dragAdsorption(temporaryParentNode, pos)
+}
+
+function pasteNodeIntoNode() {
+  const queue = []
+  var copyParentNode = deepCopy(copyNodes[0])
+  copyParentNode.id = getId()
+  copyParentNode.parentNode = null
+  copyParentNode.draggable = true
+  if (copyParentNode.childNodes && copyParentNode.childNodes.length > 0) {
+    for (let i = 0; i < copyParentNode.childNodes.length; i++) {
+      const nodeId = copyParentNode.childNodes[i]
+      const childNode = findCopyNodeById(nodeId)
+      const copyChildNode = deepCopy(childNode)
+      copyChildNode.id = getId()
+      copyChildNode.parentNode = copyParentNode.id
+      queue.push(copyChildNode)
+      copyParentNode.childNodes[i] = copyChildNode.id
+    }
+  }
+  addNode(copyParentNode)
+  var temporaryParentNode = copyParentNode
+
+  while (queue.length > 0) {
+    var parentNode = queue.shift()
+    copyParentNode = deepCopy(parentNode)
+    if (copyParentNode.childNodes && copyParentNode.childNodes.length > 0) {
+      for (let i = 0; i < copyParentNode.childNodes.length; i++) {
+        const nodeId = copyParentNode.childNodes[i]
+        const childNode = findCopyNodeById(nodeId)
         const copyChildNode = deepCopy(childNode)
         copyChildNode.id = getId()
         copyChildNode.parentNode = copyParentNode.id
@@ -195,11 +226,11 @@ export {
   deleteNode,
   deleteEdge,
   deleteNodeConfirm,
-  copyNode,
   onNodeContextMenu,
   onEdgeContextMenu,
   onFlowContextMenu,
   deleteNodeHandler,
+  copyNodeHandler,
   pasteNodeHandler,
   getCopyIdRestore,
   setCopyIdRestore,

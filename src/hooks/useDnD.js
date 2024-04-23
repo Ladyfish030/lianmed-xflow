@@ -169,6 +169,7 @@ export default function useDragAndDrop() {
     node.childNodes.push(defaultNodeId)
     return defaultNodeId
   }
+  
   function addWhenNode(parentNodeId) {
     let parentNode = findNodeById(parentNodeId)
     var whenNode = getNewNode(NodeType.CHOICEWHEN)

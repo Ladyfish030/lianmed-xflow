@@ -144,9 +144,9 @@ function updateChildNodeAdsorptionPos(node) {
   for (let i of childNodes) {
     let childNode = findNodeById(i)
     if (childNode.adsorption) {
+      let { x, y } = getTruePos(childNode)
       for (let item of parentNodePosition) {
         if (item.id == childNode.id) {
-          let { x, y } = getTruePos(childNode)
           if (
             item.xMin != x ||
             item.xMax != x + parseInt(childNode.style.width) ||
@@ -160,8 +160,18 @@ function updateChildNodeAdsorptionPos(node) {
             item.yMax = y + parseInt(childNode.style.height)
             updateChildNodeAdsorptionPos(childNode)
           }
+          return
         }
       }
+      let pos = {
+        xMin: x,
+        xMax: x + parseInt(childNode.style.width),
+        yMin: y,
+        yMax: y + parseInt(childNode.style.height),
+        id: childNode.id,
+      }
+      parentNodePosition.push(pos)
+      updateChildNodeAdsorptionPos(childNode)
     } else if (childNode.type == NodeType.CHOICE) {
       updateChildNodeAdsorptionPos(childNode)
     }

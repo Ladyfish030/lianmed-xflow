@@ -20,7 +20,7 @@ import {
     menuClickNode,
     deleteNode,
     deleteNodeHandler,
-    copyNode,
+    copyNodeHandler,
 } from '@/hooks/useMenu'
 
 function deleteHandler() {
@@ -29,7 +29,7 @@ function deleteHandler() {
 }
 
 function copyHandler() {
-    copyNode.value = menuClickNode.value
+    copyNodeHandler()
 }
 </script>
 
