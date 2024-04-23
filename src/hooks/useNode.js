@@ -19,9 +19,23 @@ function findAncestorsNodeById(nodeId) {
     return currentNode
 }
 
+function findAbsolutePositionByNodeId(nodeId) {
+    var currentNode = findNodeById(nodeId)
+    var absolutePosition = currentNode.position
+    while (currentNode.parentNode) {
+        currentNode = findNodeById(currentNode.parentNode)
+        absolutePosition = {
+            x: absolutePosition.x + currentNode.position.x,
+            y: absolutePosition.y + currentNode.position.y,
+        }
+    }
+    return absolutePosition
+}
+
 export {
     nodes,
     findNodeById,
     addNode,
     findAncestorsNodeById,
+    findAbsolutePositionByNodeId,
 }

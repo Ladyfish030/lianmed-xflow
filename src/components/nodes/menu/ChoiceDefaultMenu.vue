@@ -1,42 +1,17 @@
 <template>
     <div class="container">
-        <div @click="copyHandler" class="button-container">
-            <el-icon :size="20">
-                <CopyDocument />
-            </el-icon>
-            <span>复制</span>
-        </div>
         <div @click="pasteHandler" class="button-container">
             <PasteIcon />
             <span>粘贴</span>
-        </div>
-        <div @click="deleteHandler" class="button-container">
-            <el-icon :size="20" color="#f89898">
-                <Delete />
-            </el-icon>
-            <span style="color: #f89898;">删除</span>
         </div>
     </div>
 </template>
 
 <script setup>
 import {
-    menuClickNode,
-    deleteNode,
-    deleteNodeHandler,
-    copyNode,
     pasteNodeHandler,
 } from '@/hooks/useMenu'
 import PasteIcon from '@/assets/svg/PasteIcon.vue'
-
-function deleteHandler() {
-    deleteNode.value = menuClickNode.value
-    deleteNodeHandler()
-}
-
-function copyHandler() {
-    copyNode.value = menuClickNode.value
-}
 
 function pasteHandler() {
     pasteNodeHandler()

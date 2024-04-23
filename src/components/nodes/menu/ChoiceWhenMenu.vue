@@ -1,5 +1,9 @@
 <template>
     <div class="container">
+        <div @click="pasteHandler" class="button-container">
+            <PasteIcon />
+            <span>粘贴</span>
+        </div>
         <div @click="deleteHandler" class="button-container">
             <el-icon :size="20" color="#f89898">
                 <Delete />
@@ -14,13 +18,18 @@ import {
     menuClickNode,
     deleteNode,
     deleteNodeHandler,
+    pasteNodeHandler,
 } from '@/hooks/useMenu'
+import PasteIcon from '@/assets/svg/PasteIcon.vue'
 
 function deleteHandler() {
     deleteNode.value = menuClickNode.value
     deleteNodeHandler()
 }
 
+function pasteHandler() {
+    pasteNodeHandler()
+}
 </script>
 
 <style scoped>

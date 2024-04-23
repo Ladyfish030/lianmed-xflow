@@ -6,10 +6,7 @@
     <Handle type="target" :position="Position.Left" />
     <Handle type="source" :position="Position.Right" />
     <ChoiceIcon />
-    <!-- <el-button class="add-button" @click="addWhenNode">+</el-button> -->
-    <el-button class="add-button" @click="addWhenNode" circle>
-      <el-icon size="20"><Plus /></el-icon>
-    </el-button>
+    <ChoiceAddIcon class="add-button" @click="addWhenNode"/>
   </div>
 </template>
 
@@ -18,6 +15,7 @@ import { Handle, Position } from '@vue-flow/core'
 import { ref, watch, getCurrentInstance, defineProps } from 'vue'
 import useDragAndDrop from '@/hooks/useDnD'
 import ChoiceIcon from '@/assets/svg/ChoiceIcon.vue'
+import ChoiceAddIcon from '@/assets/svg/ChoiceAddIcon.vue'
 import emitter from '@/utils/emitter'
 const props = defineProps(['id'])
 const instance = getCurrentInstance()
@@ -50,18 +48,18 @@ function addWhenNode() {
   align-items: center;
   border: 1px solid #b1b3b8;
   border-radius: 5px;
-  background-color: #ecf5ff;
+  background-color: white;
   height: 100%;
   position: relative;
 }
 
 .component-container:hover {
-  background-color: #d9ecff;
+  background-color: #f4f4f5;
 }
 
 .add-button {
   position: absolute;
-  bottom: 5px;
+  bottom: 10px;
   left: 50%;
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);

@@ -5,9 +5,9 @@ import {
   dragAdsorption,
   updateParentNode,
   updateNodePosAddWhenNode,
-} from './useAdsorption.js'
+} from './useAdsorption'
 import * as NodeAttribute from '../components/nodes/attribute/NodeAttribute'
-import { findNodeById, nodes } from './useNode.js'
+import { findNodeById, nodes } from './useNode'
 
 let id = 0
 function getId() {
@@ -52,7 +52,7 @@ const state = {
 
 export default function useDragAndDrop() {
   const { draggedId, draggedType, isDragOver, isDragging, newNodeType } = state
-  const { screenToFlowCoordinate, addNodes, updateNode } = useVueFlow()
+  const { screenToFlowCoordinate, addNodes } = useVueFlow()
 
   watch(isDragging, (dragging) => {
     document.body.style.userSelect = dragging ? 'none' : ''
@@ -109,7 +109,6 @@ export default function useDragAndDrop() {
       x: event.clientX,
       y: event.clientY,
     })
-
     const nodeId = getId()
     var newNode = getNewNode(newNodeType.value)
     newNode = {
@@ -180,7 +179,7 @@ export default function useDragAndDrop() {
       data: whenNode.data,
       position: {
         x: 50,
-        y: parseInt(parentNode.style.height) - 30,
+        y: parseInt(parentNode.style.height) - 25,
       },
       dimensions: whenNode.dimensions,
       initDimensions: whenNode.initDimensions,
