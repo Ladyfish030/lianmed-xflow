@@ -1,8 +1,19 @@
+<template>
+  <Panel class="save-restore-controls">
+    <button style="background-color: #33a6b8" @click="onSave">保存草稿</button>
+    <button style="background-color: #113285" @click="onRestore">
+      载入草稿
+    </button>
+    <button style="background-color: #f89898" @click="onClear">
+      清空草稿
+    </button>
+  </Panel>
+</template>
+
 <script setup>
 import { Panel, useVueFlow } from '@vue-flow/core'
-import { ElNotification } from 'element-plus'
-import { h } from 'vue'
 import { setParentPos, getParentPos } from '../hooks/useAdsorption'
+import { getCopyIdRestore, setCopyIdRestore } from '../hooks/useMenu'
 import useDragAndDrop from '../hooks/useDnD'
 const { getIdRestore, setIdRestore } = useDragAndDrop()
 const flowKey = 'xFlow'
@@ -13,9 +24,10 @@ function onSave() {
   localStorage.setItem(flowKey, JSON.stringify(toObject()))
   localStorage.setItem(parentPos, JSON.stringify(getParentPos()))
   localStorage.setItem('nodeId', getIdRestore())
-  ElNotification({
-    title: '提示',
-    message: h('i', { style: 'color: teal' }, '存入成功'),
+  localStorage.setItem('copyNodeId', getCopyIdRestore())
+  ElMessage({
+    message: '保存成功',
+    type: 'success',
   })
 }
 
@@ -26,28 +38,29 @@ function onRestore() {
     fromObject(flow)
     setParentPos(JSON.parse(localStorage.getItem(parentPos)))
     setIdRestore(parseInt(localStorage.getItem('nodeId')))
-    ElNotification({
-      title: '提示',
-      message: h('i', { style: 'color: teal' }, '载入草稿成功'),
+    setCopyIdRestore(parseInt(localStorage.getItem('copyNodeId')))
+    ElMessage({
+      message: '载入草稿成功',
+      type: 'success',
     })
     return
   }
 
-  ElNotification({
-    title: '提示',
-    message: h('i', { style: 'color: teal' }, '草稿箱为空'),
+  ElMessage({
+    message: '草稿箱为空',
+    type: 'warning',
+  })
+}
+
+function onClear() {
+  localStorage.clear()
+  ElMessage({
+      message: '清空草稿成功',
+      type: 'success',
   })
 }
 </script>
 
-<template>
-  <Panel class="save-restore-controls">
-    <button style="background-color: #33a6b8" @click="onSave">存入草稿</button>
-    <button style="background-color: #113285" @click="onRestore">
-      载入草稿
-    </button>
-  </Panel>
-</template>
 <style scoped>
 .save-restore-controls {
   font-size: 14px;
@@ -55,6 +68,7 @@ function onRestore() {
   right: 60px;
   top: 0;
 }
+
 .save-restore-controls button {
   margin-left: 5px;
   padding: 10px;
@@ -66,6 +80,7 @@ function onRestore() {
   box-shadow: 0 5px 10px #0000004d;
   cursor: pointer;
 }
+
 .save-restore-controls button:hover {
   transform: scale(105%);
   transition: 0.25s all ease-in-out;

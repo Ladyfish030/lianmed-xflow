@@ -150,7 +150,7 @@ export default function useDragAndDrop() {
       type: NodeType.CHOICEDEFAULT,
       position: {
         x: 50,
-        y: 15,
+        y: 20,
       },
       dimensions: defaultNode.dimensions,
       initDimensions: defaultNode.initDimensions,
@@ -179,7 +179,7 @@ export default function useDragAndDrop() {
       data: whenNode.data,
       position: {
         x: 50,
-        y: parseInt(parentNode.style.height) - 25,
+        y: parseInt(parentNode.style.height) - 20,
       },
       dimensions: whenNode.dimensions,
       initDimensions: whenNode.initDimensions,
@@ -193,8 +193,6 @@ export default function useDragAndDrop() {
       childNodes: whenNode.childNodes,
     }
     whenNode.childNodes = []
-    // parentNode.style.height =
-    // parseInt(parentNode.style.height) + whenNode.dimensions.height + 20 + 'px'
     addNodes(whenNode)
     updateNodePosAddWhenNode(whenNode, parentNode)
     parentNode.childNodes.push(whenNodeId)
@@ -218,13 +216,15 @@ export default function useDragAndDrop() {
       dragAdsorption(dragNode, pos)
     }
   }
+
   function getIdRestore() {
     return id
   }
+
   function setIdRestore(value) {
-    id = value + 1
-    console.log(id)
+    id = value
   }
+
   return {
     draggedId,
     draggedType,

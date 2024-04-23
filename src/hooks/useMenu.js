@@ -15,6 +15,7 @@ const deleteNode = ref(null)
 const deleteEdge = ref(null)
 const deleteNodeConfirm = ref(false)
 const copyNode = ref(null)
+var temporaryCopyNode = null
 
 function getId() {
   return `copynode_${id++}`
@@ -175,6 +176,14 @@ function deepCopy(obj) {
   return copy;
 }
 
+function getCopyIdRestore() {
+  return id
+}
+
+function setCopyIdRestore(value) {
+  id = value
+}
+
 export {
   nodeMenuVisible,
   edgeMenuVisible,
@@ -192,4 +201,6 @@ export {
   onFlowContextMenu,
   deleteNodeHandler,
   pasteNodeHandler,
+  getCopyIdRestore,
+  setCopyIdRestore,
 }

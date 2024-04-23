@@ -177,7 +177,6 @@ function updateParentNodeStyle(node, parentNode, width, height) {
     width = updateWidthExceptChoice(node, parentNode, width)
   }
   if (parentNode.parentNode) {
-    // console.log(parentNode)
     updateParentNodeStyle(
       parentNode,
       findNodeById(parentNode.parentNode),
@@ -396,7 +395,6 @@ function getParentPos() {
   return parentNodePosition
 }
 function setParentPos(value) {
-  console.log(value)
   parentNodePosition = value || []
 }
 export {

@@ -8,6 +8,7 @@
       @dragover="onDragOver"
       @dragleave="onDragLeave"
       @connect="onConnect"
+      @node-click="nodeClickHandler"
       @node-double-click="nodeDoubleClickHandler"
       @node-drag-start="nodeDragStartHandler"
       @node-drag-stop="onNodeDragStop"
@@ -22,17 +23,17 @@
       <DropzoneBackground />
       <MiniMap pannable />
       <Controls position="top-right" />
+      <SaveRestoreControls />
       <FlowNodeMenu />
       <FlowEdgeMenu />
       <FlowMenu />
-      <SaveRestoreControls></SaveRestoreControls>
     </VueFlow>
     <FlowDrawer />
   </div>
 </template>
 
 <script setup>
-import { ref, watch, markRaw, getCurrentInstance } from 'vue'
+import { ref, watch, markRaw } from 'vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
@@ -94,6 +95,10 @@ const nodeTypes = {
   [NodeType.SUBFLOW]: markRaw(SubFlow),
   [NodeType.LOGGER]: markRaw(Logger),
   [NodeType.FLOWREFERENCE]: markRaw(FlowReference),
+}
+
+function nodeClickHandler(e) {
+  console.log("点击节点：", e.node)
 }
 
 function nodeDoubleClickHandler(e) {

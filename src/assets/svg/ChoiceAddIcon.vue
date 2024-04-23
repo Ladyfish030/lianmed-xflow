@@ -15,8 +15,8 @@
 
 <style scoped>
 .icon {
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
     fill: #b1b3b8;
 }
 
