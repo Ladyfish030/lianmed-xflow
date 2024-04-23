@@ -6,10 +6,6 @@
             </el-icon>
             <span>复制</span>
         </div>
-        <div @click="pasteHandler" class="button-container">
-            <PasteIcon />
-            <span>粘贴</span>
-        </div>
         <div @click="deleteHandler" class="button-container">
             <el-icon :size="20" color="#f89898">
                 <Delete />
@@ -20,15 +16,12 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
 import {
     menuClickNode,
     deleteNode,
     deleteNodeHandler,
-    copyNode,
-    pasteNodeHandler,
+    copyNodeHandler,
 } from '@/hooks/useMenu'
-import PasteIcon from '@/assets/svg/PasteIcon.vue'
 
 function deleteHandler() {
     deleteNode.value = menuClickNode.value
@@ -36,11 +29,7 @@ function deleteHandler() {
 }
 
 function copyHandler() {
-    copyNode.value = menuClickNode.value
-}
-
-function pasteHandler() {
-    pasteNodeHandler()
+    copyNodeHandler()
 }
 </script>
 

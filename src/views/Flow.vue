@@ -8,6 +8,7 @@
       @dragover="onDragOver"
       @dragleave="onDragLeave"
       @connect="onConnect"
+      @node-click="nodeClickHandler"
       @node-double-click="nodeDoubleClickHandler"
       @node-drag-start="nodeDragStartHandler"
       @node-drag-stop="onNodeDragStop"
@@ -15,16 +16,17 @@
       @edge-context-menu="edgeContextMenuHandler"
       @click="clickHandler"
       @dblclick="doubleClickHandler"
-      @contextmenu.prevent.self
+      @contextmenu.prevent="contextMenuHandler"
       :zoomOnDoubleClick="false"
       :delete-key-code="null"
     >
       <DropzoneBackground />
       <MiniMap pannable />
       <Controls position="top-right" />
+      <SaveRestoreControls />
       <FlowNodeMenu />
       <FlowEdgeMenu />
-      <SaveRestoreControls></SaveRestoreControls>
+      <FlowMenu />
     </VueFlow>
     <FlowDrawer />
   </div>
@@ -41,6 +43,7 @@ import FlowSide from '../components/FlowSide.vue'
 import FlowDrawer from '../components/FlowDrawer.vue'
 import FlowNodeMenu from '@/components/FlowNodeMenu.vue'
 import FlowEdgeMenu from '@/components/FlowEdgeMenu.vue'
+import FlowMenu from '@/components/FlowMenu.vue'
 
 import Database from '@/components/nodes/Database.vue'
 import WebService from '@/components/nodes/WebService.vue'
@@ -60,10 +63,13 @@ import { nodes } from '../hooks/useNode'
 import {
   onNodeContextMenu,
   onEdgeContextMenu,
+  onFlowContextMenu,
   nodeMenuVisible,
   edgeMenuVisible,
+  flowMenuVisible,
   deleteNode,
   deleteNodeConfirm,
+  menuToFlowCoordinatePosition,
 } from '../hooks/useMenu'
 import { removeNodeAdsorption } from '../hooks/useAdsorption'
 import emitter from '@/utils/emitter'
@@ -76,7 +82,8 @@ const {
   onNodeDragStop,
   addWhenNode,
 } = useDragAndDrop()
-const { findNode, removeNodes } = useVueFlow()
+
+const { findNode, removeNodes, screenToFlowCoordinate } = useVueFlow()
 
 const nodeTypes = {
   [NodeType.DATABASE]: markRaw(Database),
@@ -90,6 +97,10 @@ const nodeTypes = {
   [NodeType.FLOWREFERENCE]: markRaw(FlowReference),
 }
 
+function nodeClickHandler(e) {
+  console.log("点击节点：", e.node)
+}
+
 function nodeDoubleClickHandler(e) {
   drawerClickNode.value = findNode(e.node.id)
   onNodeDoubleClick()
@@ -98,29 +109,49 @@ function nodeDoubleClickHandler(e) {
 function nodeDragStartHandler(e) {
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
+  flowMenuVisible.value = false
   onNodeDragStart(e)
 }
 
 function nodeContextMenuHandler(e) {
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
+  flowMenuVisible.value = false
   onNodeContextMenu(e)
 }
 
 function edgeContextMenuHandler(e) {
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
+  flowMenuVisible.value = false
   onEdgeContextMenu(e)
 }
 
 function clickHandler(e) {
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
+  flowMenuVisible.value = false
 }
 
 function doubleClickHandler(e) {
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
+  flowMenuVisible.value = false
+}
+
+function contextMenuHandler(e) {
+  const subString = "vue-flow__container"
+  if (!e.target.classList.value.includes(subString)) {
+    return
+  }
+  nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
+  flowMenuVisible.value = false
+  menuToFlowCoordinatePosition.value = screenToFlowCoordinate({
+      x: e.clientX,
+      y: e.clientY,
+  })
+  onFlowContextMenu(e)
 }
 
 watch(deleteNodeConfirm, (newValue, oldValue) => {

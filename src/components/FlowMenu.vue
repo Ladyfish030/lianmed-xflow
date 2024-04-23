@@ -1,31 +1,18 @@
 <template>
-    <div class="container">
-        <div @click="pasteHandler" class="button-container">
-            <PasteIcon />
-            <span>粘贴</span>
-        </div>
-        <div @click="deleteHandler" class="button-container">
-            <el-icon :size="20" color="#f89898">
-                <Delete />
-            </el-icon>
-            <span style="color: #f89898;">删除</span>
+    <div v-if="flowMenuVisible" class="menu-container"
+        :style="{ left: menuPosition.x + 'px', top: menuPosition.y + 'px' }">
+        <div class="container">
+            <div @click="pasteHandler" class="button-container">
+                <PasteIcon />
+                <span>粘贴</span>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import {
-    menuClickNode,
-    deleteNode,
-    deleteNodeHandler,
-    pasteNodeHandler,
-} from '@/hooks/useMenu'
+import { flowMenuVisible, menuPosition, pasteNodeHandler } from '../hooks/useMenu'
 import PasteIcon from '@/assets/svg/PasteIcon.vue'
-
-function deleteHandler() {
-    deleteNode.value = menuClickNode.value
-    deleteNodeHandler()
-}
 
 function pasteHandler() {
     pasteNodeHandler()
@@ -33,6 +20,30 @@ function pasteHandler() {
 </script>
 
 <style scoped>
+.menu-container {
+    position: absolute;
+    width: 150px;
+    border: 1px solid #e9e9eb;
+    border-radius: 5px;
+    background-color: white;
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    z-index: 1000;
+}
+
 .container {
     height: 90%;
     width: 100%;
@@ -72,9 +83,5 @@ function pasteHandler() {
 .button-container>span {
     margin-left: 5px;
     line-height: 100%;
-}
-
-.el-icon {
-    margin-left: 5px;
 }
 </style>

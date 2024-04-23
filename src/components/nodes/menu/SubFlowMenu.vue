@@ -20,12 +20,11 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
 import {
     menuClickNode,
     deleteNode,
     deleteNodeHandler,
-    copyNode,
+    copyNodeHandler,
     pasteNodeHandler,
 } from '@/hooks/useMenu'
 import PasteIcon from '@/assets/svg/PasteIcon.vue'
@@ -36,7 +35,7 @@ function deleteHandler() {
 }
 
 function copyHandler() {
-    copyNode.value = menuClickNode.value
+    copyNodeHandler()
 }
 
 function pasteHandler() {

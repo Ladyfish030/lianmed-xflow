@@ -5,9 +5,9 @@ import {
   dragAdsorption,
   updateParentNode,
   updateNodePosAddWhenNode,
-} from './useAdsorption.js'
+} from './useAdsorption'
 import * as NodeAttribute from '../components/nodes/attribute/NodeAttribute'
-import { findNodeById, nodes } from './useNode.js'
+import { findNodeById, nodes } from './useNode'
 
 let id = 0
 function getId() {
@@ -52,7 +52,7 @@ const state = {
 
 export default function useDragAndDrop() {
   const { draggedId, draggedType, isDragOver, isDragging, newNodeType } = state
-  const { screenToFlowCoordinate, addNodes, updateNode } = useVueFlow()
+  const { screenToFlowCoordinate, addNodes } = useVueFlow()
 
   watch(isDragging, (dragging) => {
     document.body.style.userSelect = dragging ? 'none' : ''
@@ -109,7 +109,6 @@ export default function useDragAndDrop() {
       x: event.clientX,
       y: event.clientY,
     })
-
     const nodeId = getId()
     var newNode = getNewNode(newNodeType.value)
     newNode = {
@@ -151,7 +150,7 @@ export default function useDragAndDrop() {
       type: NodeType.CHOICEDEFAULT,
       position: {
         x: 50,
-        y: 15,
+        y: 20,
       },
       dimensions: defaultNode.dimensions,
       initDimensions: defaultNode.initDimensions,
@@ -170,6 +169,7 @@ export default function useDragAndDrop() {
     node.childNodes.push(defaultNodeId)
     return defaultNodeId
   }
+  
   function addWhenNode(parentNodeId) {
     let parentNode = findNodeById(parentNodeId)
     var whenNode = getNewNode(NodeType.CHOICEWHEN)
@@ -180,7 +180,7 @@ export default function useDragAndDrop() {
       data: whenNode.data,
       position: {
         x: 50,
-        y: parseInt(parentNode.style.height) - 30,
+        y: parseInt(parentNode.style.height) - 20,
       },
       dimensions: whenNode.dimensions,
       initDimensions: whenNode.initDimensions,
@@ -194,8 +194,6 @@ export default function useDragAndDrop() {
       childNodes: whenNode.childNodes,
     }
     whenNode.childNodes = []
-    // parentNode.style.height =
-    // parseInt(parentNode.style.height) + whenNode.dimensions.height + 20 + 'px'
     addNodes(whenNode)
     updateNodePosAddWhenNode(whenNode, parentNode)
     parentNode.childNodes.push(whenNodeId)
@@ -219,13 +217,15 @@ export default function useDragAndDrop() {
       dragAdsorption(dragNode, pos)
     }
   }
+
   function getIdRestore() {
     return id
   }
+
   function setIdRestore(value) {
-    id = value + 1
-    console.log(id)
+    id = value
   }
+
   return {
     draggedId,
     draggedType,
