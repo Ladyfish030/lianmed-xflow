@@ -96,9 +96,6 @@ function getLastPos(node, parentNode) {
 }
 //往上祖先更新可吸附的parentNodePosition
 function updateParentNode(node, parentNode) {
-  console.log(
-    '往上进来更新类型：' + node.type + ' ID: ' + node.id + '节点的吸附位置'
-  )
   //只更新新增choicedefault节点版本
   parentNode = parentNode || undefined
   //如果是choice，则跳过这个node继续往上更新
@@ -131,6 +128,8 @@ function updateParentNode(node, parentNode) {
             updateParentNode(parentNode)
           } else if (node.parentNode) {
             updateParentNode(findNodeById(node.parentNode))
+          } else {
+            updateChildNodeAdsorptionPos(node)
           }
         }
         return
@@ -162,13 +161,13 @@ function updateChildNodeAdsorptionPos(node) {
   }
   for (let i of childNodes) {
     let childNode = findNodeById(i)
-    console.log('往下进来更新' + childNode.type + i + '节点的吸附位置')
     if (childNode.adsorption) {
       let isHasParentPos = false
       let { x, y } = getTruePos(childNode)
       for (let item of parentNodePosition) {
-        isHasParentPos = true
         if (item.id == childNode.id) {
+          //说明原来就存在于parentNodePosition中
+          isHasParentPos = true
           if (
             item.xMin != x ||
             item.xMax != x + parseInt(childNode.style.width) ||
