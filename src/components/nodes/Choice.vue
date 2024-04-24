@@ -6,7 +6,7 @@
     <Handle type="target" :position="Position.Left" />
     <Handle type="source" :position="Position.Right" />
     <ChoiceIcon />
-    <ChoiceAddIcon class="add-button" @click="addWhenNode"/>
+    <ChoiceAddIcon class="add-button" @click="addWhenNode" />
   </div>
 </template>
 
@@ -58,6 +58,7 @@ function addWhenNode() {
 }
 
 .add-button {
+  cursor: pointer;
   position: absolute;
   bottom: 10px;
   left: 50%;

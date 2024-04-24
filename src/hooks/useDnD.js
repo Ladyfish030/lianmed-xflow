@@ -163,13 +163,12 @@ export default function useDragAndDrop() {
       adsorption: defaultNode.adsorption,
     }
     defaultNode.childNodes = []
-    node.defaultNode = defaultNodeId
     updateParentNode(defaultNode, node)
     addNodes(defaultNode)
     node.childNodes.push(defaultNodeId)
     return defaultNodeId
   }
-  
+
   function addWhenNode(parentNodeId) {
     let parentNode = findNodeById(parentNodeId)
     var whenNode = getNewNode(NodeType.CHOICEWHEN)
@@ -198,7 +197,7 @@ export default function useDragAndDrop() {
     updateNodePosAddWhenNode(whenNode, parentNode)
     parentNode.childNodes.push(whenNodeId)
   }
-  
+
   function onNodeDragStart(e) {
     const dragNode = e.event == undefined ? e : e.nodes[0]
     isDragging.value = true

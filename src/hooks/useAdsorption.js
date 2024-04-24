@@ -12,7 +12,7 @@ function dragAdsorption(node, pos) {
   }
   if (node.type == NodeType.CHOICE || node.adsorption) {
     updateParentNode(node) //更新祖上节点的parentNodePos和位置
-    updateChildNodeAdsorptionPos(node) //更新孩子节点的parentNodePos
+    // updateChildNodeAdsorptionPos(node) //更新孩子节点的parentNodePos
   }
   for (let i = parentNodePosition.length - 1; i >= 0; i--) {
     let item = parentNodePosition[i]
@@ -22,7 +22,8 @@ function dragAdsorption(node, pos) {
       pos.layerY >= item.yMin &&
       pos.layerY <= item.yMax &&
       node.id != item.id &&
-      node.parentNode != item.id
+      node.parentNode != item.id &&
+      !isChild(node, item.id)
     ) {
       let parentNode = findNodeById(item.id)
       let { width, height } = getLastPos(node, parentNode) //放置新节点的位置
@@ -33,10 +34,21 @@ function dragAdsorption(node, pos) {
       //更新父节点的大小
       updateParentNodeStyle(node, parentNode, width, height)
       updateParentNode(node) //更新祖上节点的parentNodePos和位置
-      updateChildNodeAdsorptionPos(node) //更新孩子节点的parentNodePos
+      // updateChildNodeAdsorptionPos(node) //更新孩子节点的parentNodePos
       return
     }
   }
+}
+function isChild(node, isChildId) {
+  if (node.adsorption || node.type == NodeType.CHOICE) {
+    for (let childNodeId of node.childNodes) {
+      if (childNodeId == isChildId) {
+        //则不考虑这个item
+        return true
+      }
+    }
+  }
+  return false
 }
 //由于子节点的position是相对父节点的，该函数可以拿到子节点真正的position
 function getTruePos(node, parentNode) {
@@ -84,6 +96,9 @@ function getLastPos(node, parentNode) {
 }
 //往上祖先更新可吸附的parentNodePosition
 function updateParentNode(node, parentNode) {
+  console.log(
+    '往上进来更新类型：' + node.type + ' ID: ' + node.id + '节点的吸附位置'
+  )
   //只更新新增choicedefault节点版本
   parentNode = parentNode || undefined
   //如果是choice，则跳过这个node继续往上更新
@@ -91,6 +106,8 @@ function updateParentNode(node, parentNode) {
     if (node.parentNode) {
       let parentNode = findNodeById(node.parentNode)
       updateParentNode(parentNode)
+    } else {
+      updateChildNodeAdsorptionPos(node)
     }
     return
   }
@@ -132,6 +149,8 @@ function updateParentNode(node, parentNode) {
       updateParentNode(parentNode)
     } else if (node.parentNode) {
       updateParentNode(findNodeById(node.parentNode))
+    } else {
+      updateChildNodeAdsorptionPos(node)
     }
   }
 }
@@ -143,9 +162,12 @@ function updateChildNodeAdsorptionPos(node) {
   }
   for (let i of childNodes) {
     let childNode = findNodeById(i)
+    console.log('往下进来更新' + childNode.type + i + '节点的吸附位置')
     if (childNode.adsorption) {
+      let isHasParentPos = false
       let { x, y } = getTruePos(childNode)
       for (let item of parentNodePosition) {
+        isHasParentPos = true
         if (item.id == childNode.id) {
           if (
             item.xMin != x ||
@@ -159,19 +181,21 @@ function updateChildNodeAdsorptionPos(node) {
             item.yMin = y
             item.yMax = y + parseInt(childNode.style.height)
             updateChildNodeAdsorptionPos(childNode)
+            break
           }
-          return
         }
       }
-      let pos = {
-        xMin: x,
-        xMax: x + parseInt(childNode.style.width),
-        yMin: y,
-        yMax: y + parseInt(childNode.style.height),
-        id: childNode.id,
+      if (!isHasParentPos) {
+        let pos = {
+          xMin: x,
+          xMax: x + parseInt(childNode.style.width),
+          yMin: y,
+          yMax: y + parseInt(childNode.style.height),
+          id: childNode.id,
+        }
+        parentNodePosition.push(pos)
+        updateChildNodeAdsorptionPos(childNode)
       }
-      parentNodePosition.push(pos)
-      updateChildNodeAdsorptionPos(childNode)
     } else if (childNode.type == NodeType.CHOICE) {
       updateChildNodeAdsorptionPos(childNode)
     }
