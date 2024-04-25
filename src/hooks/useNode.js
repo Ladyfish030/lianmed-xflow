@@ -1,6 +1,12 @@
 import { ref } from 'vue'
+import { v4 as uuidv4 } from 'uuid'
 
 const nodes = ref([])
+
+function getNodeId() {
+    const nodeId = uuidv4();
+    return nodeId
+}
 
 function findNodeById(nodeId) {
     const node = nodes.value.find(node => node.id === nodeId)
@@ -34,6 +40,7 @@ function findAbsolutePositionByNodeId(nodeId) {
 
 export {
     nodes,
+    getNodeId,
     findNodeById,
     addNode,
     findAncestorsNodeById,

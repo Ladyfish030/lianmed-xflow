@@ -7,12 +7,7 @@ import {
   updateNodePosAddWhenNode,
 } from './useAdsorption'
 import * as NodeAttribute from '../components/nodes/attribute/NodeAttribute'
-import { findNodeById, nodes } from './useNode'
-
-let id = 0
-function getId() {
-  return `dndnode_${id++}`
-}
+import { findNodeById, getNodeId } from './useNode'
 
 function getNewNode(newNodeType) {
   switch (newNodeType) {
@@ -109,7 +104,7 @@ export default function useDragAndDrop() {
       x: event.clientX,
       y: event.clientY,
     })
-    const nodeId = getId()
+    const nodeId = getNodeId()
     var newNode = getNewNode(newNodeType.value)
     newNode = {
       id: nodeId,
@@ -144,7 +139,7 @@ export default function useDragAndDrop() {
 
   function initChoice(node) {
     var defaultNode = getNewNode(NodeType.CHOICEDEFAULT)
-    const defaultNodeId = getId()
+    const defaultNodeId = getNodeId()
     defaultNode = {
       id: defaultNodeId,
       type: NodeType.CHOICEDEFAULT,
@@ -172,7 +167,7 @@ export default function useDragAndDrop() {
   function addWhenNode(parentNodeId) {
     let parentNode = findNodeById(parentNodeId)
     var whenNode = getNewNode(NodeType.CHOICEWHEN)
-    const whenNodeId = getId()
+    const whenNodeId = getNodeId()
     whenNode = {
       id: whenNodeId,
       type: NodeType.CHOICEWHEN,
@@ -217,14 +212,6 @@ export default function useDragAndDrop() {
     }
   }
 
-  function getIdRestore() {
-    return id
-  }
-
-  function setIdRestore(value) {
-    id = value
-  }
-
   return {
     draggedId,
     draggedType,
@@ -237,7 +224,5 @@ export default function useDragAndDrop() {
     onNodeDragStart,
     onNodeDragStop,
     addWhenNode,
-    getIdRestore,
-    setIdRestore,
   }
 }

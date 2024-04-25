@@ -1,10 +1,12 @@
-import { ref, h } from 'vue'
+import { ref } from 'vue'
 import { findNodeById } from './useNode'
-let id = 0
+import { v4 as uuidv4 } from 'uuid'
+
 const edges = ref([])
 
-function getId() {
-  return `dndedge_${id++}`
+function getEdgeId() {
+  const edgeId = uuidv4();
+  return edgeId
 }
 
 function isEdgeExist(source, target) {
@@ -19,7 +21,7 @@ function onConnect(params) {
   if (isEdgeExist(params.source, params.target)) {
     return null
   }
-  const edgeId = getId()
+  const edgeId = getEdgeId()
   const newEdge = {
     id: edgeId,
     source: params.source,

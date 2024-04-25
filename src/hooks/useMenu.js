@@ -1,17 +1,6 @@
 import { ref } from 'vue'
-import {
-  addNode,
-  findNodeById,
-  findAbsolutePositionByNodeId,
-} from '../hooks/useNode'
-import {
-  dragAdsorption,
-  updateParentNode,
-  updateNodePosAddWhenNode,
-} from './useAdsorption'
-import { NodeType } from '../enums/NodeType'
-
-let id = 0
+import { addNode, findNodeById, findAbsolutePositionByNodeId, getNodeId } from '../hooks/useNode'
+import { dragAdsorption } from './useAdsorption'
 
 const nodeMenuVisible = ref(false)
 const edgeMenuVisible = ref(false)
@@ -24,10 +13,6 @@ const deleteNode = ref(null)
 const deleteEdge = ref(null)
 const deleteNodeConfirm = ref(false)
 var copyNodes = []
-
-function getId() {
-  return `copynode_${id++}`
-}
 
 function onNodeContextMenu(e) {
   nodeMenuVisible.value = true
@@ -98,7 +83,7 @@ function pasteNodeHandler() {
 function pasteNodeOnFlow() {
   const queue = []
   var copyParentNode = deepCopy(copyNodes[0])
-  copyParentNode.id = getId()
+  copyParentNode.id = getNodeId()
   copyParentNode.position = menuToFlowCoordinatePosition.value
   copyParentNode.parentNode = null
   copyParentNode.draggable = true
@@ -107,7 +92,7 @@ function pasteNodeOnFlow() {
       const nodeId = copyParentNode.childNodes[i]
       const childNode = findCopyNodeById(nodeId)
       const copyChildNode = deepCopy(childNode)
-      copyChildNode.id = getId()
+      copyChildNode.id = getNodeId()
       copyChildNode.parentNode = copyParentNode.id
       queue.push(copyChildNode)
       copyParentNode.childNodes[i] = copyChildNode.id
@@ -124,7 +109,7 @@ function pasteNodeOnFlow() {
         const nodeId = copyParentNode.childNodes[i]
         const childNode = findCopyNodeById(nodeId)
         const copyChildNode = deepCopy(childNode)
-        copyChildNode.id = getId()
+        copyChildNode.id = getNodeId()
         copyChildNode.parentNode = copyParentNode.id
         queue.push(copyChildNode)
         copyParentNode.childNodes[i] = copyChildNode.id
@@ -144,7 +129,7 @@ function pasteNodeOnFlow() {
 function pasteNodeIntoNode() {
   const queue = []
   var copyParentNode = deepCopy(copyNodes[0])
-  copyParentNode.id = getId()
+  copyParentNode.id = getNodeId()
   copyParentNode.parentNode = null
   copyParentNode.draggable = true
   if (copyParentNode.childNodes && copyParentNode.childNodes.length > 0) {
@@ -152,7 +137,7 @@ function pasteNodeIntoNode() {
       const nodeId = copyParentNode.childNodes[i]
       const childNode = findCopyNodeById(nodeId)
       const copyChildNode = deepCopy(childNode)
-      copyChildNode.id = getId()
+      copyChildNode.id = getNodeId()
       copyChildNode.parentNode = copyParentNode.id
       queue.push(copyChildNode)
       copyParentNode.childNodes[i] = copyChildNode.id
@@ -169,7 +154,7 @@ function pasteNodeIntoNode() {
         const nodeId = copyParentNode.childNodes[i]
         const childNode = findCopyNodeById(nodeId)
         const copyChildNode = deepCopy(childNode)
-        copyChildNode.id = getId()
+        copyChildNode.id = getNodeId()
         copyChildNode.parentNode = copyParentNode.id
         queue.push(copyChildNode)
         copyParentNode.childNodes[i] = copyChildNode.id
@@ -214,14 +199,6 @@ function deepCopy(obj) {
   return copy
 }
 
-function getCopyIdRestore() {
-  return id
-}
-
-function setCopyIdRestore(value) {
-  id = value
-}
-
 export {
   nodeMenuVisible,
   edgeMenuVisible,
@@ -239,6 +216,10 @@ export {
   deleteNodeHandler,
   copyNodeHandler,
   pasteNodeHandler,
+<<<<<<< HEAD
   getCopyIdRestore,
   setCopyIdRestore,
 }
+=======
+}
+>>>>>>> f98826d0ce6b9153504f95db66d5001f0c6e77be
