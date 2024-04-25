@@ -1,6 +1,14 @@
 import { ref } from 'vue'
-import { addNode, findNodeById, findAbsolutePositionByNodeId } from '../hooks/useNode'
-import { dragAdsorption, updateParentNode, updateNodePosAddWhenNode } from './useAdsorption'
+import {
+  addNode,
+  findNodeById,
+  findAbsolutePositionByNodeId,
+} from '../hooks/useNode'
+import {
+  dragAdsorption,
+  updateParentNode,
+  updateNodePosAddWhenNode,
+} from './useAdsorption'
 import { NodeType } from '../enums/NodeType'
 
 let id = 0
@@ -48,7 +56,7 @@ function onFlowContextMenu(e) {
 }
 
 function findCopyNodeById(nodeId) {
-  const node = copyNodes.find(node => node.id === nodeId)
+  const node = copyNodes.find((node) => node.id === nodeId)
   return node
 }
 
@@ -69,7 +77,7 @@ function copyNodeHandler() {
       }
     }
   }
-  console.log("copyNodes:", copyNodes)
+  console.log('copyNodes:', copyNodes)
 }
 
 function pasteNodeHandler() {
@@ -82,8 +90,7 @@ function pasteNodeHandler() {
   }
   if (flowMenuVisible.value) {
     pasteNodeOnFlow()
-  }
-  else if (nodeMenuVisible.value) {
+  } else if (nodeMenuVisible.value) {
     pasteNodeIntoNode()
   }
 }
@@ -129,7 +136,7 @@ function pasteNodeOnFlow() {
   temporaryParentNode = findNodeById(temporaryParentNode.id)
   let pos = {
     layerX: temporaryParentNode.position.x,
-    layerY: temporaryParentNode.position.y
+    layerY: temporaryParentNode.position.y,
   }
   dragAdsorption(temporaryParentNode, pos)
 }
@@ -174,7 +181,7 @@ function pasteNodeIntoNode() {
   const absolutePosition = findAbsolutePositionByNodeId(menuClickNode.value.id)
   let pos = {
     layerX: absolutePosition.x,
-    layerY: absolutePosition.y
+    layerY: absolutePosition.y,
   }
   temporaryParentNode = findNodeById(temporaryParentNode.id)
   dragAdsorption(temporaryParentNode, pos)
@@ -193,18 +200,18 @@ const deleteNodeHandler = (done) => {
 
 function deepCopy(obj) {
   if (typeof obj !== 'object' || obj === null) {
-    return obj;
+    return obj
   }
 
-  let copy = Array.isArray(obj) ? [] : {};
+  let copy = Array.isArray(obj) ? [] : {}
 
   for (let key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      copy[key] = deepCopy(obj[key]);
+      copy[key] = deepCopy(obj[key])
     }
   }
 
-  return copy;
+  return copy
 }
 
 function getCopyIdRestore() {

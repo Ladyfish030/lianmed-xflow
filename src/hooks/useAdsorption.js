@@ -22,8 +22,9 @@ function dragAdsorption(node, pos) {
       pos.layerY >= item.yMin &&
       pos.layerY <= item.yMax &&
       node.id != item.id &&
-      node.parentNode != item.id &&
-      !isChild(node, item.id)
+      node.parentNode != item.id
+      // &&
+      // !isChild(node, item.id)
     ) {
       let parentNode = findNodeById(item.id)
       let { width, height } = getLastPos(node, parentNode) //放置新节点的位置
@@ -38,6 +39,17 @@ function dragAdsorption(node, pos) {
       return
     }
   }
+}
+//粘贴节点 一定吸附 node：需要吸附的copy节点 parentNode:被吸附的节点
+function dragPasteAdsorption(node, parentNode) {
+  let { width, height } = getLastPos(node, parentNode) //放置新节点的位置
+  node.draggable = false
+  node.parentNode = parentNode.id
+  updateEdge(node.id) //处理连线
+  parentNode.childNodes.push(node.id)
+  //更新父节点的大小
+  updateParentNodeStyle(node, parentNode, width, height)
+  updateParentNode(node) //更新祖上节点的parentNodePos和位置
 }
 function isChild(node, isChildId) {
   if (node.adsorption || node.type == NodeType.CHOICE) {
@@ -437,4 +449,5 @@ export {
   updateNodePosAddWhenNode,
   getParentPos,
   setParentPos,
+  dragPasteAdsorption,
 }
