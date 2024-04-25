@@ -11,9 +11,7 @@
 <script setup>
 import { Panel, useVueFlow } from '@vue-flow/core'
 import { setParentPos, getParentPos } from '../hooks/useAdsorption'
-import { getCopyIdRestore, setCopyIdRestore } from '../hooks/useMenu'
-import useDragAndDrop from '../hooks/useDnD'
-const { getIdRestore, setIdRestore } = useDragAndDrop()
+
 const flowKey = 'xFlow'
 const parentPos = 'parentPos'
 const { toObject, fromObject } = useVueFlow()
@@ -21,8 +19,6 @@ const { toObject, fromObject } = useVueFlow()
 function onSave() {
   localStorage.setItem(flowKey, JSON.stringify(toObject()))
   localStorage.setItem(parentPos, JSON.stringify(getParentPos()))
-  localStorage.setItem('nodeId', getIdRestore())
-  localStorage.setItem('copyNodeId', getCopyIdRestore())
   ElMessage({
     message: '保存成功',
     type: 'success',
@@ -36,8 +32,6 @@ function onRestore() {
       .then(() => {
         fromObject(flow)
         setParentPos(JSON.parse(localStorage.getItem(parentPos)) || [])
-        setIdRestore(parseInt(localStorage.getItem('nodeId')) || 0)
-        setCopyIdRestore(parseInt(localStorage.getItem('copyNodeId')) || 0)
         ElMessage({
           message: '载入草稿成功',
           type: 'success',
