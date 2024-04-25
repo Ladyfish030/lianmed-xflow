@@ -1,6 +1,6 @@
 import { ref } from 'vue'
-import { addNode, findNodeById, findAbsolutePositionByNodeId, getNodeId } from '../hooks/useNode'
-import { dragAdsorption } from './useAdsorption'
+import { addNode, findNodeById, getNodeId } from '../hooks/useNode'
+import { dragAdsorption, dragPasteAdsorption } from './useAdsorption'
 
 const nodeMenuVisible = ref(false)
 const edgeMenuVisible = ref(false)
@@ -163,13 +163,8 @@ function pasteNodeIntoNode() {
     addNode(copyParentNode)
   }
 
-  const absolutePosition = findAbsolutePositionByNodeId(menuClickNode.value.id)
-  let pos = {
-    layerX: absolutePosition.x,
-    layerY: absolutePosition.y,
-  }
   temporaryParentNode = findNodeById(temporaryParentNode.id)
-  dragAdsorption(temporaryParentNode, pos)
+  dragPasteAdsorption(temporaryParentNode, menuClickNode.value)
 }
 
 const deleteNodeHandler = (done) => {
@@ -216,10 +211,4 @@ export {
   deleteNodeHandler,
   copyNodeHandler,
   pasteNodeHandler,
-<<<<<<< HEAD
-  getCopyIdRestore,
-  setCopyIdRestore,
 }
-=======
-}
->>>>>>> f98826d0ce6b9153504f95db66d5001f0c6e77be
