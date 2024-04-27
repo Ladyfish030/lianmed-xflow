@@ -1,11 +1,37 @@
 <script setup>
 import { Search } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import useDragAndDrop from '../hooks/useDnD'
 import { NodeType } from '../enums/NodeType'
 
 const { onDragStart } = useDragAndDrop()
-const input1 = ref('')
+const searchContent = ref('')
+const isSearch = ref(false)
+const searchResult = ref(null)
+
+const nodeComponents = [
+  { type: NodeType.DATABASE, label: 'Database' },
+  { type: NodeType.WEBSERVICE, label: 'WebService' },
+  { type: NodeType.CHOICE, label: 'Choice' },
+  { type: NodeType.FOREACH, label: 'For Each' },
+  { type: NodeType.SUBFLOW, label: 'Sub Flow' },
+  { type: NodeType.FLOWREFERENCE, label: 'Flow Reference' },
+  { type: NodeType.LOGGER, label: 'Logger' },
+]
+
+function filterNode() {
+  if (searchContent.value == '') {
+    isSearch.value = false
+    return
+  }
+  const searchNode = searchContent.value.toLowerCase()
+  isSearch.value = true
+  searchResult.value = nodeComponents.filter(item => item.label.toLowerCase().includes(searchNode))
+}
+
+function searchClearHandler() {
+  isSearch.value = false
+}
 </script>
 
 <template>
@@ -18,13 +44,28 @@ const input1 = ref('')
     >
       <div class="input-container">
         <el-input
-          v-model="input1"
+          v-model="searchContent"
           placeholder="请输入关键字"
           clearable
           :prefix-icon="Search"
+          @input="filterNode"
+          @clear="searchClearHandler"
         />
       </div>
-      <el-sub-menu index="1">
+      <div v-if="isSearch" class="search-result-container">
+        <div
+          v-for="item in searchResult"
+          :key="item.type"
+          :draggable="true"
+          @dragstart="onDragStart($event, item.type)"
+          class="node-container"
+        >
+          <el-button class="node" type="info" plain>
+            <el-icon class="icon"><Grid /></el-icon>{{ item.label }}
+          </el-button>
+        </div>
+      </div>
+      <el-sub-menu index="1" v-if="!isSearch">
         <template #title>
           <span class="menu-title">数据源组件</span>
         </template>
@@ -47,7 +88,7 @@ const input1 = ref('')
           </el-button>
         </div>
       </el-sub-menu>
-      <el-sub-menu index="2">
+      <el-sub-menu index="2" v-if="!isSearch">
         <template #title>
           <span class="menu-title">逻辑组件</span>
         </template>
@@ -88,7 +129,7 @@ const input1 = ref('')
           </el-button>
         </div>
       </el-sub-menu>
-      <el-sub-menu index="3">
+      <el-sub-menu index="3" v-if="!isSearch">
         <template #title>
           <span class="menu-title">处理组件</span>
         </template>
@@ -177,5 +218,13 @@ const input1 = ref('')
   -ms-flex-pack: left;
   justify-content: left;
   padding-left: 0px;
+}
+.search-result-container {
+  margin-top: 20px;
+}
+.icon {
+  font-size: 18px;
+  margin-right: 5px;
+  margin-left: 3px;
 }
 </style>

@@ -62,7 +62,6 @@ function copyNodeHandler() {
       }
     }
   }
-  console.log('copyNodes:', copyNodes)
 }
 
 function pasteNodeHandler() {
