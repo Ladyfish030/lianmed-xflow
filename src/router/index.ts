@@ -13,6 +13,11 @@ const router = createRouter({
           name: 'flow',
           component: () => import('../views/Flow.vue'),
         },
+        {
+          path: '/home',
+          name: 'home',
+          component: () => import('../views/Home.vue'),
+        },
       ],
     },
   ],

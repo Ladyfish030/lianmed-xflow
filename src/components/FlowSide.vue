@@ -35,6 +35,7 @@ function searchClearHandler() {
 </script>
 
 <template>
+  <div class="component-library-container">
   <div class="component-library">
     <span class="description">组件库</span>
     <el-divider class="divider" />
@@ -56,11 +57,15 @@ function searchClearHandler() {
         <div
           v-for="item in searchResult"
           :key="item.type"
-          :draggable="true"
-          @dragstart="onDragStart($event, item.type)"
           class="node-container"
         >
-          <el-button class="node" type="info" plain>
+          <el-button 
+            class="node" 
+            type="info" 
+            plain 
+            :draggable="true"
+            @dragstart="onDragStart($event, item.type)"
+          >
             <el-icon class="icon"><Grid /></el-icon>{{ item.label }}
           </el-button>
         </div>
@@ -69,21 +74,25 @@ function searchClearHandler() {
         <template #title>
           <span class="menu-title">数据源组件</span>
         </template>
-        <div
-          :draggable="true"
-          @dragstart="onDragStart($event, NodeType.DATABASE)"
-          class="node-container"
-        >
-          <el-button class="node" type="info" plain>
+        <div class="node-container">
+          <el-button 
+            class="node" 
+            type="info" 
+            plain 
+            :draggable="true"
+            @dragstart="onDragStart($event, NodeType.DATABASE)"
+          >
             <el-icon><Grid /></el-icon>Database
           </el-button>
         </div>
-        <div
-          :draggable="true"
-          @dragstart="onDragStart($event, NodeType.WEBSERVICE)"
-          class="node-container"
-        >
-          <el-button class="node" type="info" plain>
+        <div class="node-container">
+          <el-button 
+            class="node" 
+            type="info" 
+            plain 
+            :draggable="true"
+            @dragstart="onDragStart($event, NodeType.WEBSERVICE)"
+          >
             <el-icon><Grid /></el-icon>WebService
           </el-button>
         </div>
@@ -92,39 +101,47 @@ function searchClearHandler() {
         <template #title>
           <span class="menu-title">逻辑组件</span>
         </template>
-        <div
-          :draggable="true"
-          @dragstart="onDragStart($event, NodeType.CHOICE)"
-          class="node-container"
-        >
-          <el-button class="node" type="info" plain>
+        <div class="node-container">
+          <el-button 
+            class="node" 
+            type="info" 
+            plain 
+            :draggable="true"
+            @dragstart="onDragStart($event, NodeType.CHOICE)"
+          >
             <el-icon><Grid /></el-icon>Choice
           </el-button>
         </div>
-        <div
-          :draggable="true"
-          @dragstart="onDragStart($event, NodeType.FOREACH)"
-          class="node-container"
-        >
-          <el-button class="node" type="info" plain>
+        <div class="node-container">
+          <el-button 
+            class="node" 
+            type="info" 
+            plain 
+            :draggable="true"
+            @dragstart="onDragStart($event, NodeType.FOREACH)"
+          >
             <el-icon><Grid /></el-icon>For Each
           </el-button>
         </div>
-        <div
-          :draggable="true"
-          @dragstart="onDragStart($event, NodeType.SUBFLOW)"
-          class="node-container"
-        >
-          <el-button class="node" type="info" plain>
+        <div class="node-container">
+          <el-button 
+            class="node" 
+            type="info" 
+            plain 
+            :draggable="true"
+            @dragstart="onDragStart($event, NodeType.SUBFLOW)"
+          >
             <el-icon><Grid /></el-icon>Sub Flow
           </el-button>
         </div>
-        <div
-          :draggable="true"
-          @dragstart="onDragStart($event, NodeType.FLOWREFERENCE)"
-          class="node-container"
-        >
-          <el-button class="node" type="info" plain>
+        <div class="node-container">
+          <el-button 
+            class="node" 
+            type="info" 
+            plain 
+            :draggable="true"
+            @dragstart="onDragStart($event, NodeType.FLOWREFERENCE)"
+          >
             <el-icon><Grid /></el-icon>Flow Reference
           </el-button>
         </div>
@@ -133,24 +150,49 @@ function searchClearHandler() {
         <template #title>
           <span class="menu-title">处理组件</span>
         </template>
-        <div
-          :draggable="true"
-          @dragstart="onDragStart($event, NodeType.LOGGER)"
-          class="node-container"
-        >
-          <el-button class="node" type="info" plain>
+        <div class="node-container">
+          <el-button 
+            class="node" 
+            type="info" 
+            plain 
+            :draggable="true"
+            @dragstart="onDragStart($event, NodeType.LOGGER)"
+          >
             <el-icon><Grid /></el-icon>Logger
           </el-button>
         </div>
       </el-sub-menu>
     </el-menu>
   </div>
+</div>
 </template>
 
 <style scoped>
+.component-library-container {
+  width: 220px;
+  height: 97%;
+  border: 0px solid white; 
+  border-radius: 10px;
+  -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); 
+  display: -webkit-box; 
+  display: -ms-flexbox; 
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: white;
+}
 .component-library {
-  width: 250px;
-  height: 100%;
+  width: 220px;
+  height: 95%;
+  margin-top: 0px;
+  margin-bottom: auto;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -158,9 +200,17 @@ function searchClearHandler() {
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 .description {
-  height: 50px;
+  height: 45px;
   font-size: 15px;
   color: black;
   display: -webkit-box;
@@ -173,9 +223,11 @@ function searchClearHandler() {
   -ms-flex-align: center;
   align-items: center;
   position: relative;
+  background-color: white;
 }
 .divider {
   margin: 0px;
+  width: 90%;
 }
 .input-container {
   display: -webkit-box;
@@ -195,7 +247,8 @@ function searchClearHandler() {
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 100%;
   min-height: 400px;
-  height: 100%;
+  height: 100%; 
+  border-right-width: 0px;
 }
 .menu-title {
   font-size: 13px;
