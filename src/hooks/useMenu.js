@@ -167,7 +167,13 @@ function pasteNodeIntoNode() {
 }
 
 const deleteNodeHandler = (done) => {
-  ElMessageBox.confirm('确定删除该节点？')
+  ElMessageBox.confirm(
+    '确定删除该节点？',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+    }
+  )
     .then(() => {
       deleteNodeConfirm.value = true
       done()

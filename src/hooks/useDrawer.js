@@ -10,7 +10,13 @@ function onNodeDoubleClick() {
 }
 
 const handleClose = (done) => {
-  ElMessageBox.confirm('确定关闭配置栏？请注意保存配置信息')
+  ElMessageBox.confirm(
+    '确定关闭配置栏？请注意保存配置信息',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+    }
+  )
     .then(() => {
       drawer.value = false
       drawerClickNode.value = {}
