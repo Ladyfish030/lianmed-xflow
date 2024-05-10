@@ -1,34 +1,46 @@
 <template>
-  <div class="dndflow" @drop="onDrop" @click="logNode">
-    <FlowSide />
-    <VueFlow
-      v-model:nodes="nodes"
-      v-model:edges="edges"
-      :node-types="nodeTypes"
-      @dragover="onDragOver"
-      @dragleave="onDragLeave"
-      @connect="onConnect"
-      @node-click="nodeClickHandler"
-      @node-double-click="nodeDoubleClickHandler"
-      @node-drag-start="nodeDragStartHandler"
-      @node-drag-stop="onNodeDragStop"
-      @node-context-menu="nodeContextMenuHandler"
-      @edge-context-menu="edgeContextMenuHandler"
-      @click="clickHandler"
-      @dblclick="doubleClickHandler"
-      @contextmenu.prevent="contextMenuHandler"
-      :zoomOnDoubleClick="false"
-      :delete-key-code="null"
-    >
-      <DropzoneBackground />
-      <MiniMap pannable />
-      <Controls position="top-right" />
-      <SaveRestoreControls />
-      <FlowNodeMenu />
-      <FlowEdgeMenu />
-      <FlowMenu />
-    </VueFlow>
-    <FlowDrawer />
+  <div class="dndflow" @drop="onDrop">
+    <el-container class="flow-container">
+      <el-aside class="flow-side"><FlowSide /></el-aside>
+      <el-container class="flow-container">
+        <el-header class="flow-header">
+          <div class="header-container">
+            <FlowHeader />
+          </div>
+        </el-header>
+        <el-main class="flow-main">
+          <div class="vueflow-container">
+            <VueFlow
+              v-model:nodes="nodes"
+              v-model:edges="edges"
+              :node-types="nodeTypes"
+              @dragover="onDragOver"
+              @dragleave="onDragLeave"
+              @connect="onConnect"
+              @node-click="nodeClickHandler"
+              @node-double-click="nodeDoubleClickHandler"
+              @node-drag-start="nodeDragStartHandler"
+              @node-drag-stop="onNodeDragStop"
+              @node-context-menu="nodeContextMenuHandler"
+              @edge-context-menu="edgeContextMenuHandler"
+              @click="clickHandler"
+              @dblclick="doubleClickHandler"
+              @contextmenu.prevent="contextMenuHandler"
+              :zoomOnDoubleClick="false"
+              :delete-key-code="null"
+            >
+              <DropzoneBackground />
+              <MiniMap pannable />
+              <Controls position="top-right" />
+              <FlowNodeMenu />
+              <FlowEdgeMenu />
+              <FlowMenu />
+            </VueFlow>
+            <FlowDrawer />
+          </div>
+        </el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
@@ -37,9 +49,9 @@ import { ref, watch, markRaw } from 'vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
-import SaveRestoreControls from '../components/SaveRestoreControls.vue'
 import DropzoneBackground from '../components/DropzoneBackground.vue'
 import FlowSide from '../components/FlowSide.vue'
+import FlowHeader from '../components/FlowHeader.vue'
 import FlowDrawer from '../components/FlowDrawer.vue'
 import FlowNodeMenu from '@/components/FlowNodeMenu.vue'
 import FlowEdgeMenu from '@/components/FlowEdgeMenu.vue'
@@ -176,6 +188,88 @@ emitter.on('addWhenNode', (id) => addWhenNode(id))
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/minimap@latest/dist/style.css';
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/node-resizer@latest/dist/style.css';
 
+.flow-container {
+  height: 100%;
+}
+.flow-header {
+  --el-header-padding: 0 0px;
+  height: 56px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: #fafafa;
+}
+.header-container {
+  width: 99%;
+  height: 65%;
+  border: 1px solid white;
+  border-radius: 10px;
+  -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: 0px;
+  margin-right: auto;
+  background-color: white;
+}
+.flow-side {
+  --el-side-padding: 0 0px;
+  width: 240px;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #fafafa;
+}
+
+.flow-main {
+  --el-main-padding: 0px;
+}
+.vueflow-container {
+  width: 99%;
+  height: 98.4%;
+  border: 1px solid white;
+  -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-top: 0px;
+}
+.divider {
+  margin: 0px;
+}
+
 .vue-flow__minimap {
   -webkit-transform: scale(75%);
   -ms-transform: scale(75%);
@@ -222,7 +316,7 @@ emitter.on('addWhenNode', (id) => addWhenNode(id))
   }
 
   .dndflow aside {
-    min-width: 25%;
+    min-width: 15%;
   }
 }
 

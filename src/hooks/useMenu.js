@@ -1,11 +1,6 @@
 import { ref } from 'vue'
-import {
-  addNode,
-  findNodeById,
-  findAbsolutePositionByNodeId,
-  getNodeId,
-} from '../hooks/useNode'
-import { dragAdsorption } from './useAdsorption'
+import { addNode, findNodeById, getNodeId } from '../hooks/useNode'
+import { dragAdsorption, dragPasteAdsorption } from './useAdsorption'
 
 const nodeMenuVisible = ref(false)
 const edgeMenuVisible = ref(false)
@@ -67,7 +62,6 @@ function copyNodeHandler() {
       }
     }
   }
-  console.log('copyNodes:', copyNodes)
 }
 
 function pasteNodeHandler() {
@@ -168,17 +162,15 @@ function pasteNodeIntoNode() {
     addNode(copyParentNode)
   }
 
-  const absolutePosition = findAbsolutePositionByNodeId(menuClickNode.value.id)
-  let pos = {
-    layerX: absolutePosition.x,
-    layerY: absolutePosition.y,
-  }
   temporaryParentNode = findNodeById(temporaryParentNode.id)
-  dragAdsorption(temporaryParentNode, pos)
+  dragPasteAdsorption(temporaryParentNode, menuClickNode.value)
 }
 
 const deleteNodeHandler = (done) => {
-  ElMessageBox.confirm('确定删除该节点？')
+  ElMessageBox.confirm('确定删除该节点？', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+  })
     .then(() => {
       deleteNodeConfirm.value = true
       done()
