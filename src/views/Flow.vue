@@ -1,5 +1,5 @@
 <template>
-  <div class="dndflow" @drop="onDrop">
+  <div class="dndflow" @drop="onDrop" @click="logNode">
     <FlowSide />
     <VueFlow
       v-model:nodes="nodes"
@@ -96,9 +96,12 @@ const nodeTypes = {
   [NodeType.LOGGER]: markRaw(Logger),
   [NodeType.FLOWREFERENCE]: markRaw(FlowReference),
 }
-
+function logNode() {
+  console.log(JSON.stringify(nodes.value))
+  console.log(JSON.stringify(edges.value))
+}
 function nodeClickHandler(e) {
-  console.log("点击节点：", e.node)
+  console.log('点击节点：', e.node)
 }
 
 function nodeDoubleClickHandler(e) {
@@ -140,7 +143,7 @@ function doubleClickHandler(e) {
 }
 
 function contextMenuHandler(e) {
-  const subString = "vue-flow__container"
+  const subString = 'vue-flow__container'
   if (!e.target.classList.value.includes(subString)) {
     return
   }
@@ -148,8 +151,8 @@ function contextMenuHandler(e) {
   edgeMenuVisible.value = false
   flowMenuVisible.value = false
   menuToFlowCoordinatePosition.value = screenToFlowCoordinate({
-      x: e.clientX,
-      y: e.clientY,
+    x: e.clientX,
+    y: e.clientY,
   })
   onFlowContextMenu(e)
 }

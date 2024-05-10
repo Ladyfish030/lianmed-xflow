@@ -1,5 +1,10 @@
 import { ref } from 'vue'
-import { addNode, findNodeById, findAbsolutePositionByNodeId, getNodeId } from '../hooks/useNode'
+import {
+  addNode,
+  findNodeById,
+  findAbsolutePositionByNodeId,
+  getNodeId,
+} from '../hooks/useNode'
 import { dragAdsorption } from './useAdsorption'
 
 const nodeMenuVisible = ref(false)
@@ -216,10 +221,4 @@ export {
   deleteNodeHandler,
   copyNodeHandler,
   pasteNodeHandler,
-<<<<<<< HEAD
-  getCopyIdRestore,
-  setCopyIdRestore,
 }
-=======
-}
->>>>>>> f98826d0ce6b9153504f95db66d5001f0c6e77be
