@@ -84,6 +84,7 @@ import {
   menuToFlowCoordinatePosition,
 } from '../hooks/useMenu'
 import { removeNodeAdsorption } from '../hooks/useAdsorption'
+import { deleteSubFlowByName } from '../hooks/useSubFlow'
 import emitter from '@/utils/emitter'
 
 const {
@@ -113,7 +114,9 @@ function logNode() {
   console.log(JSON.stringify(edges.value))
 }
 function nodeClickHandler(e) {
-  console.log('点击节点：', e.node)
+  // console.log('点击节点：', e.node)
+  // console.log('所有节点：', JSON.stringify(nodes.value))
+  // console.log('所有连线：', edges.value)
 }
 
 function nodeDoubleClickHandler(e) {
@@ -171,6 +174,14 @@ function contextMenuHandler(e) {
 
 watch(deleteNodeConfirm, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
+    if (deleteNode.value.type == NodeType.SUBFLOW) {
+      nodes.value.forEach((node, index) => {
+        if (node.type == NodeType.FLOWREFERENCE && node.data.flowName == deleteNode.value.data.displayName) {
+          node.data.flowName = ''
+        }
+      });
+      deleteSubFlowByName(deleteNode.value.data.displayName)
+    }
     removeNodeAdsorption(deleteNode.value.id)
     removeNodes(deleteNode.value.id, true, true)
     deleteNode.value = null

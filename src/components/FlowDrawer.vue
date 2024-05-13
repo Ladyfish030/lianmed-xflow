@@ -27,6 +27,7 @@ import WebServiceDrawer from '../components/nodes/drawer/WebServiceDrawer.vue'
 import ChoiceWhenDrawer from '../components/nodes/drawer/ChoiceWhenDrawer.vue'
 import SubFlowDrawer from '../components/nodes/drawer/SubFlowDrawer.vue'
 import FlowReferenceDrawer from '../components/nodes/drawer/FlowReferenceDrawer.vue'
+import LoggerDrawer from '../components/nodes/drawer/LoggerDrawer.vue'
 import { drawer, drawerClickNode, handleClose, saveAttribute, saveComplete } from '../hooks/useDrawer'
 import { NodeType } from '../enums/NodeType'
 
@@ -42,6 +43,8 @@ const currentDrawer = computed(() => {
       return SubFlowDrawer
     case NodeType.FLOWREFERENCE:
       return FlowReferenceDrawer
+    case NodeType.LOGGER:
+      return LoggerDrawer
     default:
       return null
   }

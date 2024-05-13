@@ -18,7 +18,6 @@
       </template>
     </el-menu-item>
     <div class="button-container">
-      <el-divider class="divider" />
       <el-button @click="ExpandOrFoldClickHandle" class="expand-or-fold-button">
         <el-icon v-if="isCollapse">
           <Expand />
@@ -28,7 +27,6 @@
         </el-icon>
       </el-button>
     </div>
-
   </el-menu>
 </template>
 
@@ -90,16 +88,13 @@ const handleClose = (key: string, keyPath: string[]) => {
   align-items: center;
 }
 
-.divider {
-  margin: 0px;
-}
-
 .expand-or-fold-button {
   width: 100%;
+  height: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  border-width: 0px;
+  border-width: 1px 0px 0px 0px;
   border-radius: 0px;
 }
 

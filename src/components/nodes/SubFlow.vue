@@ -1,7 +1,7 @@
 <template>
     <div class="component-container" :style="{ opacity: isDragged ? '0.5' : '1' }">
         <el-text class="span-text" truncated>
-            {{ name }}
+            {{ displayName }}
         </el-text>
         <el-divider class="divider" />
     </div>
@@ -10,16 +10,15 @@
 <script setup>
 import { ref, watch, getCurrentInstance } from 'vue'
 import useDragAndDrop from '@/hooks/useDnD'
-import { menuClickNode } from '@/hooks/useMenu'
 import { findNodeById } from '../../hooks/useNode'
 import { saveComplete, drawerClickNode } from '../../hooks/useDrawer'
 
 const instance = getCurrentInstance()
 const nodeId = instance.attrs.id
 const node = findNodeById(nodeId)
+const displayName = ref(node?.data.displayName)
 const isDragged = ref(false)
 const { isDragging, draggedId } = useDragAndDrop()
-const name = ref(node?.data.name || 'SubFlow')
 
 watch(isDragging, (newValue, oldValue) => {
     if (oldValue === false && newValue === true) {
@@ -34,7 +33,7 @@ watch(isDragging, (newValue, oldValue) => {
 watch(saveComplete, (newValue, oldValue) => {
     if (oldValue === false && newValue === true) {
         if (drawerClickNode.value.id === nodeId) {
-            name.value = findNodeById(nodeId).data.name
+            displayName.value = findNodeById(nodeId).data.displayName
         }
     }
 })

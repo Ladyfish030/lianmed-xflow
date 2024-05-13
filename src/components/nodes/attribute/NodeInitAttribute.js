@@ -1,12 +1,13 @@
-// 定义 Database 数据结构
+// 定义 Database 初始化属性
 const Database = {
   id: '',
   type: '',
   data: {
-    name: '',
-    type: '',
-    url: '',
+    displayName: 'Database',
+    operation: '',
+    connectorConfiguration: '',
     sqlCommand: '',
+    inputParameters: '',
   },
   position: {
     x: 0,
@@ -24,7 +25,7 @@ const Database = {
   adsorption: false,
 }
 
-// 定义 WebService 数据结构
+// 定义 WebService 初始化属性
 const WebService = {
   id: '',
   type: '',
@@ -48,11 +49,13 @@ const WebService = {
   adsorption: false,
 }
 
-// 定义 条件分支 数据结构
+// 定义 条件分支 初始化属性
 const Choice = {
   id: '',
   type: '',
-  data: '',
+  data: {
+    displayName: 'Choice',
+  },
   position: {
     x: 0,
     y: 0,
@@ -68,9 +71,10 @@ const Choice = {
   parentNode: '',
   adsorption: false,
   defaultNode: '',
+  childNodes: [],
 }
 
-// 定义 条件分支When 数据结构
+// 定义 条件分支When 初始化属性
 const ChoiceWhen = {
   id: '',
   type: '',
@@ -94,11 +98,11 @@ const ChoiceWhen = {
   childNodes: [],
 }
 
-// 定义 条件分支Default 数据结构
+// 定义 条件分支Default 初始化属性
 const ChoiceDefault = {
   id: '',
   type: '',
-  data: '',
+  data: {},
   position: {
     x: 0,
     y: 0,
@@ -116,11 +120,13 @@ const ChoiceDefault = {
   childNodes: [],
 }
 
-// 定义 ForEach 数据结构
+// 定义 ForEach 初始化属性
 const ForEach = {
   id: '',
   type: '',
-  data: '',
+  data: {
+    displayName: 'ForEach',
+  },
   position: {
     x: 0,
     y: 0,
@@ -138,12 +144,12 @@ const ForEach = {
   childNodes: [],
 }
 
-// 定义 Sub Flow 数据结构
+// 定义 Sub Flow 初始化属性
 const SubFlow = {
   id: '',
   type: '',
   data: {
-    name: '',
+    displayName: '',
   },
   position: {
     x: 0,
@@ -162,11 +168,15 @@ const SubFlow = {
   childNodes: [],
 }
 
-// 定义 Logger 数据结构
+// 定义 Logger 初始化属性
 const Logger = {
   id: '',
   type: '',
-  data: '',
+  data: {
+    displayName: 'Logger',
+    message: '',
+    level: '',
+  },
   position: {
     x: 0,
     y: 0,
@@ -183,11 +193,12 @@ const Logger = {
   adsorption: false,
 }
 
-// 定义 Flow Reference 数据结构
+// 定义 Flow Reference 初始化属性
 const FlowReference = {
   id: '',
   type: '',
   data: {
+    displayName: 'Flow Reference',
     flowName: '',
   },
   position: {

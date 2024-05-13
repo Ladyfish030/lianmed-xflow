@@ -1,22 +1,35 @@
 <template>
     <div class="button-container">
         <el-tooltip content="保存草稿" placement="bottom" effect="dark">
-            <button @click="onSave"><SaveFlowIcon /></button>
+            <button @click="onSave">
+                <SaveFlowIcon />
+            </button>
         </el-tooltip>
         <el-tooltip content="载入草稿" placement="bottom" effect="dark">
-            <button @click="onRestore"><LoadFlowIcon /></button>
+            <button @click="onRestore">
+                <LoadFlowIcon />
+            </button>
         </el-tooltip>
         <el-tooltip content="清空草稿" placement="bottom" effect="dark">
-            <button @click="onClear"><ClearFlowIcon /></button>
+            <button @click="onClear">
+                <ClearFlowIcon />
+            </button>
         </el-tooltip>
         <el-tooltip content="生成XML" placement="bottom" effect="dark">
-            <button @click="generateXmlFile"><GenerateXmlFileIcon /></button>
+            <button @click="generateXmlFile">
+                <GenerateXmlFileIcon />
+            </button>
         </el-tooltip>
     </div>
 </template>
 <script setup>
 import { useVueFlow } from '@vue-flow/core'
 import { setParentPos, getParentPos } from '../hooks/useAdsorption'
+import { nodes } from '../hooks/useNode'
+import { edges } from '../hooks/useEdge'
+import { globalConfigList } from '../hooks/useGlobalConfig'
+import { NodeType } from '../enums/NodeType'
+import * as Attributes from '../components/nodes/attribute/AttributesNeededToGenerateXml'
 import SaveFlowIcon from '@/assets/svg/SaveFlowIcon.vue'
 import LoadFlowIcon from '@/assets/svg/LoadFlowIcon.vue'
 import ClearFlowIcon from '@/assets/svg/ClearFlowIcon.vue'
@@ -74,8 +87,42 @@ function onClear() {
         })
 }
 
+function organizeData() {
+    var result = {
+        globalConfig: [],
+        nodes: [],
+        edges: [],
+    }
+
+    const nodeMappings = {
+        [NodeType.DATABASE]: Attributes.Database,
+        [NodeType.WEBSERVICE]: Attributes.WebService,
+        [NodeType.CHOICE]: Attributes.Choice,
+        [NodeType.CHOICEWHEN]: Attributes.ChoiceWhen,
+        [NodeType.CHOICEDEFAULT]: Attributes.ChoiceDefault,
+        [NodeType.FOREACH]: Attributes.ForEach,
+        [NodeType.SUBFLOW]: Attributes.SubFlow,
+        [NodeType.LOGGER]: Attributes.Logger,
+        [NodeType.FLOWREFERENCE]: Attributes.FlowReference,
+    };
+
+    const nodeList = nodes.value
+    for (const node of nodeList) {
+        const type = node.type
+        if (nodeMappings.hasOwnProperty(type)) {
+            const targetNode = JSON.parse(JSON.stringify(nodeMappings[type]))
+            for (const prop in targetNode) {
+                if (targetNode.hasOwnProperty(prop) && node.hasOwnProperty(prop)) {
+                    targetNode[prop] = node[prop];
+                }
+            }
+            result.nodes.push(targetNode)
+        }
+    }
+}
+
 function generateXmlFile() {
-    
+    organizeData()
 }
 </script>
 

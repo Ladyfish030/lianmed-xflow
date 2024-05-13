@@ -14,14 +14,14 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue'),
       children: [
         {
-          path: '/flow',
-          name: 'flow',
-          component: () => import('../views/Flow.vue'),
-        },
-        {
           path: '/home',
           name: 'home',
           component: () => import('../views/Home.vue'),
+        },
+        {
+          path: '/flow',
+          name: 'flow',
+          component: () => import('../views/Flow.vue'),
         },
       ],
     },

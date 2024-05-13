@@ -21,6 +21,10 @@ import { RouterView } from 'vue-router'
 </template>
 
 <style scoped>
+.common-layout {
+  width: 100%;
+  height: 100%;
+}
 .base-header {
   --el-header-padding: 0 0px;
 }

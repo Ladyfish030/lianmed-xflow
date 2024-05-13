@@ -6,29 +6,30 @@ import {
   updateParentNode,
   updateNodePosAddWhenNode,
 } from './useAdsorption'
-import * as NodeAttribute from '../components/nodes/attribute/NodeAttribute'
+import * as NodeInitAttribute from '../components/nodes/attribute/NodeInitAttribute'
 import { findNodeById, getNodeId } from './useNode'
+import { generateUniqueSubFlowName } from './useSubFlow'
 
 function getNewNode(newNodeType) {
   switch (newNodeType) {
     case NodeType.DATABASE:
-      return NodeAttribute.Database
+      return NodeInitAttribute.Database
     case NodeType.WEBSERVICE:
-      return NodeAttribute.WebService
+      return NodeInitAttribute.WebService
     case NodeType.CHOICE:
-      return NodeAttribute.Choice
+      return NodeInitAttribute.Choice
     case NodeType.CHOICEWHEN:
-      return NodeAttribute.ChoiceWhen
+      return NodeInitAttribute.ChoiceWhen
     case NodeType.CHOICEDEFAULT:
-      return NodeAttribute.ChoiceDefault
+      return NodeInitAttribute.ChoiceDefault
     case NodeType.FOREACH:
-      return NodeAttribute.ForEach
+      return NodeInitAttribute.ForEach
     case NodeType.SUBFLOW:
-      return NodeAttribute.SubFlow
+      return NodeInitAttribute.SubFlow
     case NodeType.LOGGER:
-      return NodeAttribute.Logger
+      return NodeInitAttribute.Logger
     case NodeType.FLOWREFERENCE:
-      return NodeAttribute.FlowReference
+      return NodeInitAttribute.FlowReference
     default:
       return null
   }
@@ -105,7 +106,7 @@ export default function useDragAndDrop() {
       y: event.clientY,
     })
     const nodeId = getNodeId()
-    var newNode = getNewNode(newNodeType.value)
+    var newNode = JSON.parse(JSON.stringify(getNewNode(newNodeType.value)))
     newNode = {
       id: nodeId,
       type: newNodeType.value,
@@ -124,6 +125,11 @@ export default function useDragAndDrop() {
     }
     if (newNode.adsorption) {
       newNode.childNodes = []
+    }
+    if (newNode.type == NodeType.SUBFLOW) {
+      newNode.data.displayName = generateUniqueSubFlowName()
+      // addNodes(newNode)
+      // return
     }
     let pos = {
       layerX: newNode.position.x,
@@ -203,6 +209,9 @@ export default function useDragAndDrop() {
     const dragNode = e.event == undefined ? e : e.nodes[0]
     isDragging.value = false
     draggedId.value = null
+    // if (dragNode.type == NodeType.SUBFLOW) {
+    //   return
+    // }
     if (dragNode) {
       let pos = {
         layerX: dragNode.position.x,

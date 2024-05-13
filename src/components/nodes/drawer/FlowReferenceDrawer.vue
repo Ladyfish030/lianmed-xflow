@@ -2,7 +2,9 @@
   <div class="form-container">
     <div class="form-item">
       <label>Flow Name</label>
-      <el-input v-model="flowName" autosize type="textarea" class="input-field"></el-input>
+      <el-select v-model="flowName" placeholder="" class="input-field">
+        <el-option v-for="(item, index) in subFlowList" :key="index" :label="item" :value="item" />
+      </el-select>
     </div>
   </div>
 </template>
@@ -11,6 +13,7 @@
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { isSave, saveAttributeComplete, drawerClickNode } from '../../../hooks/useDrawer'
+import { subFlowList } from '../../../hooks/useSubFlow'
 
 const flowName = ref(drawerClickNode?.value.data.flowName || '')
 
@@ -22,6 +25,7 @@ watch(isSave, (newValue, oldValue) => {
       {
         data:
         {
+          displayName: drawerClickNode?.value.data.displayName,
           flowName: flowName.value,
         }
       })

@@ -13,10 +13,14 @@
 import { Handle, Position } from '@vue-flow/core'
 import { ref, watch, getCurrentInstance } from 'vue'
 import useDragAndDrop from '@/hooks/useDnD'
+// import { saveComplete, drawerClickNode } from '../../hooks/useDrawer'
+// import { findNodeById } from '../../hooks/useNode'
 import DatabaseIcon from '@/assets/svg/DatabaseIcon.vue'
 
 const instance = getCurrentInstance()
 const nodeId = instance.attrs.id
+// const node = findNodeById(nodeId)
+// const displayName = ref(node?.data.displayName || 'Database')
 const isDragged = ref(false)
 const { isDragging, draggedId } = useDragAndDrop()
 
@@ -30,6 +34,15 @@ watch(isDragging, (newValue, oldValue) => {
     isDragged.value = false
   }
 })
+
+// watch(saveComplete, (newValue, oldValue) => {
+//   if (oldValue === false && newValue === true) {
+//     if (drawerClickNode.value.id === nodeId) {
+//       const name = findNodeById(nodeId).data.displayName
+//       displayName.value = name == '' ? 'Database' : name
+//     }
+//   }
+// })
 </script>
 
 <style scoped>

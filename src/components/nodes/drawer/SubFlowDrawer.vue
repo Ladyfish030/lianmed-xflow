@@ -2,7 +2,7 @@
     <div class="form-container">
         <div class="form-item">
             <label>名称</label>
-            <el-input v-model="name" autosize type="textarea" class="input-field"></el-input>
+            <el-input v-model="displayName" autosize type="textarea" class="input-field"></el-input>
         </div>
     </div>
 </template>
@@ -10,22 +10,50 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
+import { nodes } from '@/hooks/useNode'
 import { isSave, saveAttributeComplete, drawerClickNode } from '../../../hooks/useDrawer'
+import { findSubFlow, editSubFlow } from '../../../hooks/useSubFlow'
+import { NodeType } from '@/enums/NodeType'
 
-const name = ref(drawerClickNode?.value.data.name || '')
+const displayName = ref(drawerClickNode?.value.data.displayName || '')
 
 const { updateNode } = useVueFlow()
 
 watch(isSave, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
-    updateNode(drawerClickNode.value.id,
+    if (displayName.value == '') {
+      ElMessage({
+        message: '名称不能为空',
+        type: 'error',
+      })
+      isSave.value = false
+      return
+    }
+    else if (drawerClickNode.value.data.displayName !== displayName.value
+        && findSubFlow(displayName.value) !== -1) {
+      ElMessage({
+        message: '保存失败，名称不能重复',
+        type: 'error',
+      })
+      isSave.value = false
+      return
+    }
+    else {
+      nodes.value.forEach((node, index) => {
+          if (node.type == NodeType.FLOWREFERENCE && node.data.flowName == drawerClickNode.value.data.displayName) {
+            node.data.flowName = displayName.value
+          }
+        });
+      editSubFlow(drawerClickNode.value.data.displayName, displayName.value)
+      updateNode(drawerClickNode.value.id,
       {
         data:
         {
-          name: name.value,
+          displayName: displayName.value,
         }
       })
-    saveAttributeComplete()
+      saveAttributeComplete()
+    }
   }
 })
 </script>
