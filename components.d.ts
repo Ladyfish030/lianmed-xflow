@@ -51,7 +51,6 @@ declare module 'vue' {
     FlowReferenceMenu: typeof import('./src/components/nodes/menu/FlowReferenceMenu.vue')['default']
     FlowSide: typeof import('./src/components/FlowSide.vue')['default']
     ForEach: typeof import('./src/components/nodes/ForEach.vue')['default']
-    ForEachDrawer: typeof import('./src/components/nodes/drawer/ForEachDrawer.vue')['default']
     ForEachMenu: typeof import('./src/components/nodes/menu/ForEachMenu.vue')['default']
     Logger: typeof import('./src/components/nodes/Logger.vue')['default']
     LoggerDrawer: typeof import('./src/components/nodes/drawer/LoggerDrawer.vue')['default']

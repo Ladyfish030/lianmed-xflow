@@ -7,16 +7,15 @@ let parentNodePosition = []
 
 //拉动节点判断是否进行吸附
 function dragAdsorption(node, pos) {
-  if (
-    node.type == NodeType.CHOICEWHEN ||
-    node.type == NodeType.CHOICEDEFAULT ||
-    node.type == NodeType.SUBFLOW
-  ) {
+  if (node.type == NodeType.CHOICEWHEN || node.type == NodeType.CHOICEDEFAULT) {
     return
   }
   if (node.type == NodeType.CHOICE || node.adsorption) {
     updateParentNode(node) //更新祖上节点的parentNodePos和位置
     // updateChildNodeAdsorptionPos(node) //更新孩子节点的parentNodePos
+  }
+  if (node.type == NodeType.SUBFLOW) {
+    return
   }
   for (let i = parentNodePosition.length - 1; i >= 0; i--) {
     let item = parentNodePosition[i]
