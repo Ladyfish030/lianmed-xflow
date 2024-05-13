@@ -39,8 +39,6 @@ declare module 'vue' {
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
-    ElTabPane: typeof import('element-plus/es')['ElTabPane']
-    ElTabs: typeof import('element-plus/es')['ElTabs']
     ElText: typeof import('element-plus/es')['ElText']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     FlowDrawer: typeof import('./src/components/FlowDrawer.vue')['default']
@@ -59,15 +57,11 @@ declare module 'vue' {
     LoggerMenu: typeof import('./src/components/nodes/menu/LoggerMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SaveRestoreControls: typeof import('./src/components/SaveRestoreControls.vue')['default']
     SubFlow: typeof import('./src/components/nodes/SubFlow.vue')['default']
     SubFlowDrawer: typeof import('./src/components/nodes/drawer/SubFlowDrawer.vue')['default']
     SubFlowMenu: typeof import('./src/components/nodes/menu/SubFlowMenu.vue')['default']
     WebService: typeof import('./src/components/nodes/WebService.vue')['default']
     WebServiceDrawer: typeof import('./src/components/nodes/drawer/WebServiceDrawer.vue')['default']
     WebServiceMenu: typeof import('./src/components/nodes/menu/WebServiceMenu.vue')['default']
-  }
-  export interface ComponentCustomProperties {
-    vInfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
   }
 }

@@ -7,7 +7,11 @@ let parentNodePosition = []
 
 //拉动节点判断是否进行吸附
 function dragAdsorption(node, pos) {
-  if (node.type == NodeType.CHOICEWHEN || node.type == NodeType.CHOICEDEFAULT) {
+  if (
+    node.type == NodeType.CHOICEWHEN ||
+    node.type == NodeType.CHOICEDEFAULT ||
+    node.type == NodeType.SUBFLOW
+  ) {
     return
   }
   if (node.type == NodeType.CHOICE || node.adsorption) {
@@ -42,6 +46,13 @@ function dragAdsorption(node, pos) {
 }
 //粘贴节点 一定吸附 node：需要吸附的copy节点 parentNode:被吸附的节点
 function dragPasteAdsorption(node, parentNode) {
+  if (node.type == NodeType.SUBFLOW) {
+    ElMessage({
+      message: '子流程节点不可被群组节点吸附',
+      type: 'warning',
+    })
+    return
+  }
   let { width, height } = getLastPos(node, parentNode) //放置新节点的位置
   node.draggable = false
   node.parentNode = parentNode.id
@@ -173,6 +184,9 @@ function updateChildNodeAdsorptionPos(node) {
   }
   for (let i of childNodes) {
     let childNode = findNodeById(i)
+    if (!childNode) {
+      return
+    }
     if (childNode.adsorption) {
       let isHasParentPos = false
       let { x, y } = getTruePos(childNode)
