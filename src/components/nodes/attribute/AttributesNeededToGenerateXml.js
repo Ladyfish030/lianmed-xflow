@@ -21,6 +21,18 @@ const WebService = {
   parentNode: '',
 }
 
+// 定义 Listener 初始化属性
+const Listener = {
+  id: '',
+  type: '',
+  data: {
+    displayName: '',
+    connectorConfiguration: '',
+    path: '',
+  },
+  parentNode: '',
+}
+
 const Choice = {
   id: '',
   type: '',
@@ -66,7 +78,6 @@ const SubFlow = {
   data: {
     displayName: '',
   },
-  parentNode: '',
   childNodes: [],
 }
 

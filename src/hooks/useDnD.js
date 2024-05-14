@@ -16,6 +16,8 @@ function getNewNode(newNodeType) {
       return NodeInitAttribute.Database
     case NodeType.WEBSERVICE:
       return NodeInitAttribute.WebService
+    case NodeType.LISTENER:
+      return NodeInitAttribute.Listener
     case NodeType.CHOICE:
       return NodeInitAttribute.Choice
     case NodeType.CHOICEWHEN:
@@ -126,16 +128,14 @@ export default function useDragAndDrop() {
     if (newNode.adsorption) {
       newNode.childNodes = []
     }
-    if (newNode.type == NodeType.SUBFLOW) {
-      newNode.data.displayName = generateUniqueSubFlowName()
-      // addNodes(newNode)
-      // return
-    }
     let pos = {
       layerX: newNode.position.x,
       layerY: newNode.position.y,
     }
     dragAdsorption(newNode, pos)
+    if (newNode.type == NodeType.SUBFLOW) {
+      newNode.data.displayName = generateUniqueSubFlowName()
+    }
     if (newNode.type == NodeType.CHOICE) {
       newNode.childNodes = []
       newNode.defaultNode = initChoice(newNode)
@@ -209,9 +209,6 @@ export default function useDragAndDrop() {
     const dragNode = e.event == undefined ? e : e.nodes[0]
     isDragging.value = false
     draggedId.value = null
-    // if (dragNode.type == NodeType.SUBFLOW) {
-    //   return
-    // }
     if (dragNode) {
       let pos = {
         layerX: dragNode.position.x,

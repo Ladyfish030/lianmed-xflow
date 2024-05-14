@@ -24,12 +24,18 @@
 </template>
 <script setup>
 import { useVueFlow } from '@vue-flow/core'
+
 import { setParentPos, getParentPos } from '../hooks/useAdsorption'
 import { nodes } from '../hooks/useNode'
 import { edges } from '../hooks/useEdge'
-import { globalConfigList } from '../hooks/useGlobalConfig'
+import { globalConfigList, getGlobalConfig, setGlobalConfig } from '../hooks/useGlobalConfig'
+
 import { NodeType } from '../enums/NodeType'
-import * as Attributes from '../components/nodes/attribute/AttributesNeededToGenerateXml'
+import { GlobalConfigTypeInDetail } from '../enums/GlobalConfigTypeInDetail'
+import { GlobalConfigTypeInGeneral } from '../enums/GlobalConfigTypeInGeneral'
+import * as NodeAttributes from '../components/nodes/attribute/AttributesNeededToGenerateXml'
+import * as ConfigAttributes from '../enums/GlobalConfigAttribute'
+
 import SaveFlowIcon from '@/assets/svg/SaveFlowIcon.vue'
 import LoadFlowIcon from '@/assets/svg/LoadFlowIcon.vue'
 import ClearFlowIcon from '@/assets/svg/ClearFlowIcon.vue'
@@ -37,11 +43,13 @@ import GenerateXmlFileIcon from '@/assets/svg/GenerateXmlFileIcon.vue'
 
 const flowKey = 'xFlow'
 const parentPos = 'parentPos'
+const globalConfig = 'globalConfig'
 const { toObject, fromObject } = useVueFlow()
 
 function onSave() {
     localStorage.setItem(flowKey, JSON.stringify(toObject()))
     localStorage.setItem(parentPos, JSON.stringify(getParentPos()))
+    localStorage.setItem(globalConfig, JSON.stringify(getGlobalConfig()))
     ElMessage({
         message: '保存成功',
         type: 'success',
@@ -55,6 +63,7 @@ function onRestore() {
             .then(() => {
                 fromObject(flow)
                 setParentPos(JSON.parse(localStorage.getItem(parentPos)) || [])
+                setGlobalConfig(JSON.parse(localStorage.getItem(globalConfig)) || [])
                 ElMessage({
                     message: '载入草稿成功',
                     type: 'success',
@@ -94,17 +103,37 @@ function organizeData() {
         edges: [],
     }
 
+    const configMappings = {
+        [GlobalConfigTypeInDetail.DATABASE_MYSQL_CONFIG]: ConfigAttributes.MySQL,
+    }
     const nodeMappings = {
-        [NodeType.DATABASE]: Attributes.Database,
-        [NodeType.WEBSERVICE]: Attributes.WebService,
-        [NodeType.CHOICE]: Attributes.Choice,
-        [NodeType.CHOICEWHEN]: Attributes.ChoiceWhen,
-        [NodeType.CHOICEDEFAULT]: Attributes.ChoiceDefault,
-        [NodeType.FOREACH]: Attributes.ForEach,
-        [NodeType.SUBFLOW]: Attributes.SubFlow,
-        [NodeType.LOGGER]: Attributes.Logger,
-        [NodeType.FLOWREFERENCE]: Attributes.FlowReference,
+        [NodeType.DATABASE]: NodeAttributes.Database,
+        [NodeType.WEBSERVICE]: NodeAttributes.WebService,
+        [NodeType.CHOICE]: NodeAttributes.Choice,
+        [NodeType.CHOICEWHEN]: NodeAttributes.ChoiceWhen,
+        [NodeType.CHOICEDEFAULT]: NodeAttributes.ChoiceDefault,
+        [NodeType.FOREACH]: NodeAttributes.ForEach,
+        [NodeType.SUBFLOW]: NodeAttributes.SubFlow,
+        [NodeType.LOGGER]: NodeAttributes.Logger,
+        [NodeType.FLOWREFERENCE]: NodeAttributes.FlowReference,
     };
+
+    const configList = globalConfigList.value
+    for (const config of configList) {
+        var type = config.type
+        if (type == GlobalConfigTypeInGeneral.DATABASE_CONFIG) {
+            type = config.connection
+        }
+        if (configMappings.hasOwnProperty(type)) {
+            const targetConfig = JSON.parse(JSON.stringify(configMappings[type]))
+            for (const prop in targetConfig) {
+                if (targetConfig.hasOwnProperty(prop) && config.hasOwnProperty(prop)) {
+                    targetConfig[prop] = config[prop];
+                }
+            }
+            result.globalConfig.push(targetConfig)
+        }
+    }
 
     const nodeList = nodes.value
     for (const node of nodeList) {
@@ -113,16 +142,25 @@ function organizeData() {
             const targetNode = JSON.parse(JSON.stringify(nodeMappings[type]))
             for (const prop in targetNode) {
                 if (targetNode.hasOwnProperty(prop) && node.hasOwnProperty(prop)) {
-                    targetNode[prop] = node[prop];
+                    targetNode[prop] = node[prop] == undefined ? null : node[prop]
                 }
             }
             result.nodes.push(targetNode)
         }
     }
+
+    const edgeList = edges.value
+    for (const edge of edgeList) {
+        const targetEdge = {}
+        targetEdge.id = edge.id
+        targetEdge.source = edge.source
+        targetEdge.target = edge.target
+        result.edges.push(targetEdge)
+    }
 }
 
 function generateXmlFile() {
-    organizeData()
+   const sendData = organizeData()
 }
 </script>
 

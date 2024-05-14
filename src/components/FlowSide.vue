@@ -85,7 +85,7 @@ function searchClearHandler() {
             <el-icon><Grid /></el-icon>Database
           </el-button>
         </div>
-        <div class="node-container">
+        <!-- <div class="node-container">
           <el-button 
             class="node" 
             type="info" 
@@ -94,6 +94,17 @@ function searchClearHandler() {
             @dragstart="onDragStart($event, NodeType.WEBSERVICE)"
           >
             <el-icon><Grid /></el-icon>WebService
+          </el-button>
+        </div> -->
+        <div class="node-container">
+          <el-button 
+            class="node" 
+            type="info" 
+            plain 
+            :draggable="true"
+            @dragstart="onDragStart($event, NodeType.LISTENER)"
+          >
+            <el-icon><Grid /></el-icon>Listener
           </el-button>
         </div>
       </el-sub-menu>

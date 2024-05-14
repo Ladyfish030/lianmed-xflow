@@ -49,6 +49,31 @@ const WebService = {
   adsorption: false,
 }
 
+// 定义 Listener 初始化属性
+const Listener = {
+  id: '',
+  type: '',
+  data: {
+    displayName: 'Listener',
+    connectorConfiguration: '',
+    path: '',
+  },
+  position: {
+    x: 0,
+    y: 0,
+  },
+  dimensions: {
+    width: 70,
+    height: 70,
+  },
+  initDimensions: {
+    width: 70,
+    height: 70,
+  },
+  parentNode: '',
+  adsorption: false,
+}
+
 // 定义 条件分支 初始化属性
 const Choice = {
   id: '',
@@ -163,7 +188,6 @@ const SubFlow = {
     width: 150,
     height: 100,
   },
-  parentNode: '',
   adsorption: true,
   childNodes: [],
 }
@@ -220,6 +244,7 @@ const FlowReference = {
 export {
   Database,
   WebService,
+  Listener,
   Choice,
   ChoiceWhen,
   ChoiceDefault,

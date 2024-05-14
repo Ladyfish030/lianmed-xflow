@@ -11,6 +11,7 @@ import { nodeMenuVisible, menuClickNode, menuPosition } from '../hooks/useMenu'
 import { NodeType } from '../enums/NodeType'
 import DatabaseMenu from '../components/nodes/menu/DatabaseMenu.vue'
 import WebServiceMenu from '../components/nodes/menu/WebServiceMenu.vue'
+import ListenerMenu from '../components/nodes/menu/ListenerMenu.vue'
 import ChoiceMenu from '../components/nodes/menu/ChoiceMenu.vue'
 import ChoiceWhenMenu from '../components/nodes/menu/ChoiceWhenMenu.vue'
 import ChoiceDefaultMenu from '../components/nodes/menu/ChoiceDefaultMenu.vue'
@@ -25,6 +26,8 @@ const currentMenu = computed(() => {
       return DatabaseMenu
     case NodeType.WEBSERVICE:
       return WebServiceMenu
+    case NodeType.LISTENER:
+      return ListenerMenu
     case NodeType.CHOICE:
       return ChoiceMenu
     case NodeType.CHOICEWHEN:

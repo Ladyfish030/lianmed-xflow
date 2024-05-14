@@ -3,6 +3,13 @@ import { v4 as uuidv4 } from 'uuid'
 
 const globalConfigList = ref([])
 
+function getGlobalConfig() {
+    return globalConfigList.value
+  }
+  function setGlobalConfig(value) {
+    globalConfigList.value = value || []
+  }
+
 function getGlobalConfigId() {
     const configId = uuidv4();
     return configId
@@ -52,6 +59,8 @@ function removeGlobalConfig(configName) {
 
 export {
     globalConfigList,
+    getGlobalConfig,
+    setGlobalConfig,
     findGlobalConfigByName,
     getGlobalConfigListByType,
     editGlobalConfig,

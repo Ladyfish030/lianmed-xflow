@@ -59,6 +59,7 @@ import FlowMenu from '@/components/FlowMenu.vue'
 
 import Database from '@/components/nodes/Database.vue'
 import WebService from '@/components/nodes/WebService.vue'
+import Listener from '@/components/nodes/Listener.vue'
 import Choice from '@/components/nodes/Choice.vue'
 import ChoiceWhen from '@/components/nodes/ChoiceWhen.vue'
 import ChoiceDefault from '@/components/nodes/ChoiceDefault.vue'
@@ -101,6 +102,7 @@ const { findNode, removeNodes, screenToFlowCoordinate } = useVueFlow()
 const nodeTypes = {
   [NodeType.DATABASE]: markRaw(Database),
   [NodeType.WEBSERVICE]: markRaw(WebService),
+  [NodeType.LISTENER]: markRaw(Listener),
   [NodeType.CHOICE]: markRaw(Choice),
   [NodeType.CHOICEWHEN]: markRaw(ChoiceWhen),
   [NodeType.CHOICEDEFAULT]: markRaw(ChoiceDefault),
@@ -114,7 +116,7 @@ function logNode() {
   console.log(JSON.stringify(edges.value))
 }
 function nodeClickHandler(e) {
-  // console.log('点击节点：', e.node)
+  console.log('点击节点：', e.node)
   // console.log('所有节点：', JSON.stringify(nodes.value))
   // console.log('所有连线：', edges.value)
 }
