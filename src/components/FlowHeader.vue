@@ -1,34 +1,36 @@
 <template>
-    <div class="button-container">
-        <el-tooltip content="保存草稿" placement="bottom" effect="dark">
-            <button @click="onSave">
-                <SaveFlowIcon />
-            </button>
-        </el-tooltip>
-        <el-tooltip content="载入草稿" placement="bottom" effect="dark">
-            <button @click="onRestore">
-                <LoadFlowIcon />
-            </button>
-        </el-tooltip>
-        <el-tooltip content="清空草稿" placement="bottom" effect="dark">
-            <button @click="onClear">
-                <ClearFlowIcon />
-            </button>
-        </el-tooltip>
-        <el-tooltip content="生成XML" placement="bottom" effect="dark">
-            <button @click="generateXmlFile">
-                <GenerateXmlFileIcon />
-            </button>
-        </el-tooltip>
-    </div>
+  <div class="button-container">
+    <el-tooltip content="保存" placement="bottom" effect="dark">
+      <button @click="onSave">
+        <SaveFlowIcon />
+      </button>
+    </el-tooltip>
+    <el-tooltip content="历史画布" placement="bottom" effect="dark">
+      <button @click="showHistoryPaint">
+        <HistoryPaintIcon></HistoryPaintIcon>
+      </button>
+    </el-tooltip>
+    <el-tooltip content="生成XML" placement="bottom" effect="dark">
+      <button @click="generateXmlFile">
+        <GenerateXmlFileIcon />
+      </button>
+    </el-tooltip>
+  </div>
+  <div class="history-paint" v-show="isShowHistoryPaint">
+    <HistoryPaint></HistoryPaint>
+  </div>
 </template>
 <script setup>
 import { useVueFlow } from '@vue-flow/core'
-
+import { ref } from 'vue'
 import { setParentPos, getParentPos } from '../hooks/useAdsorption'
 import { nodes } from '../hooks/useNode'
 import { edges } from '../hooks/useEdge'
-import { globalConfigList, getGlobalConfig, setGlobalConfig } from '../hooks/useGlobalConfig'
+import {
+  globalConfigList,
+  getGlobalConfig,
+  setGlobalConfig,
+} from '../hooks/useGlobalConfig'
 
 import { NodeType } from '../enums/NodeType'
 import { GlobalConfigTypeInDetail } from '../enums/GlobalConfigTypeInDetail'
@@ -37,183 +39,195 @@ import * as NodeAttributes from '../components/nodes/attribute/AttributesNeededT
 import * as ConfigAttributes from '../enums/GlobalConfigAttribute'
 
 import SaveFlowIcon from '@/assets/svg/SaveFlowIcon.vue'
-import LoadFlowIcon from '@/assets/svg/LoadFlowIcon.vue'
-import ClearFlowIcon from '@/assets/svg/ClearFlowIcon.vue'
+import HistoryPaintIcon from '@/assets/svg/HistoryPaintIcon.vue'
 import GenerateXmlFileIcon from '@/assets/svg/GenerateXmlFileIcon.vue'
+
+import HistoryPaint from '@/components/HistoryPaint.vue'
 
 const flowKey = 'xFlow'
 const parentPos = 'parentPos'
 const globalConfig = 'globalConfig'
 const { toObject, fromObject } = useVueFlow()
-
+let isShowHistoryPaint = ref(false)
 function onSave() {
-    localStorage.setItem(flowKey, JSON.stringify(toObject()))
-    localStorage.setItem(parentPos, JSON.stringify(getParentPos()))
-    localStorage.setItem(globalConfig, JSON.stringify(getGlobalConfig()))
-    ElMessage({
-        message: '保存成功',
-        type: 'success',
-    })
+  //等待有接口后将画布传到后台数据库
+  localStorage.setItem(flowKey, JSON.stringify(toObject()))
+  localStorage.setItem(parentPos, JSON.stringify(getParentPos()))
+  localStorage.setItem(globalConfig, JSON.stringify(getGlobalConfig()))
+  ElMessage({
+    message: '保存成功',
+    type: 'success',
+  })
 }
 
 function onRestore() {
-    const flow = JSON.parse(localStorage.getItem(flowKey))
-    if (flow) {
-        ElMessageBox.confirm('确定载入草稿？这将会覆盖当前数据')
-            .then(() => {
-                fromObject(flow)
-                setParentPos(JSON.parse(localStorage.getItem(parentPos)) || [])
-                setGlobalConfig(JSON.parse(localStorage.getItem(globalConfig)) || [])
-                ElMessage({
-                    message: '载入草稿成功',
-                    type: 'success',
-                })
-                return
-            })
-            .catch(() => {
-                // catch error
-            })
-    } else {
+  const flow = JSON.parse(localStorage.getItem(flowKey))
+  if (flow) {
+    ElMessageBox.confirm('确定载入草稿？这将会覆盖当前数据')
+      .then(() => {
+        fromObject(flow)
+        setParentPos(JSON.parse(localStorage.getItem(parentPos)) || [])
+        setGlobalConfig(JSON.parse(localStorage.getItem(globalConfig)) || [])
         ElMessage({
-            message: '草稿箱为空',
-            type: 'warning',
+          message: '载入草稿成功',
+          type: 'success',
         })
-    }
+        return
+      })
+      .catch(() => {
+        // catch error
+      })
+  } else {
+    ElMessage({
+      message: '草稿箱为空',
+      type: 'warning',
+    })
+  }
 }
 
 function onClear() {
-    ElMessageBox.confirm('确定清空草稿箱？')
-        .then(() => {
-            localStorage.clear()
-            ElMessage({
-                message: '清空草稿成功',
-                type: 'success',
-            })
-            return
-        })
-        .catch(() => {
-            // catch error
-        })
+  ElMessageBox.confirm('确定清空草稿箱？')
+    .then(() => {
+      localStorage.clear()
+      ElMessage({
+        message: '清空草稿成功',
+        type: 'success',
+      })
+      return
+    })
+    .catch(() => {
+      // catch error
+    })
 }
-
+function showHistoryPaint() {
+  isShowHistoryPaint.value = !isShowHistoryPaint.value
+}
 function organizeData() {
-    var result = {
-        globalConfig: [],
-        nodes: [],
-        edges: [],
-    }
+  var result = {
+    globalConfig: [],
+    nodes: [],
+    edges: [],
+  }
 
-    const configMappings = {
-        [GlobalConfigTypeInDetail.DATABASE_MYSQL_CONFIG]: ConfigAttributes.MySQL,
-        [GlobalConfigTypeInDetail.DATABASE_SQLSERVER_CONFIG]: ConfigAttributes.SQLServer,
-        [GlobalConfigTypeInDetail.DATABASE_ORACLE_CONFIG]: ConfigAttributes.Oracle,
-        [GlobalConfigTypeInDetail.DATABASE_POSTGRESQL_CONFIG]: ConfigAttributes.PostgreSQL,
-        [GlobalConfigTypeInDetail.LISTENER_CONFIG]: ConfigAttributes.Listener
-    }
-    const nodeMappings = {
-        [NodeType.DATABASE]: NodeAttributes.Database,
-        [NodeType.WEBSERVICE]: NodeAttributes.WebService,
-        [NodeType.LISTENER]: NodeAttributes.Listener,
-        [NodeType.CHOICE]: NodeAttributes.Choice,
-        [NodeType.CHOICEWHEN]: NodeAttributes.ChoiceWhen,
-        [NodeType.CHOICEDEFAULT]: NodeAttributes.ChoiceDefault,
-        [NodeType.FOREACH]: NodeAttributes.ForEach,
-        [NodeType.SUBFLOW]: NodeAttributes.SubFlow,
-        [NodeType.LOGGER]: NodeAttributes.Logger,
-        [NodeType.FLOWREFERENCE]: NodeAttributes.FlowReference,
-    };
+  const configMappings = {
+    [GlobalConfigTypeInDetail.DATABASE_MYSQL_CONFIG]: ConfigAttributes.MySQL,
+    [GlobalConfigTypeInDetail.DATABASE_SQLSERVER_CONFIG]:
+      ConfigAttributes.SQLServer,
+    [GlobalConfigTypeInDetail.DATABASE_ORACLE_CONFIG]: ConfigAttributes.Oracle,
+    [GlobalConfigTypeInDetail.DATABASE_POSTGRESQL_CONFIG]:
+      ConfigAttributes.PostgreSQL,
+    [GlobalConfigTypeInDetail.LISTENER_CONFIG]: ConfigAttributes.Listener,
+  }
+  const nodeMappings = {
+    [NodeType.DATABASE]: NodeAttributes.Database,
+    [NodeType.WEBSERVICE]: NodeAttributes.WebService,
+    [NodeType.LISTENER]: NodeAttributes.Listener,
+    [NodeType.CHOICE]: NodeAttributes.Choice,
+    [NodeType.CHOICEWHEN]: NodeAttributes.ChoiceWhen,
+    [NodeType.CHOICEDEFAULT]: NodeAttributes.ChoiceDefault,
+    [NodeType.FOREACH]: NodeAttributes.ForEach,
+    [NodeType.SUBFLOW]: NodeAttributes.SubFlow,
+    [NodeType.LOGGER]: NodeAttributes.Logger,
+    [NodeType.FLOWREFERENCE]: NodeAttributes.FlowReference,
+  }
 
-    const configList = globalConfigList.value
-    for (const config of configList) {
-        var type = config.type
-        if (type == GlobalConfigTypeInGeneral.DATABASE_CONFIG) {
-            type = config.connection
+  const configList = globalConfigList.value
+  for (const config of configList) {
+    var type = config.type
+    if (type == GlobalConfigTypeInGeneral.DATABASE_CONFIG) {
+      type = config.connection
+    }
+    if (configMappings.hasOwnProperty(type)) {
+      const targetConfig = JSON.parse(JSON.stringify(configMappings[type]))
+      for (const prop in targetConfig) {
+        if (targetConfig.hasOwnProperty(prop) && config.hasOwnProperty(prop)) {
+          targetConfig[prop] = config[prop]
         }
-        if (configMappings.hasOwnProperty(type)) {
-            const targetConfig = JSON.parse(JSON.stringify(configMappings[type]))
-            for (const prop in targetConfig) {
-                if (targetConfig.hasOwnProperty(prop) && config.hasOwnProperty(prop)) {
-                    targetConfig[prop] = config[prop];
-                }
-            }
-            result.globalConfig.push(targetConfig)
+      }
+      result.globalConfig.push(targetConfig)
+    }
+  }
+
+  const nodeList = nodes.value
+  for (const node of nodeList) {
+    const type = node.type
+    if (nodeMappings.hasOwnProperty(type)) {
+      const targetNode = JSON.parse(JSON.stringify(nodeMappings[type]))
+      for (const prop in targetNode) {
+        if (targetNode.hasOwnProperty(prop) && node.hasOwnProperty(prop)) {
+          targetNode[prop] = node[prop] == undefined ? null : node[prop]
         }
+      }
+      result.nodes.push(targetNode)
     }
+  }
 
-    const nodeList = nodes.value
-    for (const node of nodeList) {
-        const type = node.type
-        if (nodeMappings.hasOwnProperty(type)) {
-            const targetNode = JSON.parse(JSON.stringify(nodeMappings[type]))
-            for (const prop in targetNode) {
-                if (targetNode.hasOwnProperty(prop) && node.hasOwnProperty(prop)) {
-                    targetNode[prop] = node[prop] == undefined ? null : node[prop]
-                }
-            }
-            result.nodes.push(targetNode)
-        }
-    }
+  const edgeList = edges.value
+  for (const edge of edgeList) {
+    const targetEdge = {}
+    targetEdge.id = edge.id
+    targetEdge.source = edge.source
+    targetEdge.target = edge.target
+    result.edges.push(targetEdge)
+  }
 
-    const edgeList = edges.value
-    for (const edge of edgeList) {
-        const targetEdge = {}
-        targetEdge.id = edge.id
-        targetEdge.source = edge.source
-        targetEdge.target = edge.target
-        result.edges.push(targetEdge)
-    }
-
-    return result
+  return result
 }
 
 function generateXmlFile() {
-    const sendData = JSON.stringify(organizeData())
+  const sendData = JSON.stringify(organizeData())
 }
 </script>
 
 <style scoped>
 .button-container {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    margin-left: 5px;
-    margin-right: auto;
-    height: 100%;
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content;
-    border-color: transparent;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: 5px;
+  margin-right: auto;
+  height: 100%;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-color: transparent;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
-.button-container>button {
-    margin-left: 8px;
-    border-radius: 5px;
-    border-color: transparent;
-    background-color: transparent;
-    height: 25px;
-    width: 25px;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
+.button-container > button {
+  margin-left: 8px;
+  border-radius: 5px;
+  border-color: transparent;
+  background-color: transparent;
+  height: 25px;
+  width: 25px;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
-.button-container>button:hover {
-    -webkit-transform: scale(105%);
-    -ms-transform: scale(105%);
-    transform: scale(105%);
-    -webkit-transition: 0.25s all ease-in-out;
-    -o-transition: 0.25s all ease-in-out;
-    transition: 0.25s all ease-in-out;
-    cursor: pointer;
-    background-color: #e9e9eb;
+.button-container > button:hover {
+  -webkit-transform: scale(105%);
+  -ms-transform: scale(105%);
+  transform: scale(105%);
+  -webkit-transition: 0.25s all ease-in-out;
+  -o-transition: 0.25s all ease-in-out;
+  transition: 0.25s all ease-in-out;
+  cursor: pointer;
+  background-color: #e9e9eb;
+}
+.history-paint {
+  position: relative;
+  display: block;
+  height: 10px;
+  width: 30%;
 }
 </style>

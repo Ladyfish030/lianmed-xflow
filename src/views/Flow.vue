@@ -178,10 +178,13 @@ watch(deleteNodeConfirm, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
     if (deleteNode.value.type == NodeType.SUBFLOW) {
       nodes.value.forEach((node, index) => {
-        if (node.type == NodeType.FLOWREFERENCE && node.data.flowName == deleteNode.value.data.displayName) {
+        if (
+          node.type == NodeType.FLOWREFERENCE &&
+          node.data.flowName == deleteNode.value.data.displayName
+        ) {
           node.data.flowName = ''
         }
-      });
+      })
       deleteSubFlowByName(deleteNode.value.data.displayName)
     }
     removeNodeAdsorption(deleteNode.value.id)
@@ -221,6 +224,7 @@ emitter.on('addWhenNode', (id) => addWhenNode(id))
   background-color: #fafafa;
 }
 .header-container {
+  position: relative;
   width: 99%;
   height: 65%;
   border: 1px solid white;
@@ -229,7 +233,7 @@ emitter.on('addWhenNode', (id) => addWhenNode(id))
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex;
+  display: block;
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
