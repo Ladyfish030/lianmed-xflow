@@ -311,17 +311,12 @@ function showDatabaseConfig(item) {
       databaseConfigForm[key] = item[key];
     }
   }
-  console.log("databaseConfigForm:", databaseConfigForm)
   currentDatabaseConfig = item
   isAddNewDatabaseConfig.value = false
   databaseFormVisible.value = true
 }
 
 function handleBeforeAddDatabaseConfig() {
-  // for (let key of Object.keys(databaseConfigForm)) {
-  //   databaseConfigForm[key] = '';
-  // }
-  // databaseConfigForm.connection = DatabaseConnectionType.MYSQL_CONNECTION
   Object.assign(databaseConfigForm, mySqlConfig)
   isAddNewDatabaseConfig.value = true
   databaseFormVisible.value = true
