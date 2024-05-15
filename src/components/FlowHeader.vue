@@ -105,10 +105,15 @@ function organizeData() {
 
     const configMappings = {
         [GlobalConfigTypeInDetail.DATABASE_MYSQL_CONFIG]: ConfigAttributes.MySQL,
+        [GlobalConfigTypeInDetail.DATABASE_SQLSERVER_CONFIG]: ConfigAttributes.SQLServer,
+        [GlobalConfigTypeInDetail.DATABASE_ORACLE_CONFIG]: ConfigAttributes.Oracle,
+        [GlobalConfigTypeInDetail.DATABASE_POSTGRESQL_CONFIG]: ConfigAttributes.PostgreSQL,
+        [GlobalConfigTypeInDetail.LISTENER_CONFIG]: ConfigAttributes.Listener
     }
     const nodeMappings = {
         [NodeType.DATABASE]: NodeAttributes.Database,
         [NodeType.WEBSERVICE]: NodeAttributes.WebService,
+        [NodeType.LISTENER]: NodeAttributes.Listener,
         [NodeType.CHOICE]: NodeAttributes.Choice,
         [NodeType.CHOICEWHEN]: NodeAttributes.ChoiceWhen,
         [NodeType.CHOICEDEFAULT]: NodeAttributes.ChoiceDefault,
@@ -157,10 +162,12 @@ function organizeData() {
         targetEdge.target = edge.target
         result.edges.push(targetEdge)
     }
+
+    return result
 }
 
 function generateXmlFile() {
-   const sendData = organizeData()
+    const sendData = JSON.stringify(organizeData())
 }
 </script>
 

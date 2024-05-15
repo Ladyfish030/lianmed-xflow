@@ -1,5 +1,5 @@
 export enum GlobalConfigTypeInGeneral {
-    DATABASE_CONFIG = 'database',
-    LISTENER_CONFIG = 'listener',
-    REQUEST_CONFIG = 'request',
+    DATABASE_CONFIG = 'Database',
+    LISTENER_CONFIG = 'Listener',
+    REQUEST_CONFIG = 'Request',
 }

@@ -32,13 +32,7 @@ function getGlobalConfigListByType(configType) {
 
 function editGlobalConfig(oldConfig, newConfig) {
     var config = findGlobalConfigByName(oldConfig.name)
-
-    for (let key in newConfig) {
-        if (config.hasOwnProperty(key)) {
-            config[key] = newConfig[key];
-        }
-    }
-
+    Object.assign(config, { ...newConfig, id: config.id, type: config.type })
 }
 
 function insertGlobalConfig(newConfig) {

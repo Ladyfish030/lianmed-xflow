@@ -59,21 +59,84 @@
           <el-option v-for="(item, index) in databaseConnectionTypeList" :key="index" :label="item" :value="item" />
         </el-select>
       </el-form-item>
-      <el-form-item label="主机名" :label-width="formLabelWidth">
-        <el-input v-model="databaseConfigForm.host" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="端口号" :label-width="formLabelWidth">
-        <el-input v-model="databaseConfigForm.port" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="用户名" :label-width="formLabelWidth">
-        <el-input v-model="databaseConfigForm.username" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="密码" :label-width="formLabelWidth">
-        <el-input v-model="databaseConfigForm.password" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="数据库名" :label-width="formLabelWidth">
-        <el-input v-model="databaseConfigForm.database" autocomplete="off" />
-      </el-form-item>
+
+      <div v-if="databaseConfigForm.connection === DatabaseConnectionType.MYSQL_CONNECTION">
+        <el-form-item label="主机名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.host" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="端口号" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.port" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.username" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="密码" :label-width="formLabelWidth">
+          <el-input type="password" show-password v-model="databaseConfigForm.password" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="数据库名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.database" autocomplete="off" />
+        </el-form-item>
+      </div>
+
+      <div v-if="databaseConfigForm.connection === DatabaseConnectionType.SQLSERVER_CONNECTION">
+        <el-form-item label="主机名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.host" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="端口号" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.port" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.username" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="密码" :label-width="formLabelWidth">
+          <el-input type="password" show-password v-model="databaseConfigForm.password" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="实例名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.instanceName" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="数据库名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.database" autocomplete="off" />
+        </el-form-item>
+      </div>
+
+      <div v-if="databaseConfigForm.connection === DatabaseConnectionType.ORACLE_CONNECTION">
+        <el-form-item label="主机名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.host" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="端口号" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.port" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.username" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="密码" :label-width="formLabelWidth">
+          <el-input type="password" show-password v-model="databaseConfigForm.password" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="实例名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.instanceName" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="服务名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.serviceName" autocomplete="off" />
+        </el-form-item>
+      </div>
+
+      <div v-if="databaseConfigForm.connection === DatabaseConnectionType.POSTGRESQL_CONNECTION">
+        <el-form-item label="主机名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.host" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="端口号" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.port" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.username" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="密码" :label-width="formLabelWidth">
+          <el-input type="password" show-password v-model="databaseConfigForm.password" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="数据库名" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.database" autocomplete="off" />
+        </el-form-item>
+      </div>
     </el-form>
     <template #footer>
       <div class="dialog-footer">
@@ -114,9 +177,11 @@ const inputParameters = ref(drawerClickNode?.value.data.inputParameters || '')
 const { updateNode } = useVueFlow()
 const databaseFormVisible = ref(false)
 const isAddNewDatabaseConfig = ref(false)
-const databaseConfigList = ref(getGlobalConfigListByType(GlobalConfigTypeInGeneral.DATABASE_CONFIG))
+var isAddNewDatabaseCauseConnectionToggle = false
 var currentDatabaseConfig = null
+
 const formLabelWidth = '90px'
+const databaseConfigList = ref(getGlobalConfigListByType(GlobalConfigTypeInGeneral.DATABASE_CONFIG))
 const databaseOperationList = ['Select', 'Insert', 'Delete', 'Update']
 const databaseConnectionTypeList = computed(() => {
   const types = [];
@@ -127,14 +192,72 @@ const databaseConnectionTypeList = computed(() => {
   }
   return types;
 })
-const databaseConfigForm = reactive({
+
+const mySqlConfig = {
   name: '',
-  connection: '',
+  connection: DatabaseConnectionType.MYSQL_CONNECTION,
   host: '',
   port: '',
   username: '',
   password: '',
   database: '',
+}
+
+const sqlServerConfig = {
+  name: '',
+  connection: DatabaseConnectionType.SQLSERVER_CONNECTION,
+  host: '',
+  port: '',
+  username: '',
+  password: '',
+  instanceName: '',
+  database: '',
+}
+
+const oracleConfig = {
+  name: '',
+  connection: DatabaseConnectionType.ORACLE_CONNECTION,
+  host: '',
+  port: '',
+  username: '',
+  password: '',
+  instanceName: '',
+  serviceName: '',
+}
+
+const postgreSqlConfig = {
+  name: '',
+  connection: DatabaseConnectionType.POSTGRESQL_CONNECTION,
+  host: '',
+  port: '',
+  username: '',
+  password: '',
+  database: '',
+}
+
+var databaseConfigForm = reactive(Object.assign({}, mySqlConfig))
+
+watch(() => databaseConfigForm.connection, (newValue, oldValue) => {
+  if (isAddNewDatabaseCauseConnectionToggle) {
+    isAddNewDatabaseCauseConnectionToggle = false
+    return
+  }
+  switch (newValue) {
+    case DatabaseConnectionType.MYSQL_CONNECTION:
+      Object.assign(databaseConfigForm, { ...mySqlConfig, name: databaseConfigForm.name })
+      break
+    case DatabaseConnectionType.SQLSERVER_CONNECTION:
+      Object.assign(databaseConfigForm, { ...sqlServerConfig, name: databaseConfigForm.name })
+      break
+    case DatabaseConnectionType.ORACLE_CONNECTION:
+      Object.assign(databaseConfigForm, { ...oracleConfig, name: databaseConfigForm.name })
+      break
+    case DatabaseConnectionType.POSTGRESQL_CONNECTION:
+      Object.assign(databaseConfigForm, { ...postgreSqlConfig, name: databaseConfigForm.name })
+      break
+    default:
+      return
+  }
 })
 
 function removeDatabaseConfigHandler(databaseConfigName) {
@@ -163,20 +286,43 @@ function removeDatabaseConfigHandler(databaseConfigName) {
 }
 
 function showDatabaseConfig(item) {
+  if (currentDatabaseConfig == null || item.connection != currentDatabaseConfig.connection) {
+    isAddNewDatabaseCauseConnectionToggle = true
+  }
+  switch (item.connection) {
+    case DatabaseConnectionType.MYSQL_CONNECTION:
+      Object.assign(databaseConfigForm, mySqlConfig)
+      break
+    case DatabaseConnectionType.SQLSERVER_CONNECTION:
+      Object.assign(databaseConfigForm, sqlServerConfig)
+      break
+    case DatabaseConnectionType.ORACLE_CONNECTION:
+      Object.assign(databaseConfigForm, oracleConfig)
+      break
+    case DatabaseConnectionType.POSTGRESQL_CONNECTION:
+      Object.assign(databaseConfigForm, postgreSqlConfig)
+      break
+    default:
+      break
+  }
+
   for (let key in item) {
     if (databaseConfigForm.hasOwnProperty(key)) {
       databaseConfigForm[key] = item[key];
     }
   }
+  console.log("databaseConfigForm:", databaseConfigForm)
   currentDatabaseConfig = item
   isAddNewDatabaseConfig.value = false
   databaseFormVisible.value = true
 }
 
 function handleBeforeAddDatabaseConfig() {
-  for (let key of Object.keys(databaseConfigForm)) {
-    databaseConfigForm[key] = '';
-  }
+  // for (let key of Object.keys(databaseConfigForm)) {
+  //   databaseConfigForm[key] = '';
+  // }
+  // databaseConfigForm.connection = DatabaseConnectionType.MYSQL_CONNECTION
+  Object.assign(databaseConfigForm, mySqlConfig)
   isAddNewDatabaseConfig.value = true
   databaseFormVisible.value = true
 }
@@ -346,6 +492,10 @@ watch(isSave, (newValue, oldValue) => {
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   width: 80%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .delete-button {

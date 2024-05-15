@@ -57,6 +57,9 @@
             <el-form-item label="端口号" :label-width="formLabelWidth">
                 <el-input v-model="listenerConfigForm.port" autocomplete="off" />
             </el-form-item>
+            <el-form-item label="base path" :label-width="formLabelWidth">
+                <el-input v-model="listenerConfigForm.basePath" autocomplete="off" />
+            </el-form-item>
         </el-form>
         <template #footer>
             <div class="dialog-footer">
@@ -103,6 +106,7 @@ const listenerConfigForm = reactive({
     protocol: '',
     host: '',
     port: '',
+    basePath: '',
 })
 
 function removeListenerConfigHandler(listenerConfigName) {
@@ -312,6 +316,10 @@ watch(isSave, (newValue, oldValue) => {
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     width: 80%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .delete-button {

@@ -21,7 +21,6 @@ const WebService = {
   parentNode: '',
 }
 
-// 定义 Listener 初始化属性
 const Listener = {
   id: '',
   type: '',
@@ -105,6 +104,7 @@ const FlowReference = {
 export {
   Database,
   WebService,
+  Listener,
   Choice,
   ChoiceWhen,
   ChoiceDefault,
