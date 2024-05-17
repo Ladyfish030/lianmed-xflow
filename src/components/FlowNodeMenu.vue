@@ -16,12 +16,14 @@ import ChoiceMenu from '../components/nodes/menu/ChoiceMenu.vue'
 import ChoiceWhenMenu from '../components/nodes/menu/ChoiceWhenMenu.vue'
 import ChoiceDefaultMenu from '../components/nodes/menu/ChoiceDefaultMenu.vue'
 import ForEachMenu from '../components/nodes/menu/ForEachMenu.vue'
-import SubFlowMenu from '../components/nodes/menu/SubFlowMenu.vue'
+import FlowMenu from '../components/nodes/menu/FlowMenu.vue'
 import LoggerMenu from '../components/nodes/menu/LoggerMenu.vue'
 import FlowReferenceMenu from '../components/nodes/menu/FlowReferenceMenu.vue'
 
 const currentMenu = computed(() => {
   switch (menuClickNode.value.type) {
+    case NodeType.FLOW:
+      return FlowMenu
     case NodeType.DATABASE:
       return DatabaseMenu
     case NodeType.WEBSERVICE:
@@ -37,7 +39,7 @@ const currentMenu = computed(() => {
     case NodeType.FOREACH:
       return ForEachMenu
     case NodeType.SUBFLOW:
-      return SubFlowMenu
+      return FlowMenu
     case NodeType.LOGGER:
       return LoggerMenu
     case NodeType.FLOWREFERENCE:

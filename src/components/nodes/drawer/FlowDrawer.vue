@@ -12,7 +12,7 @@ import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { nodes } from '@/hooks/useNode'
 import { isSave, saveAttributeComplete, drawerClickNode } from '../../../hooks/useDrawer'
-import { findSubFlow, editSubFlow } from '../../../hooks/useSubFlow'
+import { findFlow, editFlow } from '../../../hooks/useFlow'
 import { NodeType } from '@/enums/NodeType'
 
 const displayName = ref(drawerClickNode?.value.data.displayName || '')
@@ -30,7 +30,7 @@ watch(isSave, (newValue, oldValue) => {
       return
     }
     else if (drawerClickNode.value.data.displayName !== displayName.value
-        && findSubFlow(displayName.value) !== -1) {
+        && findFlow(displayName.value) !== -1) {
       ElMessage({
         message: '保存失败，名称不能重复',
         type: 'error',
@@ -44,7 +44,7 @@ watch(isSave, (newValue, oldValue) => {
             node.data.flowName = displayName.value
           }
         });
-      editSubFlow(drawerClickNode.value.data.displayName, displayName.value)
+      editFlow(drawerClickNode.value.data.displayName, displayName.value)
       updateNode(drawerClickNode.value.id,
       {
         data:

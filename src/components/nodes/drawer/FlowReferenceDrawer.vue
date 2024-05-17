@@ -3,7 +3,7 @@
     <div class="form-item">
       <label>Flow Name</label>
       <el-select v-model="flowName" placeholder="" class="input-field">
-        <el-option v-for="(item, index) in subFlowList" :key="index" :label="item" :value="item" />
+        <el-option v-for="(item, index) in flowList" :key="index" :label="item" :value="item" />
       </el-select>
     </div>
   </div>
@@ -13,7 +13,7 @@
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { isSave, saveAttributeComplete, drawerClickNode } from '../../../hooks/useDrawer'
-import { subFlowList } from '../../../hooks/useSubFlow'
+import { flowList } from '../../../hooks/useFlow'
 
 const flowName = ref(drawerClickNode?.value.data.flowName || '')
 
@@ -64,4 +64,4 @@ watch(isSave, (newValue, oldValue) => {
   margin-top: 5px;
   margin-bottom: 5px;
 }
-</style>
+</style>../../../hooks/useFlow

@@ -111,14 +111,13 @@ function organizeData() {
 
   const configMappings = {
     [GlobalConfigTypeInDetail.DATABASE_MYSQL_CONFIG]: ConfigAttributes.MySQL,
-    [GlobalConfigTypeInDetail.DATABASE_SQLSERVER_CONFIG]:
-      ConfigAttributes.SQLServer,
+    [GlobalConfigTypeInDetail.DATABASE_SQLSERVER_CONFIG]:ConfigAttributes.SQLServer,
     [GlobalConfigTypeInDetail.DATABASE_ORACLE_CONFIG]: ConfigAttributes.Oracle,
-    [GlobalConfigTypeInDetail.DATABASE_POSTGRESQL_CONFIG]:
-      ConfigAttributes.PostgreSQL,
+    [GlobalConfigTypeInDetail.DATABASE_POSTGRESQL_CONFIG]:ConfigAttributes.PostgreSQL,
     [GlobalConfigTypeInDetail.LISTENER_CONFIG]: ConfigAttributes.Listener,
   }
   const nodeMappings = {
+    [NodeType.FLOW]: NodeAttributes.Flow,
     [NodeType.DATABASE]: NodeAttributes.Database,
     [NodeType.WEBSERVICE]: NodeAttributes.WebService,
     [NodeType.LISTENER]: NodeAttributes.Listener,

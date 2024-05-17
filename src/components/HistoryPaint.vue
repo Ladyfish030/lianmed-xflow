@@ -10,9 +10,8 @@
     </el-table-column>
     <el-table-column fixed="right" label="操作" width="140">
       <template #default="scope">
-        <el-button type="text" size="small">展示</el-button>
+        <el-button size="small">展示</el-button>
         <el-button
-          type="text"
           size="small"
           @click.prevent="deleteRow(scope.$index)"
           >删除</el-button

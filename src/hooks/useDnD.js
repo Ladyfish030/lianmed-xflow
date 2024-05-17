@@ -8,10 +8,12 @@ import {
 } from './useAdsorption'
 import * as NodeInitAttribute from '../components/nodes/attribute/NodeInitAttribute'
 import { findNodeById, getNodeId } from './useNode'
-import { generateUniqueSubFlowName } from './useSubFlow'
+import { generateUniqueFlowName } from './useFlow'
 
 function getNewNode(newNodeType) {
   switch (newNodeType) {
+    case NodeType.FLOW:
+      return NodeInitAttribute.Flow
     case NodeType.DATABASE:
       return NodeInitAttribute.Database
     case NodeType.WEBSERVICE:
@@ -134,13 +136,51 @@ export default function useDragAndDrop() {
     }
     dragAdsorption(newNode, pos)
     if (newNode.type == NodeType.SUBFLOW) {
-      newNode.data.displayName = generateUniqueSubFlowName()
+      newNode.data.displayName = generateUniqueFlowName()
     }
     if (newNode.type == NodeType.CHOICE) {
       newNode.childNodes = []
       newNode.defaultNode = initChoice(newNode)
     }
     addNodes(newNode)
+    initFlow(newNode)
+  }
+
+  function initFlow(newNode) {
+    if (newNode.parentNode != undefined || newNode.type == NodeType.SUBFLOW) {
+      return
+    }
+    const nodeId = getNodeId()
+    var flowNode = JSON.parse(JSON.stringify(getNewNode(NodeType.FLOW)))
+    flowNode = {
+      id: nodeId,
+      type: NodeType.FLOW,
+      data: flowNode.data,
+      position: newNode.position,
+      dimensions: flowNode.dimensions,
+      initDimensions: flowNode.initDimensions,
+      style: {
+        width: `${flowNode.dimensions.width}px`,
+        height: `${flowNode.dimensions.height}px`,
+      },
+      adsorption: flowNode.adsorption,
+    }
+    flowNode.data.displayName = generateUniqueFlowName()
+    if (flowNode.adsorption) {
+      flowNode.childNodes = []
+    }
+    let pos = {
+      layerX: flowNode.position.x,
+      layerY: flowNode.position.y,
+    }
+    dragAdsorption(flowNode, pos)
+    addNodes(flowNode)
+
+    pos = {
+      layerX: newNode.position.x,
+      layerY: newNode.position.y,
+    }
+    dragAdsorption(newNode, pos)
   }
 
   function initChoice(node) {

@@ -1,3 +1,12 @@
+const Flow = {
+  id: '',
+  type: '',
+  data: {
+    displayName: '',
+  },
+  childNodes: [],
+}
+
 const Database = {
   id: '',
   type: '',
@@ -102,6 +111,7 @@ const FlowReference = {
 }
 
 export {
+  Flow,
   Database,
   WebService,
   Listener,

@@ -1,3 +1,26 @@
+// 定义 Flow 初始化属性
+const Flow = {
+  id: '',
+  type: '',
+  data: {
+    displayName: '',
+  },
+  position: {
+    x: 0,
+    y: 0,
+  },
+  dimensions: {
+    width: 150,
+    height: 100,
+  },
+  initDimensions: {
+    width: 150,
+    height: 100,
+  },
+  adsorption: true,
+  childNodes: [],
+}
+
 // 定义 Database 初始化属性
 const Database = {
   id: '',
@@ -242,6 +265,7 @@ const FlowReference = {
 }
 
 export {
+  Flow,
   Database,
   WebService,
   Listener,

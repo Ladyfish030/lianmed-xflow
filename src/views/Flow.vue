@@ -57,6 +57,7 @@ import FlowNodeMenu from '@/components/FlowNodeMenu.vue'
 import FlowEdgeMenu from '@/components/FlowEdgeMenu.vue'
 import FlowMenu from '@/components/FlowMenu.vue'
 
+import Flow from '@/components/nodes/Flow.vue'
 import Database from '@/components/nodes/Database.vue'
 import WebService from '@/components/nodes/WebService.vue'
 import Listener from '@/components/nodes/Listener.vue'
@@ -85,7 +86,7 @@ import {
   menuToFlowCoordinatePosition,
 } from '../hooks/useMenu'
 import { removeNodeAdsorption } from '../hooks/useAdsorption'
-import { deleteSubFlowByName } from '../hooks/useSubFlow'
+import { deleteFlowByName } from '../hooks/useFlow'
 import emitter from '@/utils/emitter'
 
 const {
@@ -100,6 +101,7 @@ const {
 const { findNode, removeNodes, screenToFlowCoordinate } = useVueFlow()
 
 const nodeTypes = {
+  [NodeType.FLOW]: markRaw(Flow),
   [NodeType.DATABASE]: markRaw(Database),
   [NodeType.WEBSERVICE]: markRaw(WebService),
   [NodeType.LISTENER]: markRaw(Listener),
@@ -185,7 +187,7 @@ watch(deleteNodeConfirm, (newValue, oldValue) => {
           node.data.flowName = ''
         }
       })
-      deleteSubFlowByName(deleteNode.value.data.displayName)
+      deleteFlowByName(deleteNode.value.data.displayName)
     }
     removeNodeAdsorption(deleteNode.value.id)
     removeNodes(deleteNode.value.id, true, true)
@@ -350,3 +352,4 @@ emitter.on('addWhenNode', (id) => addWhenNode(id))
   }
 }
 </style>
+../hooks/useFlow
