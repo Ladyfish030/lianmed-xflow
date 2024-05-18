@@ -65,8 +65,6 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SubFlow: typeof import('./src/components/nodes/SubFlow.vue')['default']
-    SubFlowDrawer: typeof import('./src/components/nodes/drawer/SubFlowDrawer.vue')['default']
-    SubFlowMenu: typeof import('./src/components/nodes/menu/SubFlowMenu.vue')['default']
     WebService: typeof import('./src/components/nodes/WebService.vue')['default']
     WebServiceDrawer: typeof import('./src/components/nodes/drawer/WebServiceDrawer.vue')['default']
     WebServiceMenu: typeof import('./src/components/nodes/menu/WebServiceMenu.vue')['default']

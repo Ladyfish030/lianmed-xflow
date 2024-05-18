@@ -14,9 +14,7 @@ function dragAdsorption(node, pos) {
     updateParentNode(node) //更新祖上节点的parentNodePos和位置
     // updateChildNodeAdsorptionPos(node) //更新孩子节点的parentNodePos
   }
-  if (node.type == NodeType.SUBFLOW) {
-    return
-  }
+
   for (let i = parentNodePosition.length - 1; i >= 0; i--) {
     let item = parentNodePosition[i]
     if (
@@ -29,11 +27,26 @@ function dragAdsorption(node, pos) {
       // &&
       // !isChild(node, item.id)
     ) {
+      if (node.type == NodeType.FLOW) {
+        ElMessage({
+          message: '流程节点不可被吸附',
+          type: 'warning',
+        })
+        return
+      }
+      if (node.type == NodeType.SUBFLOW) {
+        ElMessage({
+          message: '子流程节点不可被吸附',
+          type: 'warning',
+        })
+        return
+      }
+
       let parentNode = findNodeById(item.id)
       let { width, height } = getLastPos(node, parentNode) //放置新节点的位置
       node.draggable = false
       node.parentNode = item.id
-      updateEdge(node.id) //处理连线
+      // updateEdge(node.id) //处理连线
       parentNode.childNodes.push(node.id)
       //更新父节点的大小
       updateParentNodeStyle(node, parentNode, width, height)
@@ -47,19 +60,45 @@ function dragAdsorption(node, pos) {
 function dragPasteAdsorption(node, parentNode) {
   if (node.type == NodeType.SUBFLOW) {
     ElMessage({
-      message: '子流程节点不可被群组节点吸附',
+      message: '子流程节点不可被吸附',
       type: 'warning',
     })
     return
   }
+  if (node.type == NodeType.FLOW) {
+    ElMessage({
+      message: '流程节点不可被吸附',
+      type: 'warning',
+    })
+    return
+  }
+
+  if (node.adsorption && parentNode.adsorption) {
+    let nodeIndex = indexOfParentNodePos(node.id)
+    let parentIndex = indexOfParentNodePos(parentNode.id)
+    if (nodeIndex > -1 && parentIndex > -1 && nodeIndex < parentIndex) {
+      let posCatch = parentNodePosition[nodeIndex]
+      parentNodePosition[nodeIndex] = parentNodePosition[parentIndex]
+      parentNodePosition[parentIndex] = posCatch
+    }
+  }
+  if (node.type == NodeType.CHOICE && parentNode.adsorption) {
+    let nodeIndex = indexOfParentNodePos(node.childNodes[0])
+    let parentIndex = indexOfParentNodePos(parentNode.id)
+    if (nodeIndex > -1 && parentIndex > -1 && nodeIndex < parentIndex) {
+      let posCatch = parentNodePosition[nodeIndex]
+      parentNodePosition[nodeIndex] = parentNodePosition[parentIndex]
+      parentNodePosition[parentIndex] = posCatch
+    }
+  }
   let { width, height } = getLastPos(node, parentNode) //放置新节点的位置
   node.draggable = false
   node.parentNode = parentNode.id
-  updateEdge(node.id) //处理连线
+  // updateEdge(node.id) //处理连线
   parentNode.childNodes.push(node.id)
   //更新父节点的大小
   updateParentNodeStyle(node, parentNode, width, height)
-  updateParentNode(node) //更新祖上节点的parentNodePos和位置
+  updateParentNode(node, parentNode) //更新祖上节点的parentNodePos和位置
 }
 function isChild(node, isChildId) {
   if (node.adsorption || node.type == NodeType.CHOICE) {
@@ -118,6 +157,9 @@ function getLastPos(node, parentNode) {
 }
 //往上祖先更新可吸附的parentNodePosition
 function updateParentNode(node, parentNode) {
+  if (!node) {
+    return
+  }
   //只更新新增choicedefault节点版本
   parentNode = parentNode || undefined
   //如果是choice，则跳过这个node继续往上更新
@@ -173,6 +215,11 @@ function updateParentNode(node, parentNode) {
     } else {
       updateChildNodeAdsorptionPos(node)
     }
+  } else if (parentNode) {
+    updateParentNode(parentNode)
+  } else if (node.parentNode) {
+    parentNode = findNodeById(node.parentNode)
+    updateParentNode(parentNode)
   }
 }
 //往下孩子更新可吸附的parentNodePosition
@@ -454,6 +501,14 @@ function getParentPos() {
 }
 function setParentPos(value) {
   parentNodePosition = value || []
+}
+function indexOfParentNodePos(id) {
+  for (let i = 0, len = parentNodePosition.length; i < len; i++) {
+    if (parentNodePosition[i].id == id) {
+      return i
+    }
+  }
+  return -1
 }
 export {
   dragAdsorption,

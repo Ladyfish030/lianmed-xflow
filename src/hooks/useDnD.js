@@ -5,6 +5,7 @@ import {
   dragAdsorption,
   updateParentNode,
   updateNodePosAddWhenNode,
+  dragPasteAdsorption,
 } from './useAdsorption'
 import * as NodeInitAttribute from '../components/nodes/attribute/NodeInitAttribute'
 import { findNodeById, getNodeId } from './useNode'
@@ -142,8 +143,9 @@ export default function useDragAndDrop() {
       newNode.childNodes = []
       newNode.defaultNode = initChoice(newNode)
     }
-    addNodes(newNode)
+
     initFlow(newNode)
+    addNodes(newNode)
   }
 
   function initFlow(newNode) {
@@ -156,7 +158,10 @@ export default function useDragAndDrop() {
       id: nodeId,
       type: NodeType.FLOW,
       data: flowNode.data,
-      position: newNode.position,
+      position: {
+        x: newNode.position.x,
+        y: newNode.position.y,
+      },
       dimensions: flowNode.dimensions,
       initDimensions: flowNode.initDimensions,
       style: {
@@ -173,14 +178,15 @@ export default function useDragAndDrop() {
       layerX: flowNode.position.x,
       layerY: flowNode.position.y,
     }
+    newNode.parentNode = nodeId
     dragAdsorption(flowNode, pos)
     addNodes(flowNode)
-
-    pos = {
-      layerX: newNode.position.x,
-      layerY: newNode.position.y,
-    }
-    dragAdsorption(newNode, pos)
+    // pos = {
+    //   layerX: newNode.position.x,
+    //   layerY: newNode.position.y,
+    // }
+    // dragAdsorption(newNode, pos)
+    dragPasteAdsorption(newNode, flowNode)
   }
 
   function initChoice(node) {
