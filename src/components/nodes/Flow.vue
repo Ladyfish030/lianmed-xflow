@@ -41,10 +41,10 @@ watch(saveComplete, (newValue, oldValue) => {
 
 <style scoped>
 .component-container {
+    position: relative;
     border: 1px solid #b1b3b8;
     border-radius: 3px;
     background-color: white;
-    position: relative;
     height: 100%;
 }
 
@@ -54,15 +54,13 @@ watch(saveComplete, (newValue, oldValue) => {
 
 .span-text {
     position: absolute;
-    top: 10px;
-    text-align: left;
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    top: 2px;
+    left: 10px;
     font-size: 11px;
     color: black;
     line-height: 150%;
     width: 90%;
+    text-align: left;
 }
 
 .divider {

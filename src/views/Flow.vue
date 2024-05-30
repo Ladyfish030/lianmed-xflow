@@ -119,8 +119,6 @@ function logNode() {
 }
 function nodeClickHandler(e) {
   console.log('点击节点：', e.node)
-  // console.log('所有节点：', JSON.stringify(nodes.value))
-  // console.log('所有连线：', edges.value)
 }
 
 function nodeDoubleClickHandler(e) {
@@ -178,7 +176,7 @@ function contextMenuHandler(e) {
 
 watch(deleteNodeConfirm, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
-    if (deleteNode.value.type == NodeType.SUBFLOW) {
+    if (deleteNode.value.type == NodeType.FLOW || deleteNode.value.type == NodeType.SUBFLOW) {
       nodes.value.forEach((node, index) => {
         if (
           node.type == NodeType.FLOWREFERENCE &&
@@ -352,4 +350,3 @@ emitter.on('addWhenNode', (id) => addWhenNode(id))
   }
 }
 </style>
-../hooks/useFlow

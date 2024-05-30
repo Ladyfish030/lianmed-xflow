@@ -1,6 +1,8 @@
 import { ref } from 'vue'
 import { addNode, findNodeById, getNodeId } from '../hooks/useNode'
+import { generateUniqueFlowName } from '../hooks/useFlow'
 import { dragAdsorption, dragPasteAdsorption } from './useAdsorption'
+import { NodeType } from '../enums/NodeType'
 
 const nodeMenuVisible = ref(false)
 const edgeMenuVisible = ref(false)
@@ -86,6 +88,9 @@ function pasteNodeOnFlow() {
   copyParentNode.position = menuToFlowCoordinatePosition.value
   copyParentNode.parentNode = null
   copyParentNode.draggable = true
+  if (copyParentNode.type == NodeType.FLOW || copyParentNode.type == NodeType.SUBFLOW) {
+    copyParentNode.data.displayName = generateUniqueFlowName()
+  }
   if (copyParentNode.childNodes && copyParentNode.childNodes.length > 0) {
     for (let i = 0; i < copyParentNode.childNodes.length; i++) {
       const nodeId = copyParentNode.childNodes[i]

@@ -252,6 +252,8 @@ watch(isSave, (newValue, oldValue) => {
     height: 160px;
     border-radius: 5px;
     border: 1px solid #dedfe0;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     margin-top: 5px;
 }
@@ -265,12 +267,16 @@ watch(isSave, (newValue, oldValue) => {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
 }
 
 .listener-span {
     line-height: 100%;
-    writing-mode: vertical-lr;
+    -webkit-writing-mode: vertical-lr;
+        -ms-writing-mode: tb-lr;
+            writing-mode: vertical-lr;
     letter-spacing: 0.5em;
     margin-top: 10px;
     font-weight: bold;
@@ -279,8 +285,13 @@ watch(isSave, (newValue, oldValue) => {
 .listener-right-container {
     width: 85%;
     height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
 }
 
 .scrollbar-container {
@@ -295,6 +306,8 @@ watch(isSave, (newValue, oldValue) => {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     margin: 6px 0px 6px 0px;
 }
@@ -317,9 +330,15 @@ watch(isSave, (newValue, oldValue) => {
     transform: translate(-50%, -50%);
     width: 80%;
     height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 
 .delete-button {
@@ -336,6 +355,8 @@ watch(isSave, (newValue, oldValue) => {
 }
 
 .listener-button-container:hover .delete-button {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
 }
 
@@ -346,6 +367,8 @@ watch(isSave, (newValue, oldValue) => {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     width: 95%;
     height: 40px;
