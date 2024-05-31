@@ -116,10 +116,7 @@ export default function useDragAndDrop() {
       id: nodeId,
       type: newNodeType.value,
       data: newNode.data,
-      position: {
-        x: position.x - newNode.dimensions.width / 2,
-        y: position.y - newNode.dimensions.height / 2,
-      },
+      position: position,
       dimensions: newNode.dimensions,
       initDimensions: newNode.initDimensions,
       style: {
@@ -181,11 +178,7 @@ export default function useDragAndDrop() {
     newNode.parentNode = nodeId
     dragAdsorption(flowNode, pos)
     addNodes(flowNode)
-    // pos = {
-    //   layerX: newNode.position.x,
-    //   layerY: newNode.position.y,
-    // }
-    // dragAdsorption(newNode, pos)
+
     dragPasteAdsorption(newNode, flowNode)
   }
 

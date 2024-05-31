@@ -76,6 +76,9 @@
         <el-form-item label="数据库名" :label-width="formLabelWidth">
           <el-input v-model="databaseConfigForm.database" autocomplete="off" />
         </el-form-item>
+        <el-form-item label="驱动" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.driver" autocomplete="off" />
+        </el-form-item>
       </div>
 
       <div v-if="databaseConfigForm.connection === DatabaseConnectionType.SQLSERVER_CONNECTION">
@@ -96,6 +99,9 @@
         </el-form-item>
         <el-form-item label="数据库名" :label-width="formLabelWidth">
           <el-input v-model="databaseConfigForm.database" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="驱动" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.driver" autocomplete="off" />
         </el-form-item>
       </div>
 
@@ -118,6 +124,9 @@
         <el-form-item label="服务名" :label-width="formLabelWidth">
           <el-input v-model="databaseConfigForm.serviceName" autocomplete="off" />
         </el-form-item>
+        <el-form-item label="驱动" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.driver" autocomplete="off" />
+        </el-form-item>
       </div>
 
       <div v-if="databaseConfigForm.connection === DatabaseConnectionType.POSTGRESQL_CONNECTION">
@@ -135,6 +144,9 @@
         </el-form-item>
         <el-form-item label="数据库名" :label-width="formLabelWidth">
           <el-input v-model="databaseConfigForm.database" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="驱动" :label-width="formLabelWidth">
+          <el-input v-model="databaseConfigForm.driver" autocomplete="off" />
         </el-form-item>
       </div>
     </el-form>
@@ -201,6 +213,7 @@ const mySqlConfig = {
   username: '',
   password: '',
   database: '',
+  driver: '',
 }
 
 const sqlServerConfig = {
@@ -212,6 +225,7 @@ const sqlServerConfig = {
   password: '',
   instanceName: '',
   database: '',
+  driver: '',
 }
 
 const oracleConfig = {
@@ -223,6 +237,7 @@ const oracleConfig = {
   password: '',
   instanceName: '',
   serviceName: '',
+  driver: '',
 }
 
 const postgreSqlConfig = {
@@ -233,6 +248,7 @@ const postgreSqlConfig = {
   username: '',
   password: '',
   database: '',
+  driver: '',
 }
 
 var databaseConfigForm = reactive(Object.assign({}, mySqlConfig))
@@ -423,6 +439,8 @@ watch(isSave, (newValue, oldValue) => {
   height: 160px;
   border-radius: 5px;
   border: 1px solid #dedfe0;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   margin-top: 5px;
 }
@@ -436,12 +454,16 @@ watch(isSave, (newValue, oldValue) => {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 
 .database-span {
   line-height: 100%;
-  writing-mode: vertical-lr;
+  -webkit-writing-mode: vertical-lr;
+      -ms-writing-mode: tb-lr;
+          writing-mode: vertical-lr;
   letter-spacing: 0.5em;
   margin-top: 10px;
   font-weight: bold;
@@ -450,8 +472,13 @@ watch(isSave, (newValue, oldValue) => {
 .database-right-container {
   width: 85%;
   height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 .scrollbar-container {
@@ -466,6 +493,8 @@ watch(isSave, (newValue, oldValue) => {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   margin: 6px 0px 6px 0px;
 }
@@ -488,9 +517,15 @@ watch(isSave, (newValue, oldValue) => {
   transform: translate(-50%, -50%);
   width: 80%;
   height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .delete-button {
@@ -507,6 +542,8 @@ watch(isSave, (newValue, oldValue) => {
 }
 
 .database-button-container:hover .delete-button {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 
@@ -517,6 +554,8 @@ watch(isSave, (newValue, oldValue) => {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   width: 95%;
   height: 40px;

@@ -8,6 +8,7 @@ const MySQL = {
     username: '',
     password: '',
     database: '',
+    driver: '',
 }
 
 const SQLServer = {
@@ -21,6 +22,7 @@ const SQLServer = {
     password: '',
     instanceName: '',
     database: '',
+    driver: '',
 }
 
 const Oracle = {
@@ -34,6 +36,7 @@ const Oracle = {
     password: '',
     instanceName: '',
     serviceName: '',
+    driver: '',
 }
 
 const PostgreSQL = {
@@ -46,6 +49,7 @@ const PostgreSQL = {
     username: '',
     password: '',
     database: '',
+    driver: '',
 }
 
 const Listener = {
