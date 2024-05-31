@@ -16,7 +16,7 @@
       </button>
     </el-tooltip>
   </div>
-  <div class="history-paint" v-show="isShowHistoryPaint">
+  <div class="history-paint" v-if="isShowHistoryPaint">
     <HistoryPaint></HistoryPaint>
   </div>
 </template>
@@ -43,21 +43,48 @@ import HistoryPaintIcon from '@/assets/svg/HistoryPaintIcon.vue'
 import GenerateXmlFileIcon from '@/assets/svg/GenerateXmlFileIcon.vue'
 
 import HistoryPaint from '@/components/HistoryPaint.vue'
-
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { saveCanvas, deleteCanvas } from '../http/api'
+import { getPaintName, setPaintName, getPaintId } from '../hooks/usePaint'
 const flowKey = 'xFlow'
 const parentPos = 'parentPos'
 const globalConfig = 'globalConfig'
 const { toObject, fromObject } = useVueFlow()
 let isShowHistoryPaint = ref(false)
+
 function onSave() {
-  //等待有接口后将画布传到后台数据库
-  localStorage.setItem(flowKey, JSON.stringify(toObject()))
-  localStorage.setItem(parentPos, JSON.stringify(getParentPos()))
-  localStorage.setItem(globalConfig, JSON.stringify(getGlobalConfig()))
-  ElMessage({
-    message: '保存成功',
-    type: 'success',
+  let canvas = {
+    paint: toObject(),
+    parentPos: getParentPos(),
+    globalConfig: getGlobalConfig(),
+  }
+  ElMessageBox.prompt('', '请输入画布名字', {
+    confirmButtonText: '保存',
+    cancelButtonText: '取消',
+    inputValue: getPaintName(),
   })
+    .then(({ value }) => {
+      setPaintName(value)
+      if (getPaintId()) {
+        deleteCanvas({ id: getPaintId() })
+      }
+      saveCanvas({
+        canvas: canvas,
+        name: value,
+      }).then((res) => {
+        ElMessage({
+          type: 'success',
+          message: '保存画布成功',
+        })
+        console.log(res)
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '取消保存',
+      })
+    })
 }
 
 function onRestore() {

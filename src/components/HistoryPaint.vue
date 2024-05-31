@@ -3,17 +3,17 @@
     <el-table-column fixed prop="date" label="画布">
       <template #default="scope">
         <el-input
-          v-model="scope.row.paintName"
-          @change="changePaintName"
+          v-model="scope.row.name"
+          @change="changePaintName(scope.row)"
         ></el-input>
       </template>
     </el-table-column>
     <el-table-column fixed="right" label="操作" width="140">
       <template #default="scope">
-        <el-button size="small">展示</el-button>
-        <el-button
-          size="small"
-          @click.prevent="deleteRow(scope.$index)"
+        <el-button size="small" @click.prevent="showPaint(scope)"
+          >展示</el-button
+        >
+        <el-button size="small" @click.prevent="deleteRow(scope)"
           >删除</el-button
         >
       </template>
@@ -21,31 +21,42 @@
   </el-table>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
-//到时候数据从后端拿
-const tableData = ref([
-  {
-    paintName: '画布1',
-  },
-  {
-    paintName: '画布2',
-  },
-  {
-    paintName: '画布3',
-  },
-  {
-    paintName: '画布4',
-  },
-  {
-    paintName: '画布5',
-  },
-])
-function changePaintName() {
-  //需要给后端发请求
+<script setup>
+import { ref, onMounted } from 'vue'
+import { setPaintName, showCanvas, setPaintId } from '../hooks/usePaint'
+import { getCanvas, updateCanvasName, deleteCanvas } from '../http/api'
+import { useVueFlow } from '@vue-flow/core'
+const { fromObject } = useVueFlow()
+const tableData = ref([])
+onMounted(() => {
+  getCanvas()
+    .then((res) => {
+      tableData.value = res
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+})
+function changePaintName(row) {
+  updateCanvasName({ name: row.name, id: row.id }).then((res) => {
+    console.log(res)
+  })
 }
-const deleteRow = (index: number) => {
-  tableData.value.splice(index, 1)
+function deleteRow(scope) {
+  //需要给后端发请求
+  deleteCanvas({ id: String(scope.row.id) }).then((res) => {
+    ElMessage({
+      type: 'success',
+      message: '删除画布成功',
+    })
+  })
+  tableData.value.splice(scope.$index, 1)
+}
+function showPaint(scope) {
+  setPaintName(scope.row.name)
+  setPaintId(scope.row.id)
+  fromObject(scope.row.canvas.paint)
+  showCanvas(scope.row.canvas)
 }
 </script>
 <style scoped>

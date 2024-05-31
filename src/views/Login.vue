@@ -1,8 +1,11 @@
-<script setup lang="ts">
+<script setup>
+import { login, register } from '../http/api'
 import BaseHeader from '../components/BaseHeader.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+
 const router = useRouter()
+let rememberPwd = ref(false)
 let loginChoose = ref(true)
 let userName = ref('admin')
 let password = ref('admin')
@@ -15,9 +18,39 @@ function clickRegister() {
 }
 function submit() {
   if (loginChoose.value) {
-    router.push('/home')
+    ElMessage({
+      message: '登录中...',
+      type: 'warning',
+    })
+    if (rememberPwd.value) {
+      localStorage.setItem('username', userName.value)
+      localStorage.setItem('password', password.value)
+    }
+    //login
+    login({ username: userName.value, password: password.value })
+      .then((res) => {
+        ElMessage({
+          message: '登录成功',
+          type: 'success',
+        })
+        localStorage.setItem('token', res)
+        router.push('/flow')
+      })
+      .catch((err) => {
+        ElMessage({
+          message: err.response.data,
+          type: 'warning',
+        })
+      })
   } else {
-    if (password.value != passwordAgain.value) {
+    if (userName.value == null) {
+      //register
+      ElMessage({
+        message: '用户名不可为空',
+        type: 'warning',
+      })
+    } else if (password.value != passwordAgain.value) {
+      //register
       ElMessage({
         message: '两次输入密码不一致',
         type: 'warning',
@@ -27,6 +60,28 @@ function submit() {
         message: '密码长度需大于五位',
         type: 'warning',
       })
+    } else {
+      ElMessage({
+        message: '注册中...',
+        type: 'success',
+      })
+      register({
+        username: userName.value,
+        password: password.value,
+      })
+        .then((res) => {
+          ElMessage({
+            message: '注册成功，请登录',
+            type: 'success',
+          })
+          loginChoose.value = true
+        })
+        .catch((err) => {
+          ElMessage({
+            message: err.response.data,
+            type: 'warning',
+          })
+        })
     }
   }
 }
@@ -68,6 +123,12 @@ function submit() {
           type="password"
           placeholder="密码"
           show-password
+        />
+        <el-checkbox
+          v-model="rememberPwd"
+          label="记住密码"
+          size="large"
+          v-if="loginChoose"
         />
         <el-input
           class="password-input"

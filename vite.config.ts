@@ -9,13 +9,26 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), VueSetupExtend(),
+  server: {
+    hmr: true,
+    proxy: {
+      '/api': {
+        target: 'http://122.112.148.44:9090',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\api/, ''),
+      },
+    },
+  },
+  plugins: [
+    vue(),
+    VueSetupExtend(),
     AutoImport({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
       resolvers: [ElementPlusResolver()],
-    })],
+    }),
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
