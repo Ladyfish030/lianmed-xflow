@@ -37,10 +37,18 @@ function submit() {
         router.push('/flow')
       })
       .catch((err) => {
-        ElMessage({
-          message: err.response.data,
-          type: 'warning',
-        })
+        console.log(ErrorEvent)
+        if (err.response) {
+          ElMessage({
+            message: err.response.data,
+            type: 'warning',
+          })
+        } else {
+          ElMessage({
+            message: '登录失败，请联系管理员',
+            type: 'warning',
+          })
+        }
       })
   } else {
     if (userName.value == null) {

@@ -1,11 +1,8 @@
-import { useVueFlow } from '@vue-flow/core'
-import { ref } from 'vue'
 import { setGlobalConfig } from '../hooks/useGlobalConfig'
 import { setParentPos, getParentPos } from '../hooks/useAdsorption.js'
-const { toObject, fromObject } = useVueFlow()
 
 let paintName = ''
-let paintId = null
+let paintId = ''
 function setPaintName(name) {
   paintName = name
 }
@@ -16,7 +13,7 @@ function setPaintId(id) {
   paintId = Number(id)
 }
 function getPaintId() {
-  return String(id)
+  return String(paintId)
 }
 function showCanvas(canvas) {
   console.log(canvas)

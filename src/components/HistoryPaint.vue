@@ -38,7 +38,7 @@ onMounted(() => {
     })
 })
 function changePaintName(row) {
-  updateCanvasName({ name: row.name, id: row.id }).then((res) => {
+  updateCanvasName({ name: row.name, id: String(row.id) }).then((res) => {
     console.log(res)
   })
 }
