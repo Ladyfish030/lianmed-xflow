@@ -71,10 +71,7 @@ import HistoryPaint from '@/components/HistoryPaint.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { saveCanvas, deleteCanvas, downloadXML } from '../http/api'
 import { getPaintName, setPaintName, getPaintId } from '../hooks/usePaint'
-import { turnXmlEdge, turnXmlNode } from '../hooks/useXML'
-const flowKey = 'xFlow'
-const parentPos = 'parentPos'
-const globalConfig = 'globalConfig'
+
 const { toObject, fromObject } = useVueFlow()
 let isShowHistoryPaint = ref(false)
 const xmlGeneratedResultVisible = ref(false)
@@ -124,11 +121,11 @@ function onSave() {
 function showHistoryPaint() {
   isShowHistoryPaint.value = !isShowHistoryPaint.value
 }
+
 function organizeData() {
   var result = {
     globalConfig: [],
     nodes: [],
-    edges: [],
   }
 
   const configMappings = {
@@ -185,33 +182,18 @@ function organizeData() {
     }
   }
 
-  const edgeList = edges.value
-  for (const edge of edgeList) {
-    const targetEdge = {}
-    targetEdge.id = edge.id
-    targetEdge.source = edge.source
-    targetEdge.target = edge.target
-    result.edges.push(targetEdge)
-  }
-
   return result
 }
 
 function generateXmlFile() {
-  let paint = toObject()
-  let canvas = {
-    globalConfig: getGlobalConfig(),
-    nodes: turnXmlNode(paint.nodes),
-    edges: turnXmlNode(paint.edges),
-  }
-  console.log(canvas)
-  downloadXML(canvas)
+  const sendData = organizeData()
+  downloadXML(sendData)
     .then((res) => {
       xmlData.value = res
     })
     .catch((err) => {
       ElMessage({
-        message: '转XML失败',
+        message: '生成XML失败',
         type: 'warning',
       })
     })
