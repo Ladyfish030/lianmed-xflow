@@ -21,6 +21,7 @@
     "axios": "^1.7.2",
     "element-plus": "^2.6.1",
     "highlight.js": "^11.9.0",
+    "jsencrypt": "^3.3.2",
     "mitt": "^3.0.1",
     "uuid": "^9.0.1",
     "vue": "^3.4.21",

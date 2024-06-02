@@ -2,14 +2,21 @@
 import { login, register } from '../http/api'
 import BaseHeader from '../components/BaseHeader.vue'
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, onBeforeMount } from 'vue'
+import { encryptText, decryptText } from '../utils/encrypt'
 
 const router = useRouter()
 let rememberPwd = ref(false)
 let loginChoose = ref(true)
-let userName = ref('admin')
-let password = ref('admin')
-let passwordAgain = ref('admin')
+let userName = ref('')
+let password = ref('')
+let passwordAgain = ref('')
+onBeforeMount(() => {
+  if (localStorage.getItem('username') && localStorage.getItem('password')) {
+    userName.value = decryptText(localStorage.getItem('username'))
+    password.value = decryptText(localStorage.getItem('password'))
+  }
+})
 function clickLogin() {
   loginChoose.value = true
 }
@@ -18,13 +25,15 @@ function clickRegister() {
 }
 function submit() {
   if (loginChoose.value) {
+    localStorage.removeItem('token')
     ElMessage({
       message: '登录中...',
       type: 'warning',
     })
+
     if (rememberPwd.value) {
-      localStorage.setItem('username', userName.value)
-      localStorage.setItem('password', password.value)
+      localStorage.setItem('username', encryptText(userName.value))
+      localStorage.setItem('password', encryptText(password.value))
     }
     //login
     login({ username: userName.value, password: password.value })
@@ -33,6 +42,7 @@ function submit() {
           message: '登录成功',
           type: 'success',
         })
+        sessionStorage.setItem('login', true)
         localStorage.setItem('token', res)
         router.push('/flow')
       })

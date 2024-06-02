@@ -1,6 +1,12 @@
 <template>
-  <el-menu default-active="2" class="el-menu-vertical-demo" :collapse="isCollapse" @open="handleOpen"
-    @close="handleClose" :router="true">
+  <el-menu
+    default-active="2"
+    class="el-menu-vertical-demo"
+    :collapse="isCollapse"
+    @open="handleOpen"
+    @close="handleClose"
+    :router="true"
+  >
     <el-menu-item index="home">
       <el-icon>
         <House />
@@ -18,7 +24,11 @@
       </template>
     </el-menu-item>
     <div class="button-container">
-      <el-button @click="ExpandOrFoldClickHandle" class="expand-or-fold-button">
+      <el-button
+        @click="ExpandOrFoldClickHandle"
+        class="expand-or-fold-button"
+        style="display: block"
+      >
         <el-icon v-if="isCollapse">
           <Expand />
         </el-icon>
@@ -51,7 +61,7 @@ const handleClose = (key: string, keyPath: string[]) => {
 }
 </script>
 
-<style>
+<style scoped>
 .el-menu-vertical-demo {
   height: 100%;
   display: -webkit-box;
@@ -77,28 +87,19 @@ const handleClose = (key: string, keyPath: string[]) => {
 }
 
 .button-container {
-  height: 30px;
-  margin: 0px;
-  margin-top: auto;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
 }
 
 .expand-or-fold-button {
   width: 100%;
   height: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  border-width: 1px 0px 0px 0px;
-  border-radius: 0px;
 }
 
 .expand-or-fold-button:hover {
+  display: block;
   background-color: white;
 }
 </style>
