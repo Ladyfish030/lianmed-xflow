@@ -96,6 +96,8 @@ const handleClose = (key: string, keyPath: string[]) => {
   width: 100%;
   height: 100%;
   display: flex;
+  border-radius: 0px;
+  border-width: 1px 0 0 0;
 }
 
 .expand-or-fold-button:hover {

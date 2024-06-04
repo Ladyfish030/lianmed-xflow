@@ -37,8 +37,6 @@ function copyHandler() {
 .container {
     height: 90%;
     width: 100%;
-    margin-top: 5px;
-    margin-bottom: 5px;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -52,8 +50,11 @@ function copyHandler() {
 }
 
 .button-container {
+    height: 25px;
     width: 90%;
     border-radius: 3px;
+    margin-top: 3px;
+    margin-bottom: 3px;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
