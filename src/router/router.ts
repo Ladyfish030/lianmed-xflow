@@ -1,12 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { ElMessage } from 'element-plus'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
+      redirect: '/login',
+    },
+    {
+      path: '/login',
       name: 'login',
       component: () => import('../views/Login.vue'),
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/Register.vue'),
     },
     {
       path: '/home',
@@ -14,8 +24,8 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue'),
       children: [
         {
-          path: '/home',
-          name: 'home',
+          path: '',
+          name: 'homeDefault',
           component: () => import('../views/Home.vue'),
         },
         {
@@ -27,18 +37,19 @@ const router = createRouter({
     },
   ],
 })
+
 router.beforeEach(function (to, from, next) {
-  if (to.path == '/login' || to.path == '/') {
+  if (to.path === '/login' || to.path === '/register') {
     next()
   } else if (sessionStorage.getItem('login')) {
     next()
   } else {
-    next(false)
     ElMessage({
       message: '请先登录',
       type: 'warning',
     })
-    router.push('/')
+    next('/login')
   }
 })
+
 export default router

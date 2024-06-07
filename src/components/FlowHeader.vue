@@ -48,29 +48,20 @@
 <script setup>
 import { useVueFlow } from '@vue-flow/core'
 import { ref } from 'vue'
-import { setParentPos, getParentPos } from '../hooks/useAdsorption'
-import { nodes } from '../hooks/useNode'
-import { edges } from '../hooks/useEdge'
-import {
-  globalConfigList,
-  getGlobalConfig,
-  setGlobalConfig,
-} from '../hooks/useGlobalConfig'
-
-import { NodeType } from '../enums/NodeType'
-import { GlobalConfigTypeInDetail } from '../enums/GlobalConfigTypeInDetail'
-import { GlobalConfigTypeInGeneral } from '../enums/GlobalConfigTypeInGeneral'
-import * as NodeAttributes from '../components/nodes/attribute/AttributesNeededToGenerateXml'
-import * as ConfigAttributes from '../enums/GlobalConfigAttribute'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 import SaveFlowIcon from '@/assets/svg/SaveFlowIcon.vue'
 import HistoryPaintIcon from '@/assets/svg/HistoryPaintIcon.vue'
 import GenerateXmlFileIcon from '@/assets/svg/GenerateXmlFileIcon.vue'
 
-import HistoryPaint from '@/components/HistoryPaint.vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { saveCanvas, deleteCanvas, downloadXML } from '../http/api'
+import { setParentPos, getParentPos } from '../hooks/useAdsorption'
+import { getGlobalConfig, setGlobalConfig } from '../hooks/useGlobalConfig'
 import { getPaintName, setPaintName, getPaintId } from '../hooks/usePaint'
+
+import HistoryPaint from '@/components/HistoryPaint.vue'
+
+import { saveCanvas, deleteCanvas, downloadXML } from '../service/CanvasService.js'
+import { formatGenerateXmlData } from '../service/dto/GenerateXmlDTO'
 
 const { toObject, fromObject } = useVueFlow()
 let isShowHistoryPaint = ref(false)
@@ -122,71 +113,8 @@ function showHistoryPaint() {
   isShowHistoryPaint.value = !isShowHistoryPaint.value
 }
 
-function organizeData() {
-  var result = {
-    globalConfig: [],
-    nodes: [],
-  }
-
-  const configMappings = {
-    [GlobalConfigTypeInDetail.DATABASE_MYSQL_CONFIG]: ConfigAttributes.MySQL,
-    [GlobalConfigTypeInDetail.DATABASE_SQLSERVER_CONFIG]:
-      ConfigAttributes.SQLServer,
-    [GlobalConfigTypeInDetail.DATABASE_ORACLE_CONFIG]: ConfigAttributes.Oracle,
-    [GlobalConfigTypeInDetail.DATABASE_POSTGRESQL_CONFIG]:
-      ConfigAttributes.PostgreSQL,
-    [GlobalConfigTypeInDetail.LISTENER_CONFIG]: ConfigAttributes.Listener,
-  }
-  const nodeMappings = {
-    [NodeType.FLOW]: NodeAttributes.Flow,
-    [NodeType.DATABASE]: NodeAttributes.Database,
-    [NodeType.WEBSERVICE]: NodeAttributes.WebService,
-    [NodeType.LISTENER]: NodeAttributes.Listener,
-    [NodeType.CHOICE]: NodeAttributes.Choice,
-    [NodeType.CHOICEWHEN]: NodeAttributes.ChoiceWhen,
-    [NodeType.CHOICEDEFAULT]: NodeAttributes.ChoiceDefault,
-    [NodeType.FOREACH]: NodeAttributes.ForEach,
-    [NodeType.SUBFLOW]: NodeAttributes.SubFlow,
-    [NodeType.LOGGER]: NodeAttributes.Logger,
-    [NodeType.FLOWREFERENCE]: NodeAttributes.FlowReference,
-  }
-
-  const configList = globalConfigList.value
-  for (const config of configList) {
-    var type = config.type
-    if (type == GlobalConfigTypeInGeneral.DATABASE_CONFIG) {
-      type = config.connection
-    }
-    if (configMappings.hasOwnProperty(type)) {
-      const targetConfig = JSON.parse(JSON.stringify(configMappings[type]))
-      for (const prop in targetConfig) {
-        if (targetConfig.hasOwnProperty(prop) && config.hasOwnProperty(prop)) {
-          targetConfig[prop] = config[prop]
-        }
-      }
-      result.globalConfig.push(targetConfig)
-    }
-  }
-
-  const nodeList = nodes.value
-  for (const node of nodeList) {
-    const type = node.type
-    if (nodeMappings.hasOwnProperty(type)) {
-      const targetNode = JSON.parse(JSON.stringify(nodeMappings[type]))
-      for (const prop in targetNode) {
-        if (targetNode.hasOwnProperty(prop) && node.hasOwnProperty(prop)) {
-          targetNode[prop] = node[prop] == undefined ? null : node[prop]
-        }
-      }
-      result.nodes.push(targetNode)
-    }
-  }
-
-  return result
-}
-
 function generateXmlFile() {
-  const sendData = organizeData()
+  const sendData = formatGenerateXmlData()
   downloadXML(sendData)
     .then((res) => {
       xmlData.value = res

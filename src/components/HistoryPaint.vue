@@ -24,7 +24,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { setPaintName, showCanvas, setPaintId } from '../hooks/usePaint'
-import { getCanvas, updateCanvasName, deleteCanvas } from '../http/api'
+import { getCanvas, updateCanvasName, deleteCanvas } from '../service/CanvasService'
 import { useVueFlow } from '@vue-flow/core'
 const { fromObject } = useVueFlow()
 const tableData = ref([])
@@ -71,3 +71,4 @@ template {
   border-radius: 15px;
 }
 </style>
+../service/api
