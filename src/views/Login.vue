@@ -2,11 +2,26 @@
   <div class="login-container">
     <img class="logo" :src="logoUrl" alt="GitLab Logo" />
     <span class="title">VFlow</span>
-    <el-input class="input-field" v-model="username" type="text" placeholder="用户名*" clearable />
-    <el-input class="input-field" v-model="password" type="password" placeholder="密码*" clearable show-password />
+    <el-input 
+      class="input-field" 
+      v-model="username" 
+      type="text" 
+      placeholder="用户名*" 
+      clearable 
+      @keydown.enter="loginHandler"
+    />
+    <el-input 
+      class="input-field" 
+      v-model="password" 
+      type="password" 
+      placeholder="密码*" 
+      clearable 
+      show-password 
+      @keydown.enter="loginHandler"
+    />
     <div class="tool-container">
       <el-checkbox v-model="rememberPwd" label="记住密码" size="large" />
-      <el-link class="register-link" @click="registerHandler">没有账号？点击注册</el-link>
+      <el-link class="register-link" :underline="false" @click="registerHandler">没有账号？点击注册</el-link>
     </div>
     <button @click="loginHandler" class="login-button">登录</button>
   </div>
@@ -87,9 +102,18 @@ function registerHandler() {
 <style scoped>
 .login-container {
   height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 
@@ -116,8 +140,14 @@ function registerHandler() {
 .tool-container {
   width: 300px;
   margin-top: 5px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
   height: fit-content;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 

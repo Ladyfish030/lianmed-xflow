@@ -1,21 +1,20 @@
 <template>
-    <div v-if="flowMenuVisible" class="menu-container"
-        :style="{ left: menuPosition.x + 'px', top: menuPosition.y + 'px' }">
-        <div class="container">
-            <div @click="pasteHandler" class="button-container">
-                <PasteIcon />
-                <span>粘贴</span>
-            </div>
+    <div v-if="canvasMenuVisible" class="menu-container"
+        :style="{ left: menuPosition.x +'px', top: '630px' }">
+        <div @click="deleteHandler" class="button-container">
+            <el-icon :size="20" color="#f89898">
+                <Delete />
+            </el-icon>
+            <span style="color: #f89898;">删除</span>
         </div>
     </div>
 </template>
 
 <script setup>
-import { flowMenuVisible, menuPosition, pasteNodeHandler } from '../hooks/useMenu'
-import PasteIcon from '@/assets/svg/PasteIcon.vue'
+import { canvasMenuVisible, menuPosition } from '../hooks/useMenu'
 
-function pasteHandler() {
-    pasteNodeHandler()
+function deleteHandler() {
+
 }
 </script>
 

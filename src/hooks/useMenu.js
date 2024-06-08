@@ -1,19 +1,28 @@
 import { ref } from 'vue'
 import { addNode, findNodeById, getNodeId } from '../hooks/useNode'
-import { generateUniqueFlowName } from '../hooks/useFlow'
+import { generateUniqueFlowName } from '../hooks/useNodeOfFlow'
 import { dragAdsorption, dragPasteAdsorption } from './useAdsorption'
 import { NodeType } from '../enums/NodeType'
 
 const nodeMenuVisible = ref(false)
 const edgeMenuVisible = ref(false)
 const flowMenuVisible = ref(false)
+const canvasMenuVisible = ref(false)
+
 const menuClickNode = ref(null)
 const menuClickEdge = ref(null)
+const menuClickCanvas = ref(null)
+
 const menuPosition = ref({ x: 0, y: 0 })
 const menuToFlowCoordinatePosition = ref({ x: 0, y: 0 })
+
 const deleteNode = ref(null)
 const deleteEdge = ref(null)
+const deleteCanvas = ref(null)
+
 const deleteNodeConfirm = ref(false)
+const deleteCanvasConfirm = ref(false)
+
 var copyNodes = []
 
 function onNodeContextMenu(e) {
@@ -39,6 +48,15 @@ function onFlowContextMenu(e) {
   menuPosition.value = {
     x: e.layerX,
     y: e.layerY,
+  }
+}
+
+function onCanvasContextMenu(event, item) {
+  canvasMenuVisible.value = true
+  menuClickCanvas.value = item
+  menuPosition.value = {
+      x: event.screenX - 10,
+      y: event.screenY,
   }
 }
 
@@ -205,6 +223,7 @@ export {
   nodeMenuVisible,
   edgeMenuVisible,
   flowMenuVisible,
+  canvasMenuVisible,
   menuClickNode,
   menuClickEdge,
   menuPosition,
@@ -215,6 +234,7 @@ export {
   onNodeContextMenu,
   onEdgeContextMenu,
   onFlowContextMenu,
+  onCanvasContextMenu,
   deleteNodeHandler,
   copyNodeHandler,
   pasteNodeHandler,

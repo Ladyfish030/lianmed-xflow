@@ -16,8 +16,8 @@ function generateUniqueFlowName() {
     return newName;
 }
 
-function findFlow(subFlowName) {
-    const index = flowList.value.indexOf(subFlowName);
+function findFlow(flowName) {
+    const index = flowList.value.indexOf(flowName);
     return index
 }
 

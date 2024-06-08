@@ -12,7 +12,7 @@ import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { nodes } from '@/hooks/useNode'
 import { isSave, saveAttributeComplete, drawerClickNode } from '../../../hooks/useDrawer'
-import { findFlow, editFlow } from '../../../hooks/useFlow'
+import { findFlow, editFlow } from '../../../hooks/useNodeOfFlow'
 import { NodeType } from '@/enums/NodeType'
 
 const displayName = ref(drawerClickNode?.value.data.displayName || '')

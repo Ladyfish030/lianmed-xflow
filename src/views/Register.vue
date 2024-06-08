@@ -1,5 +1,5 @@
 <template>
-    <div class="login-container">
+    <div class="register-container">
         <img class="logo" :src="logoUrl" alt="GitLab Logo" />
         <span class="title">VFlow</span>
         <span class="tips">用户名</span>
@@ -12,7 +12,7 @@
         <button @click="registerHandler" class="register-button">注册</button>
 
         <div class="tool-container">
-            <el-link class="login-link" @click="loginHandler">已有帐号？登录</el-link>
+            <el-link class="login-link" :underline="false" @click="loginHandler">已有帐号？登录</el-link>
         </div>
     </div>
 </template>
@@ -94,11 +94,20 @@ function loginHandler() {
 </script>
 
 <style scoped>
-.login-container {
+.register-container {
     height: 100vh;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 }
 
@@ -136,8 +145,14 @@ function loginHandler() {
 .tool-container {
     width: 300px;
     margin-top: 5px;
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
     height: fit-content;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 }
 
