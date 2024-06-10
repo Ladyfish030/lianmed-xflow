@@ -19,15 +19,15 @@
 
 <script setup>
 import { computed } from 'vue'
-import DatabaseDrawer from '../components/nodes/drawer/DatabaseDrawer.vue'
-import WebServiceDrawer from '../components/nodes/drawer/WebServiceDrawer.vue'
-import ListenerDrawer from '../components/nodes/drawer/ListenerDrawer.vue'
-import ChoiceWhenDrawer from '../components/nodes/drawer/ChoiceWhenDrawer.vue'
-import FlowDrawer from '../components/nodes/drawer/FlowDrawer.vue'
-import FlowReferenceDrawer from '../components/nodes/drawer/FlowReferenceDrawer.vue'
-import LoggerDrawer from '../components/nodes/drawer/LoggerDrawer.vue'
-import { drawer, drawerClickNode, handleClose, saveAttribute, saveComplete } from '../hooks/useDrawer'
-import { NodeType } from '../enums/NodeType'
+import DatabaseDrawer from '../flow/nodes/drawer/DatabaseDrawer.vue'
+import WebServiceDrawer from '../flow/nodes/drawer/WebServiceDrawer.vue'
+import ListenerDrawer from '../flow/nodes/drawer/ListenerDrawer.vue'
+import ChoiceWhenDrawer from '../flow/nodes/drawer/ChoiceWhenDrawer.vue'
+import FlowDrawer from '../flow/nodes/drawer/FlowDrawer.vue'
+import FlowReferenceDrawer from '../flow/nodes/drawer/FlowReferenceDrawer.vue'
+import LoggerDrawer from '../flow/nodes/drawer/LoggerDrawer.vue'
+import { drawer, drawerClickNode, handleClose, saveAttribute, saveComplete } from '@/hooks/useDrawer'
+import { NodeType } from '@/enums/NodeType'
 
 const currentDrawer = computed(() => {
   switch (drawerClickNode.value.type) {

@@ -1,23 +1,29 @@
 <template>
   <div class="button-container">
     <el-tooltip content="保存" placement="bottom" effect="dark">
-      <button @click="onSave">
+      <button class="tool-button" @click="onSave">
         <SaveFlowIcon />
       </button>
     </el-tooltip>
-    <el-tooltip content="历史画布" placement="bottom" effect="dark">
-      <button @click="showHistoryPaint">
-        <HistoryPaintIcon></HistoryPaintIcon>
-      </button>
-    </el-tooltip>
+
+    <el-popover placement="bottom" :width="400" trigger="click">
+      <template #reference>
+        <div class="tooltip-container">
+        <el-tooltip content="历史画布" placement="top" effect="dark">
+          <button @click="" class="tool-button">
+            <HistoryPaintIcon></HistoryPaintIcon>
+          </button>
+        </el-tooltip>
+        </div>
+      </template>
+      <HistoryPaint />
+    </el-popover>
+
     <el-tooltip content="生成XML" placement="bottom" effect="dark">
-      <button @click="generateXmlFile">
+      <button class="tool-button" @click="generateXmlFile">
         <GenerateXmlFileIcon />
       </button>
     </el-tooltip>
-  </div>
-  <div class="history-paint" v-if="isShowHistoryPaint">
-    <HistoryPaint></HistoryPaint>
   </div>
 
   <el-dialog
@@ -54,14 +60,14 @@ import SaveFlowIcon from '@/assets/svg/SaveFlowIcon.vue'
 import HistoryPaintIcon from '@/assets/svg/HistoryPaintIcon.vue'
 import GenerateXmlFileIcon from '@/assets/svg/GenerateXmlFileIcon.vue'
 
-import { setParentPos, getParentPos } from '../hooks/useAdsorption'
-import { getGlobalConfig, setGlobalConfig } from '../hooks/useGlobalConfig'
-import { getPaintName, setPaintName, getPaintId } from '../hooks/usePaint'
+import { setParentPos, getParentPos } from '@/hooks/useAdsorption'
+import { getGlobalConfig, setGlobalConfig } from '@/hooks/useGlobalConfig'
+import { getPaintName, setPaintName, getPaintId } from '@/hooks/useHistoryCanvas'
 
-import HistoryPaint from '@/components/HistoryPaint.vue'
+import HistoryPaint from '@/components/flow/HistoryPaint.vue'
 
-import { saveCanvas, deleteCanvas, downloadXML } from '../service/CanvasService.js'
-import { formatGenerateXmlData } from '../service/dto/GenerateXmlDTO'
+import { saveCanvas, deleteCanvas, downloadXML } from '@/service/CanvasService.js'
+import { formatGenerateXmlData } from '@/service/dto/GenerateXmlDTO'
 
 const { toObject, fromObject } = useVueFlow()
 let isShowHistoryPaint = ref(false)
@@ -107,10 +113,6 @@ function onSave() {
         message: '取消保存',
       })
     })
-}
-
-function showHistoryPaint() {
-  isShowHistoryPaint.value = !isShowHistoryPaint.value
 }
 
 function generateXmlFile() {
@@ -178,7 +180,7 @@ function downloadXmlFile() {
   align-items: center;
 }
 
-.button-container > button {
+.tool-button {
   margin-left: 8px;
   border-radius: 5px;
   border-color: transparent;
@@ -193,7 +195,7 @@ function downloadXmlFile() {
   align-items: center;
 }
 
-.button-container > button:hover {
+.tool-button:hover {
   -webkit-transform: scale(105%);
   -ms-transform: scale(105%);
   transform: scale(105%);
@@ -204,11 +206,18 @@ function downloadXmlFile() {
   background-color: #e9e9eb;
 }
 
+.tooltip-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .history-paint {
   position: relative;
   display: block;
   height: 10px;
-  width: 30%;
+  width: 300px;
 }
 
 .xml-container {

@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { flowMenuVisible, menuPosition, pasteNodeHandler } from '../hooks/useMenu'
+import { flowMenuVisible, menuPosition, pasteNodeHandler } from '@/hooks/useMenu'
 import PasteIcon from '@/assets/svg/PasteIcon.vue'
 
 function pasteHandler() {

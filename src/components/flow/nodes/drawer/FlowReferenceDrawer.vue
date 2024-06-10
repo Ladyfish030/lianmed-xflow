@@ -12,8 +12,8 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
-import { isSave, saveAttributeComplete, drawerClickNode } from '../../../hooks/useDrawer'
-import { flowList } from '../../../hooks/useNodeOfFlow'
+import { isSave, saveAttributeComplete, drawerClickNode } from '@/hooks/useDrawer'
+import { flowList } from '@/hooks/useNodeOfFlow'
 
 const flowName = ref(drawerClickNode?.value.data.flowName || '')
 

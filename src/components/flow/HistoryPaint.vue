@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="tableData" border style="width: 100%" class="content-box">
+  <el-table :data="tableData" border size="small" max-height="400">
     <el-table-column fixed prop="date" label="画布">
       <template #default="scope">
         <el-input
@@ -23,9 +23,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { setPaintName, showCanvas, setPaintId } from '../hooks/usePaint'
-import { getCanvas, updateCanvasName, deleteCanvas } from '../service/CanvasService'
+import { setPaintName, showCanvas, setPaintId } from '@/hooks/useHistoryCanvas'
+import { getCanvas, updateCanvasName, deleteCanvas } from '@/service/CanvasService'
 import { useVueFlow } from '@vue-flow/core'
+
 const { fromObject } = useVueFlow()
 const tableData = ref([])
 onMounted(() => {
@@ -37,11 +38,13 @@ onMounted(() => {
       console.log(err)
     })
 })
+
 function changePaintName(row) {
   updateCanvasName({ name: row.name, id: String(row.id) }).then((res) => {
     console.log(res)
   })
 }
+
 function deleteRow(scope) {
   //需要给后端发请求
   deleteCanvas({ id: String(scope.row.id) }).then((res) => {
@@ -52,6 +55,7 @@ function deleteRow(scope) {
   })
   tableData.value.splice(scope.$index, 1)
 }
+
 function showPaint(scope) {
   setPaintName(scope.row.name)
   setPaintId(scope.row.id)
@@ -59,6 +63,7 @@ function showPaint(scope) {
   showCanvas(scope.row.canvas)
 }
 </script>
+
 <style scoped>
 template {
   display: block !important;
@@ -71,4 +76,3 @@ template {
   border-radius: 15px;
 }
 </style>
-../service/api

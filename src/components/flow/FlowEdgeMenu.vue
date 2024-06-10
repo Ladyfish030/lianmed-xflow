@@ -6,8 +6,8 @@
 </template>
 
 <script setup>
-import { edgeMenuVisible, menuPosition } from '../hooks/useMenu'
-import CommonEdgeMenu from '../components/edges/menu/CommonEdgeMenu.vue'
+import { edgeMenuVisible, menuPosition } from '@/hooks/useMenu'
+import CommonEdgeMenu from '../flow/edges/menu/CommonEdgeMenu.vue'
 </script>
 
 <style scoped>

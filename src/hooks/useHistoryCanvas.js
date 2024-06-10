@@ -1,5 +1,6 @@
-import { setGlobalConfig } from '../hooks/useGlobalConfig'
-import { setParentPos, getParentPos } from '../hooks/useAdsorption.js'
+import { ref } from 'vue'
+import { setGlobalConfig } from './useGlobalConfig.js'
+import { setParentPos, getParentPos } from './useAdsorption.js'
 
 let paintName = ''
 let paintId = ''
@@ -21,4 +22,10 @@ function showCanvas(canvas) {
   console.log(getParentPos())
   setGlobalConfig(canvas.globalConfig)
 }
-export { getPaintName, setPaintName, setPaintId, getPaintId, showCanvas }
+export {
+  getPaintName,
+  setPaintName,
+  setPaintId,
+  getPaintId,
+  showCanvas,
+}

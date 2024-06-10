@@ -1,8 +1,14 @@
 <template>
     <div class="form-container">
         <div class="form-item">
-            <label>表达式</label>
-            <el-input v-model="expression" autosize type="textarea" class="input-field"></el-input>
+            <label>消息</label>
+            <el-input v-model="message" autosize type="textarea" class="input-field"></el-input>
+        </div>
+        <div class="form-item">
+            <label>等级</label>
+            <el-select v-model="level" placeholder="" class="input-field">
+                <el-option v-for="(item, index) in levelList" :key="index" :label="item" :value="item" />
+            </el-select>
         </div>
     </div>
 </template>
@@ -10,10 +16,12 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
-import { isSave, saveAttributeComplete, drawerClickNode } from '../../../hooks/useDrawer'
+import { isSave, saveAttributeComplete, drawerClickNode } from '@/hooks/useDrawer'
 
-const expression = ref(drawerClickNode?.value.data.expression || '')
+const message = ref(drawerClickNode?.value.data.message || '')
+const level = ref(drawerClickNode?.value.data.level || '')
 
+const levelList = ['INFO', 'WARN', 'ERROR']
 const { updateNode } = useVueFlow()
 
 watch(isSave, (newValue, oldValue) => {
@@ -22,7 +30,9 @@ watch(isSave, (newValue, oldValue) => {
       {
         data:
         {
-          expression: expression.value,
+            displayName: drawerClickNode?.value.data.displayName,
+            message: message.value,
+            level: level.value
         }
       })
     saveAttributeComplete()

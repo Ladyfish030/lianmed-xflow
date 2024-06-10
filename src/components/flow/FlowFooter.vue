@@ -23,7 +23,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { onCanvasContextMenu } from '../hooks/useMenu'
+import { onCanvasContextMenu } from '@/hooks/useMenu'
 
 const value = ref('Delicacy')
 

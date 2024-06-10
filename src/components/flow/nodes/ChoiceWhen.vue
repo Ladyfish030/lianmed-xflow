@@ -9,8 +9,8 @@
 
 <script setup>
 import { ref, watch, getCurrentInstance } from 'vue'
-import { findNodeById } from '../../hooks/useNode'
-import { saveComplete, drawerClickNode } from '../../hooks/useDrawer'
+import { findNodeById } from '@/hooks/useNode'
+import { saveComplete, drawerClickNode } from '@/hooks/useDrawer'
 
 const instance = getCurrentInstance()
 const nodeId = instance.attrs.id

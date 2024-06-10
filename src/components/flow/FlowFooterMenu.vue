@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { canvasMenuVisible, menuPosition } from '../hooks/useMenu'
+import { canvasMenuVisible, menuPosition } from '@/hooks/useMenu'
 
 function deleteHandler() {
 

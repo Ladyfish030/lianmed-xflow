@@ -17,6 +17,7 @@ import useDragAndDrop from '@/hooks/useDnD'
 import ChoiceIcon from '@/assets/svg/ChoiceIcon.vue'
 import ChoiceAddIcon from '@/assets/svg/ChoiceAddIcon.vue'
 import emitter from '@/utils/emitter'
+
 const props = defineProps(['id'])
 const instance = getCurrentInstance()
 const nodeId = instance.props.id

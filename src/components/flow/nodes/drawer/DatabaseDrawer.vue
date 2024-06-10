@@ -165,14 +165,14 @@
 import { ref, reactive, watch, computed } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 
-import { isSave, saveAttributeComplete, drawerClickNode } from '../../../hooks/useDrawer'
+import { isSave, saveAttributeComplete, drawerClickNode } from '@/hooks/useDrawer'
 import {
   findGlobalConfigByName,
   getGlobalConfigListByType,
   editGlobalConfig,
   insertGlobalConfig,
   removeGlobalConfig,
-} from '../../../hooks/useGlobalConfig'
+} from '@/hooks/useGlobalConfig'
 import { nodes } from '@/hooks/useNode'
 
 import { NodeType } from '@/enums/NodeType'

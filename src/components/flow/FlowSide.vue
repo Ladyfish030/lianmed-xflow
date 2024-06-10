@@ -1,8 +1,8 @@
 <script setup>
 import { Search } from '@element-plus/icons-vue'
 import { ref, computed } from 'vue'
-import useDragAndDrop from '../hooks/useDnD'
-import { NodeType } from '../enums/NodeType'
+import useDragAndDrop from '@/hooks/useDnD'
+import { NodeType } from '@/enums/NodeType'
 
 const { onDragStart } = useDragAndDrop()
 const searchContent = ref('')

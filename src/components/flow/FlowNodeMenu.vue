@@ -7,18 +7,18 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { nodeMenuVisible, menuClickNode, menuPosition } from '../hooks/useMenu'
-import { NodeType } from '../enums/NodeType'
-import DatabaseMenu from '../components/nodes/menu/DatabaseMenu.vue'
-import WebServiceMenu from '../components/nodes/menu/WebServiceMenu.vue'
-import ListenerMenu from '../components/nodes/menu/ListenerMenu.vue'
-import ChoiceMenu from '../components/nodes/menu/ChoiceMenu.vue'
-import ChoiceWhenMenu from '../components/nodes/menu/ChoiceWhenMenu.vue'
-import ChoiceDefaultMenu from '../components/nodes/menu/ChoiceDefaultMenu.vue'
-import ForEachMenu from '../components/nodes/menu/ForEachMenu.vue'
-import FlowMenu from '../components/nodes/menu/FlowMenu.vue'
-import LoggerMenu from '../components/nodes/menu/LoggerMenu.vue'
-import FlowReferenceMenu from '../components/nodes/menu/FlowReferenceMenu.vue'
+import { nodeMenuVisible, menuClickNode, menuPosition } from '@/hooks/useMenu'
+import { NodeType } from '@/enums/NodeType'
+import DatabaseMenu from '../flow/nodes/menu/DatabaseMenu.vue'
+import WebServiceMenu from '../flow/nodes/menu/WebServiceMenu.vue'
+import ListenerMenu from '../flow/nodes/menu/ListenerMenu.vue'
+import ChoiceMenu from '../flow/nodes/menu/ChoiceMenu.vue'
+import ChoiceWhenMenu from '../flow/nodes/menu/ChoiceWhenMenu.vue'
+import ChoiceDefaultMenu from '../flow/nodes/menu/ChoiceDefaultMenu.vue'
+import ForEachMenu from '../flow/nodes/menu/ForEachMenu.vue'
+import FlowMenu from '../flow/nodes/menu/FlowMenu.vue'
+import LoggerMenu from '../flow/nodes/menu/LoggerMenu.vue'
+import FlowReferenceMenu from '../flow/nodes/menu/FlowReferenceMenu.vue'
 
 const currentMenu = computed(() => {
   switch (menuClickNode.value.type) {
