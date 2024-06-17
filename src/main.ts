@@ -7,7 +7,6 @@ import router from './router/router'
 import ElementPlus from 'element-plus'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css'
-import emitter from '@/utils/emitter'
 
 import 'highlight.js/styles/vs.css'
 import 'highlight.js/lib/common'

@@ -5,10 +5,11 @@ const globalConfigList = ref([])
 
 function getGlobalConfig() {
     return globalConfigList.value
-  }
-  function setGlobalConfig(value) {
+}
+
+function setGlobalConfig(value) {
     globalConfigList.value = value || []
-  }
+}
 
 function getGlobalConfigId() {
     const configId = uuidv4();

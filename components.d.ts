@@ -64,6 +64,7 @@ declare module 'vue' {
     FlowSide: typeof import('./src/components/flow/FlowSide.vue')['default']
     ForEach: typeof import('./src/components/flow/nodes/ForEach.vue')['default']
     ForEachMenu: typeof import('./src/components/flow/nodes/menu/ForEachMenu.vue')['default']
+    HistoryCanvas: typeof import('./src/components/flow/HistoryCanvas.vue')['default']
     HistoryPaint: typeof import('./src/components/flow/HistoryPaint.vue')['default']
     Listener: typeof import('./src/components/flow/nodes/Listener.vue')['default']
     ListenerDrawer: typeof import('./src/components/flow/nodes/drawer/ListenerDrawer.vue')['default']
@@ -77,5 +78,8 @@ declare module 'vue' {
     WebService: typeof import('./src/components/flow/nodes/WebService.vue')['default']
     WebServiceDrawer: typeof import('./src/components/flow/nodes/drawer/WebServiceDrawer.vue')['default']
     WebServiceMenu: typeof import('./src/components/flow/nodes/menu/WebServiceMenu.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

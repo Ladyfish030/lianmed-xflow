@@ -16,14 +16,21 @@ export function saveCanvas(data) {
     })
 }
 
-export function getCanvas() {
+export function getAllCanvas() {
     return request({
         url: '/canvas/get',
         method: 'get',
     })
 }
 
-export function updateCanvasName(data) {
+export function getCanvasById(id) {
+    return request({
+        url: `/canvas/get?id=${id}`,
+        method: 'get',
+    })
+}
+
+export function updateCanvas(data) {
     return request({
         url: '/canvas/update',
         method: 'post',

@@ -2,7 +2,6 @@
   <div class="dndflow" 
     @drop="onDrop" 
     @click="clickHandler"
-    @dblclick="doubleClickHandler"
   >
     <el-container class="flow-container">
       <el-aside class="flow-side"><FlowSide /></el-aside>
@@ -13,9 +12,8 @@
           </div>
         </el-header>
         <el-main class="flow-main">
-          <div class="vueflow-container">
+          <div v-show="haveCanvas" class="main-container">
             <FlowMain />
-            <FlowDrawer />
           </div>
         </el-main>
         <el-footer class="flow-footer">
@@ -25,36 +23,36 @@
         </el-footer>
       </el-container>
     </el-container>
+    <FlowDrawer />
     <FlowFooterMenu />
   </div>
 </template>
 
 <script setup>
-import FlowSide from '../components/flow/FlowSide.vue'
-import FlowHeader from '../components/flow/FlowHeader.vue'
-import FlowMain from '../components/flow/FlowMain.vue'
-import FlowFooter from '../components/flow/FlowFooter.vue'
-import FlowDrawer from '../components/flow/FlowDrawer.vue'
+import { ref, computed } from 'vue'
+import FlowSide from '@/components/flow/FlowSide.vue'
+import FlowHeader from '@/components/flow/FlowHeader.vue'
+import FlowMain from '@/components/flow/FlowMain.vue'
+import FlowFooter from '@/components/flow/FlowFooter.vue'
+import FlowDrawer from '@/components/flow/FlowDrawer.vue'
 import FlowFooterMenu from '@/components/flow/FlowFooterMenu.vue'
 
-import useDragAndDrop from '../hooks/useDnD'
+import useDragAndDrop from '@/hooks/useDnD'
 import {
   nodeMenuVisible,
   edgeMenuVisible,
   flowMenuVisible,
   canvasMenuVisible,
-} from '../hooks/useMenu'
+} from '@/hooks/useMenu'
+import useCanvasManage from '@/hooks/useCanvasManage'
 
 const { onDrop } = useDragAndDrop()
+const { canvasList } = useCanvasManage()
+const haveCanvas = computed(() => {
+  return canvasList.value.length != 0
+})
 
 function clickHandler(e) {
-  nodeMenuVisible.value = false
-  edgeMenuVisible.value = false
-  flowMenuVisible.value = false
-  canvasMenuVisible.value = false
-}
-
-function doubleClickHandler(e) {
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
   flowMenuVisible.value = false
@@ -72,6 +70,7 @@ function doubleClickHandler(e) {
 
 .flow-container {
   height: 100%;
+  width: 100%;
 }
 .flow-header {
   --el-header-padding: 0 0px;
@@ -128,11 +127,13 @@ function doubleClickHandler(e) {
 }
 
 .flow-main {
+  height: 100%;
+  width: 100%;
   --el-main-padding: 0px;
   background-color: #fafafa;
 }
 
-.vueflow-container {
+.main-container {
   width: 99%;
   height: 98.4%;
   border: 1px solid white;

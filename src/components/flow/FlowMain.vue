@@ -25,15 +25,15 @@
 </template>
 
 <script setup>
-import { ref, watch, markRaw } from 'vue'
+import { ref, watch, markRaw, onMounted } from 'vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
-import DropzoneBackground from '../flow/DropzoneBackground.vue'
+
+import DropzoneBackground from '@/components/flow/DropzoneBackground.vue'
 import FlowNodeMenu from '@/components/flow/FlowNodeMenu.vue'
 import FlowEdgeMenu from '@/components/flow/FlowEdgeMenu.vue'
 import FlowMenu from '@/components/flow/FlowMenu.vue'
-import HistoryPaint from '@/components/flow/HistoryPaint.vue'
 
 import Flow from '@/components/flow/nodes/Flow.vue'
 import Database from '@/components/flow/nodes/Database.vue'

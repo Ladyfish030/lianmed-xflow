@@ -1,23 +1,16 @@
 <template>
   <div class="button-container">
     <el-tooltip content="保存" placement="bottom" effect="dark">
-      <button class="tool-button" @click="onSave">
+      <button class="tool-button" @click="onSaveCanvas">
         <SaveFlowIcon />
       </button>
     </el-tooltip>
 
-    <el-popover placement="bottom" :width="400" trigger="click">
-      <template #reference>
-        <div class="tooltip-container">
-        <el-tooltip content="历史画布" placement="top" effect="dark">
-          <button @click="" class="tool-button">
-            <HistoryPaintIcon></HistoryPaintIcon>
-          </button>
-        </el-tooltip>
-        </div>
-      </template>
-      <HistoryPaint />
-    </el-popover>
+    <el-tooltip content="历史画布" placement="top" effect="dark">
+      <div>
+        <HistoryCanvas />
+      </div>
+    </el-tooltip>
 
     <el-tooltip content="生成XML" placement="bottom" effect="dark">
       <button class="tool-button" @click="generateXmlFile">
@@ -26,12 +19,7 @@
     </el-tooltip>
   </div>
 
-  <el-dialog
-    v-model="xmlGeneratedResultVisible"
-    title="XML"
-    width="800"
-    top="5vh"
-  >
+  <el-dialog v-model="xmlGeneratedResultVisible" title="XML" width="800" top="5vh">
     <div class="xml-container">
       <div class="xml-scrollbar-container">
         <el-scrollbar>
@@ -52,72 +40,112 @@
 </template>
 
 <script setup>
-import { useVueFlow } from '@vue-flow/core'
 import { ref } from 'vue'
+import { useVueFlow } from '@vue-flow/core'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 import SaveFlowIcon from '@/assets/svg/SaveFlowIcon.vue'
-import HistoryPaintIcon from '@/assets/svg/HistoryPaintIcon.vue'
 import GenerateXmlFileIcon from '@/assets/svg/GenerateXmlFileIcon.vue'
 
-import { setParentPos, getParentPos } from '@/hooks/useAdsorption'
-import { getGlobalConfig, setGlobalConfig } from '@/hooks/useGlobalConfig'
-import { getPaintName, setPaintName, getPaintId } from '@/hooks/useHistoryCanvas'
+import HistoryCanvas from '@/components/flow/HistoryCanvas.vue'
 
-import HistoryPaint from '@/components/flow/HistoryPaint.vue'
+import useCanvasManage from '@/hooks/useCanvasManage'
+import { getParentPos } from '@/hooks/useAdsorption'
+import { getGlobalConfig } from '@/hooks/useGlobalConfig'
+import { getFlowList } from '@/hooks/useNodeOfFlow'
 
-import { saveCanvas, deleteCanvas, downloadXML } from '@/service/CanvasService.js'
+import { saveCanvas, updateCanvas, downloadXML } from '@/service/CanvasService.js'
 import { formatGenerateXmlData } from '@/service/dto/GenerateXmlDTO'
 
-const { toObject, fromObject } = useVueFlow()
-let isShowHistoryPaint = ref(false)
+const { toObject } = useVueFlow()
+const { canvasList, getCurrentCanvas } = useCanvasManage()
 const xmlGeneratedResultVisible = ref(false)
 const xmlData = ref('')
 
-function onSave() {
-  let canvas = {
+async function onSaveCanvas() {
+  if (canvasList.value.length === 0) {
+    ElMessage({
+      type: 'warning',
+      message: '当前无画布',
+    })
+    return
+  }
+  const canvas = {
     paint: toObject(),
+    flowList: getFlowList(),
     parentPos: getParentPos(),
     globalConfig: getGlobalConfig(),
   }
-  ElMessageBox.prompt('', '请输入画布名字', {
-    confirmButtonText: '保存',
-    cancelButtonText: '取消',
-    inputValue: getPaintName(),
-    inputPattern: /\S/,
-    inputErrorMessage: '画布名不能为空',
-  })
-    .then(({ value }) => {
-      setPaintName(String(value).trim())
-      if (getPaintId()) {
-        console.log('进来删除')
-        deleteCanvas({ id: getPaintId() }).catch(() => {
-          setPaintName('')
+  var currentCanvas = getCurrentCanvas()
+  if (currentCanvas.id === undefined) {
+    await ElMessageBox.prompt('', '请输入画布名字', {
+      confirmButtonText: '保存',
+      cancelButtonText: '取消',
+      inputValue: currentCanvas.name,
+      inputPattern: /\S/,
+      inputErrorMessage: '画布名不能为空',
+    })
+      .then(({ value }) => {
+        saveCanvas({
+          name: String(value).trim(),
+          canvas: canvas,
         })
-      }
-      saveCanvas({
-        canvas: canvas,
-        name: String(value).trim(),
-      }).then((res) => {
+          .then((res) => {
+            currentCanvas.id = res.id
+            currentCanvas.name = res.name
+            currentCanvas.paint = res.canvas.paint
+            currentCanvas.flowList = res.canvas.flowList
+            currentCanvas.parentPos = res.canvas.parentPos
+            currentCanvas.globalConfig = res.canvas.globalConfig
+            ElMessage({
+              type: 'success',
+              message: '保存成功',
+            })
+          })
+          .catch((error) => {
+            ElMessage({
+              type: 'error',
+              message: '保存失败',
+            })
+          })
+      })
+      .catch((err) => {
+        ElMessage({
+          type: 'info',
+          message: '取消保存',
+        })
+      })
+  }
+  else {
+    await updateCanvas({
+      id: String(currentCanvas.id),
+      canvas: canvas
+    })
+      .then((res) => {
         ElMessage({
           type: 'success',
-          message: '保存画布成功',
+          message: '保存成功',
         })
-        console.log(res)
       })
-    })
-    .catch((err) => {
-      console.log(err)
-      ElMessage({
-        type: 'info',
-        message: '取消保存',
+      .catch((error) => {
+        ElMessage({
+          type: 'error',
+          message: '保存失败',
+        })
       })
-    })
+  }
 }
 
-function generateXmlFile() {
+async function generateXmlFile() {
+  if (canvasList.value.length === 0) {
+    ElMessage({
+      type: 'warning',
+      message: '当前无画布',
+    })
+    return
+  }
   const sendData = formatGenerateXmlData()
-  downloadXML(sendData)
+  await downloadXML(sendData)
     .then((res) => {
       xmlData.value = res
     })

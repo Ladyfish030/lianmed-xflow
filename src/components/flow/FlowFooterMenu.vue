@@ -1,6 +1,5 @@
 <template>
-    <div v-if="canvasMenuVisible" class="menu-container"
-        :style="{ left: menuPosition.x +'px', top: '630px' }">
+    <div v-if="canvasMenuVisible" class="menu-container" :style="{ left: menuPosition.x + 'px', top: '630px' }">
         <div @click="deleteHandler" class="button-container">
             <el-icon :size="20" color="#f89898">
                 <Delete />
@@ -11,10 +10,28 @@
 </template>
 
 <script setup>
-import { canvasMenuVisible, menuPosition } from '@/hooks/useMenu'
+import {
+    canvasMenuVisible,
+    deleteCanvas,
+    menuClickCanvas,
+    menuPosition,
+} from '@/hooks/useMenu'
+import useCanvasManage from '@/hooks/useCanvasManage'
+
+const { deleteCanvasByIndex } = useCanvasManage()
 
 function deleteHandler() {
+    deleteCanvas.value = menuClickCanvas.value
+    ElMessageBox.confirm('确定关闭该画布？请注意保存', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+    })
+        .then(() => {
+            deleteCanvasByIndex(deleteCanvas.value)
+        })
+        .catch(() => {
 
+        })
 }
 </script>
 

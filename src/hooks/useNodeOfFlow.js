@@ -2,6 +2,14 @@ import { ref } from 'vue'
 
 const flowList = ref([])
 
+function getFlowList() {
+    return flowList.value
+}
+
+function setFlowList(value) {
+    flowList.value = value || []
+}
+
 function generateUniqueFlowName() {
     let baseName = "flow";
     let index = 1;
@@ -34,6 +42,8 @@ function deleteFlowByName(name) {
 
 export {
     flowList,
+    getFlowList,
+    setFlowList,
     generateUniqueFlowName,
     findFlow,
     editFlow,

@@ -1,19 +1,29 @@
 <template>
-    <div class="scrollbar-container">
-        <el-scrollbar>
-            <div class="segmented-container">
-                <el-segmented size="small" v-model="value" :options="options" @contextmenu.prevent>
-                    <template #default="{ item }">
-                        <div @contextmenu.prevent="(e) => canvasContextMenuHandler(e, item)">
-                            {{ item }}
-                        </div>
-                    </template>
-                </el-segmented>
-            </div>
-        </el-scrollbar>
-    </div>
-    <el-tooltip content="新建画布" placement="top" effect="dark">
-        <el-button class="add-canvas-button">
+    <el-scrollbar>
+        <div class="scrollbar-flex-content">
+            <el-tooltip v-for="(item, index) in canvasList" 
+                :key="index"  
+                :content="item.name" 
+                placement="top" 
+                effect="light" 
+                :hide-after="0"
+            >
+                <el-button 
+                    class="scrollbar-item"
+                    :class="{ 'active-item': index === currentCanvasIndex }" 
+                    :disabled="isSwitchingCanvas"
+                    @click.prevent="switchCanvasHandler(index)"
+                    @contextmenu.prevent="(e) => canvasContextMenuHandler(e, index)">
+                    <el-text class="scrollbar-item-text" truncated>
+                        {{ item.name }}
+                    </el-text>
+                </el-button>
+            </el-tooltip>
+        </div>
+    </el-scrollbar>
+
+    <el-tooltip content="新建画布" placement="top" effect="dark" :hide-after="0">
+        <el-button class="add-canvas-button" @click.prevent="createNewCanvasHandler" :disabled="isCreatingCanvas">
             <el-icon color="black" size="18px">
                 <Plus />
             </el-icon>
@@ -22,51 +32,77 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { onCanvasContextMenu } from '@/hooks/useMenu'
+import useCanvasManage from '@/hooks/useCanvasManage'
 
-const value = ref('Delicacy')
+const {
+    canvasList,
+    currentCanvasIndex,
+    createNewCanvas,
+    switchCanvas,
+} = useCanvasManage()
 
-const options = ['新建画布1', '新建画布2', '新建画布3', '新建画布4', '新建画布5', '新建画布6', '新建画布7', '新建画布8', '新建画布9', '新建画布10', '新建画布11', '新建画布12', '新建画布13', '新建画布14', '新建画布15', '新建画布16']
+const isCreatingCanvas = ref(false)
+const isSwitchingCanvas = ref(false)
 
-function canvasContextMenuHandler(event, item) {
-    onCanvasContextMenu(event, item)
+function canvasContextMenuHandler(event, canvasIndex) {
+    onCanvasContextMenu(event, canvasIndex)
+}
+
+function switchCanvasHandler(index) {
+    if (isSwitchingCanvas.value === true) {
+        return
+    }
+    else {
+        isSwitchingCanvas.value = true
+        switchCanvas(index)
+        isSwitchingCanvas.value = false
+    }
+}
+
+function createNewCanvasHandler() {
+    if (isCreatingCanvas.value === true) {
+        return
+    }
+    else {
+        isCreatingCanvas.value = true
+        createNewCanvas()
+        isCreatingCanvas.value = false
+    }
 }
 </script>
 
 <style scoped>
-.scrollbar-container {
-    margin-top: 3px;
-    height: 100%;
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content;
-    max-width: 96%;
-    display: -webkit-box;
-    display: -ms-flexbox;
+.scrollbar-flex-content {
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
 }
 
-.segmented-container {
-    margin-top: 4px;
-    width: 100%;
-    display: -webkit-box;
-    display: -ms-flexbox;
+.scrollbar-item {
+    flex-shrink: 0;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-}
-
-.el-segmented {
-    font-size: 13px;
+    justify-content: center;
+    width: 70px;
+    height: 25px;
+    margin: 5px 3px 0 0;
+    border-radius: 4px;
+    border-color: transparent;
     background-color: white;
-    --el-segmented-item-selected-color: var(--el-text-color-primary);
-    --el-segmented-item-selected-bg-color: #c6e2ff;
-    --el-border-radius-base: 8px;
+}
+
+.scrollbar-item:hover {
+    background-color: #e9e9eb;
+}
+
+.scrollbar-item.active-item {
+    background-color: #c6e2ff;
+}
+
+.scrollbar-item-text {
+    width: 60px;
+    font-size: 12px;
+    color: #363636;
 }
 
 .add-canvas-button {
