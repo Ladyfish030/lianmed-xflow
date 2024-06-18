@@ -1,5 +1,5 @@
 <template>
-  <div class="dndflow" @drop="onDrop">
+  <div class="dndflow" @drop="onDrop" @click="clickHandler">
     <el-container class="flow-container">
       <el-aside class="flow-side"><FlowSide /></el-aside>
       <el-container class="flow-container">
@@ -9,202 +9,52 @@
           </div>
         </el-header>
         <el-main class="flow-main">
-          <div class="vueflow-container">
-            <VueFlow
-              v-model:nodes="nodes"
-              v-model:edges="edges"
-              :node-types="nodeTypes"
-              @dragover="onDragOver"
-              @dragleave="onDragLeave"
-              @connect="onConnect"
-              @node-click="nodeClickHandler"
-              @node-double-click="nodeDoubleClickHandler"
-              @node-drag-start="nodeDragStartHandler"
-              @node-drag-stop="onNodeDragStop"
-              @node-context-menu="nodeContextMenuHandler"
-              @edge-context-menu="edgeContextMenuHandler"
-              @click="clickHandler"
-              @dblclick="doubleClickHandler"
-              @contextmenu.prevent="contextMenuHandler"
-              :zoomOnDoubleClick="false"
-              :delete-key-code="null"
-            >
-              <DropzoneBackground />
-              <MiniMap pannable />
-              <Controls position="top-right" />
-              <FlowNodeMenu />
-              <FlowEdgeMenu />
-              <FlowMenu />
-            </VueFlow>
-            <FlowDrawer />
+          <div v-show="haveCanvas" class="main-container">
+            <FlowMain />
           </div>
         </el-main>
+        <el-footer class="flow-footer">
+          <div class="footer-container">
+            <FlowFooter />
+          </div>
+        </el-footer>
       </el-container>
     </el-container>
+    <FlowDrawer />
+    <FlowFooterMenu />
   </div>
 </template>
 
 <script setup>
-import { ref, watch, markRaw } from 'vue'
-import { VueFlow, useVueFlow } from '@vue-flow/core'
-import { Controls } from '@vue-flow/controls'
-import { MiniMap } from '@vue-flow/minimap'
-import DropzoneBackground from '../components/DropzoneBackground.vue'
-import FlowSide from '../components/FlowSide.vue'
-import FlowHeader from '../components/FlowHeader.vue'
-import FlowDrawer from '../components/FlowDrawer.vue'
-import FlowNodeMenu from '@/components/FlowNodeMenu.vue'
-import FlowEdgeMenu from '@/components/FlowEdgeMenu.vue'
-import FlowMenu from '@/components/FlowMenu.vue'
+import { ref, computed } from 'vue'
+import FlowSide from '@/components/flow/FlowSide.vue'
+import FlowHeader from '@/components/flow/FlowHeader.vue'
+import FlowMain from '@/components/flow/FlowMain.vue'
+import FlowFooter from '@/components/flow/FlowFooter.vue'
+import FlowDrawer from '@/components/flow/FlowDrawer.vue'
+import FlowFooterMenu from '@/components/flow/FlowFooterMenu.vue'
 
-import Flow from '@/components/nodes/Flow.vue'
-import Database from '@/components/nodes/Database.vue'
-import WebService from '@/components/nodes/WebService.vue'
-import Listener from '@/components/nodes/Listener.vue'
-import Choice from '@/components/nodes/Choice.vue'
-import ChoiceWhen from '@/components/nodes/ChoiceWhen.vue'
-import ChoiceDefault from '@/components/nodes/ChoiceDefault.vue'
-import ForEach from '@/components/nodes/ForEach.vue'
-import SubFlow from '@/components/nodes/SubFlow.vue'
-import Logger from '@/components/nodes/Logger.vue'
-import FlowReference from '@/components/nodes/FlowReference.vue'
-
-import { NodeType } from '../enums/NodeType'
-import useDragAndDrop from '../hooks/useDnD'
-import { onNodeDoubleClick, drawerClickNode } from '../hooks/useDrawer'
-import { onConnect, edges } from '../hooks/useEdge'
-import { nodes } from '../hooks/useNode'
+import useDragAndDrop from '@/hooks/useDnD'
 import {
-  onNodeContextMenu,
-  onEdgeContextMenu,
-  onFlowContextMenu,
   nodeMenuVisible,
   edgeMenuVisible,
   flowMenuVisible,
-  deleteNode,
-  deleteNodeConfirm,
-  menuToFlowCoordinatePosition,
-} from '../hooks/useMenu'
-import { removeNodeAdsorption } from '../hooks/useAdsorption'
-import { deleteFlowByName } from '../hooks/useFlow'
-import emitter from '@/utils/emitter'
+  canvasMenuVisible,
+} from '@/hooks/useMenu'
+import useCanvasManage from '@/hooks/useCanvasManage'
 
-function onStart() {
-  console.log('start')
-}
-
-function onUpdate() {
-  console.log('update')
-}
-const {
-  onDragOver,
-  onDrop,
-  onDragLeave,
-  onNodeDragStart,
-  onNodeDragStop,
-  addWhenNode,
-} = useDragAndDrop()
-
-const { findNode, removeNodes, screenToFlowCoordinate } = useVueFlow()
-
-const nodeTypes = {
-  [NodeType.FLOW]: markRaw(Flow),
-  [NodeType.DATABASE]: markRaw(Database),
-  [NodeType.WEBSERVICE]: markRaw(WebService),
-  [NodeType.LISTENER]: markRaw(Listener),
-  [NodeType.CHOICE]: markRaw(Choice),
-  [NodeType.CHOICEWHEN]: markRaw(ChoiceWhen),
-  [NodeType.CHOICEDEFAULT]: markRaw(ChoiceDefault),
-  [NodeType.FOREACH]: markRaw(ForEach),
-  [NodeType.SUBFLOW]: markRaw(SubFlow),
-  [NodeType.LOGGER]: markRaw(Logger),
-  [NodeType.FLOWREFERENCE]: markRaw(FlowReference),
-}
-function logNode() {
-  console.log(JSON.stringify(nodes.value))
-  console.log(JSON.stringify(edges.value))
-}
-function nodeClickHandler(e) {
-  console.log('点击节点：', e.node)
-}
-
-function nodeDoubleClickHandler(e) {
-  drawerClickNode.value = findNode(e.node.id)
-  onNodeDoubleClick()
-}
-
-function nodeDragStartHandler(e) {
-  nodeMenuVisible.value = false
-  edgeMenuVisible.value = false
-  flowMenuVisible.value = false
-  onNodeDragStart(e)
-}
-
-function nodeContextMenuHandler(e) {
-  nodeMenuVisible.value = false
-  edgeMenuVisible.value = false
-  flowMenuVisible.value = false
-  onNodeContextMenu(e)
-}
-
-function edgeContextMenuHandler(e) {
-  nodeMenuVisible.value = false
-  edgeMenuVisible.value = false
-  flowMenuVisible.value = false
-  onEdgeContextMenu(e)
-}
+const { onDrop } = useDragAndDrop()
+const { canvasList } = useCanvasManage()
+const haveCanvas = computed(() => {
+  return canvasList.value.length != 0
+})
 
 function clickHandler(e) {
   nodeMenuVisible.value = false
   edgeMenuVisible.value = false
   flowMenuVisible.value = false
+  canvasMenuVisible.value = false
 }
-
-function doubleClickHandler(e) {
-  nodeMenuVisible.value = false
-  edgeMenuVisible.value = false
-  flowMenuVisible.value = false
-}
-
-function contextMenuHandler(e) {
-  const subString = 'vue-flow__container'
-  if (!e.target.classList.value.includes(subString)) {
-    return
-  }
-  nodeMenuVisible.value = false
-  edgeMenuVisible.value = false
-  flowMenuVisible.value = false
-  menuToFlowCoordinatePosition.value = screenToFlowCoordinate({
-    x: e.clientX,
-    y: e.clientY,
-  })
-  onFlowContextMenu(e)
-}
-
-watch(deleteNodeConfirm, (newValue, oldValue) => {
-  if (oldValue === false && newValue === true) {
-    if (
-      deleteNode.value.type == NodeType.FLOW ||
-      deleteNode.value.type == NodeType.SUBFLOW
-    ) {
-      nodes.value.forEach((node, index) => {
-        if (
-          node.type == NodeType.FLOWREFERENCE &&
-          node.data.flowName == deleteNode.value.data.displayName
-        ) {
-          node.data.flowName = ''
-        }
-      })
-      deleteFlowByName(deleteNode.value.data.displayName)
-    }
-    removeNodeAdsorption(deleteNode.value.id)
-    removeNodes(deleteNode.value.id, true, true)
-    deleteNode.value = null
-    deleteNodeConfirm.value = false
-  }
-})
-
-emitter.on('addWhenNode', (id) => addWhenNode(id))
 </script>
 
 <style scoped>
@@ -216,6 +66,7 @@ emitter.on('addWhenNode', (id) => addWhenNode(id))
 
 .flow-container {
   height: 100%;
+  width: 100%;
 }
 .flow-header {
   --el-header-padding: 0 0px;
@@ -272,9 +123,13 @@ emitter.on('addWhenNode', (id) => addWhenNode(id))
 }
 
 .flow-main {
+  height: 100%;
+  width: 100%;
   --el-main-padding: 0px;
+  background-color: #fafafa;
 }
-.vueflow-container {
+
+.main-container {
   width: 99%;
   height: 98.4%;
   border: 1px solid white;
@@ -293,8 +148,30 @@ emitter.on('addWhenNode', (id) => addWhenNode(id))
   align-items: center;
   margin-top: 0px;
 }
-.divider {
-  margin: 0px;
+
+.flow-footer {
+  --el-footer-padding: 0px;
+  height: 47px;
+  width: 100%;
+  background-color: #fafafa;
+}
+
+.footer-container {
+  width: 99%;
+  height: 37px;
+  border: 1px solid white;
+  border-radius: 10px;
+  -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: 0px;
+  margin-right: auto;
+  background-color: white;
 }
 
 .vue-flow__minimap {

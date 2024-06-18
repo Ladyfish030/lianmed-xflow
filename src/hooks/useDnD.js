@@ -7,9 +7,9 @@ import {
   updateNodePosAddWhenNode,
   dragPasteAdsorption,
 } from './useAdsorption'
-import * as NodeInitAttribute from '../components/nodes/attribute/NodeInitAttribute'
+import * as NodeInitAttribute from '../components/flow/nodes/attribute/NodeInitAttribute'
 import { findNodeById, getNodeId } from './useNode'
-import { generateUniqueFlowName } from './useFlow'
+import { generateUniqueFlowName } from './useNodeOfFlow'
 
 function getNewNode(newNodeType) {
   switch (newNodeType) {

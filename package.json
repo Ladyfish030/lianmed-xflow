@@ -18,10 +18,11 @@
     "@vue-flow/core": "^1.33.4",
     "@vue-flow/minimap": "^1.4.0",
     "axios": "^1.7.2",
-    "element-plus": "^2.6.1",
+    "element-plus": "^2.7.5",
     "highlight.js": "^11.9.0",
     "jsencrypt": "^3.3.2",
     "mitt": "^3.0.1",
+    "pinia": "^2.1.7",
     "uuid": "^9.0.1",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
