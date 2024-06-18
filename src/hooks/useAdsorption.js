@@ -7,6 +7,13 @@ let parentNodePosition = []
 
 //拉动节点判断是否进行吸附
 function dragAdsorption(node, pos) {
+  if (node.parentNode) {
+    removeNodeAdsorption(node.id)
+    let { x, y } = getTruePos(findNodeById(node.parentNode))
+    node.parentNode = null
+    pos.layerX = pos.layerX + x
+    pos.layerY = pos.layerY + y
+  }
   if (node.type == NodeType.CHOICEWHEN || node.type == NodeType.CHOICEDEFAULT) {
     return
   }
@@ -43,11 +50,11 @@ function dragAdsorption(node, pos) {
       }
 
       let parentNode = findNodeById(item.id)
-      let { width, height } = getLastPos(node, parentNode) //放置新节点的位置
-      node.draggable = false
+      let { width, height } = setNodePos(node, parentNode, pos) //放置新节点的位置
+      // node.draggable = false
       node.parentNode = item.id
       // updateEdge(node.id) //处理连线
-      parentNode.childNodes.push(node.id)
+      // parentNode.childNodes.push(node.id)
       //更新父节点的大小
       updateParentNodeStyle(node, parentNode, width, height)
       updateParentNode(node) //更新祖上节点的parentNodePos和位置
@@ -92,10 +99,10 @@ function dragPasteAdsorption(node, parentNode) {
     }
   }
   let { width, height } = getLastPos(node, parentNode) //放置新节点的位置
-  node.draggable = false
+  // node.draggable = false
   node.parentNode = parentNode.id
   // updateEdge(node.id) //处理连线
-  parentNode.childNodes.push(node.id)
+  // parentNode.childNodes.push(node.id)
   //更新父节点的大小
   updateParentNodeStyle(node, parentNode, width, height)
   updateParentNode(node, parentNode) //更新祖上节点的parentNodePos和位置
@@ -145,14 +152,62 @@ function getLastPos(node, parentNode) {
       let lastNode = findNodeById(parentNode.childNodes[len - 1])
       x = lastNode.position.x + parseInt(lastNode.style.width) + 20
     }
+    let positionY =
+      (parseInt(parentNode.style.height) -
+        parseInt(node.initDimensions.height)) /
+      2
+    y = positionY > 30 ? positionY : 30
     node.position.x = x
     node.position.y = y
     let parentWidth = x + parseInt(node.style.width) + 20
-    let parentHeight = y + parseInt(node.style.height) + 30
+    let parentHeight = y + parseInt(node.style.height) + y
+    parentNode.childNodes.push(node.id)
     return {
       width: parentWidth - parseInt(parentNode.style.width),
       height: parentHeight - parseInt(parentNode.style.height),
     }
+  }
+}
+function setNodePos(node, parentNode, pos) {
+  // console.log(12314)
+  let childNodes = parentNode.childNodes
+  let len = childNodes.length
+  let changeWidth = 0
+  //若posX大于nodeId左边界值，返回true
+  function compareMaxX(nodeId, posX) {
+    let compareNode = findNodeById(nodeId)
+    let { x } = getTruePos(compareNode, parentNode)
+    if (posX > x) {
+      return true
+    }
+    return false
+  }
+  if (len <= 0 || compareMaxX(childNodes[len - 1], pos.layerX)) {
+    // console.log('进来到这')
+    return getLastPos(node, parentNode)
+  }
+  for (let i = 0; i < len; i++) {
+    let childNode = findNodeById(childNodes[i])
+    if (!changeWidth) {
+      let { x, y } = getTruePos(childNode, parentNode)
+      if (x >= pos.layerX) {
+        changeWidth = 20 + parseInt(node.style.width)
+        parentNode.childNodes.splice(i, 0, node.id)
+        node.position.x = childNode.position.x
+        // node.position.y = childNode.position.y
+        updateNodePositionY(parseInt(parentNode.style.height), node)
+        break
+      }
+    }
+    // else {
+    //   console.log(childNode.position.x)
+    //   childNode.position.x = childNode.position.x + changeWidth
+    //   console.log(childNode.position.x)
+    // }
+  }
+  return {
+    width: parseInt(node.style.width) + 20,
+    height: parseInt(node.style.height) + 20,
   }
 }
 //往上祖先更新可吸附的parentNodePosition
@@ -374,8 +429,21 @@ function updateHeightExceptChoice(parentNode, node) {
   } else {
     parentNode.style.height = parentNode.initDimensions.height + 'px'
   }
-  let changeHeight = parseInt(parentNode.style.height) - oldHeight
+  let nowHeight = parseInt(parentNode.style.height)
+  let changeHeight = nowHeight - oldHeight
+  if (changeHeight) {
+    //如果高度有更新，遍历子节点进行高度居中
+    for (let childNodeId of parentNode.childNodes) {
+      let childNode = findNodeById(childNodeId)
+      if (childNode) {
+        updateNodePositionY(nowHeight, childNode)
+      }
+    }
+  }
   return changeHeight
+}
+function updateNodePositionY(parentHeight, childNode) {
+  childNode.position.y = (parentHeight - parseInt(childNode.style.height)) / 2
 }
 function updateDeleteHeightExceptChoice(parentNode, node) {
   let childNodes = parentNode.childNodes

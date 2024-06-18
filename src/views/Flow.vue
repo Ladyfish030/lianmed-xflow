@@ -89,6 +89,13 @@ import { removeNodeAdsorption } from '../hooks/useAdsorption'
 import { deleteFlowByName } from '../hooks/useFlow'
 import emitter from '@/utils/emitter'
 
+function onStart() {
+  console.log('start')
+}
+
+function onUpdate() {
+  console.log('update')
+}
 const {
   onDragOver,
   onDrop,
@@ -176,7 +183,10 @@ function contextMenuHandler(e) {
 
 watch(deleteNodeConfirm, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {
-    if (deleteNode.value.type == NodeType.FLOW || deleteNode.value.type == NodeType.SUBFLOW) {
+    if (
+      deleteNode.value.type == NodeType.FLOW ||
+      deleteNode.value.type == NodeType.SUBFLOW
+    ) {
       nodes.value.forEach((node, index) => {
         if (
           node.type == NodeType.FLOWREFERENCE &&
