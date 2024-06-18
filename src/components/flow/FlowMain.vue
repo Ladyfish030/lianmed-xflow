@@ -46,6 +46,7 @@ import ForEach from '@/components/flow/nodes/ForEach.vue'
 import SubFlow from '@/components/flow/nodes/SubFlow.vue'
 import Logger from '@/components/flow/nodes/Logger.vue'
 import FlowReference from '@/components/flow/nodes/FlowReference.vue'
+import SetPayload from './nodes/SetPayload.vue'
 
 import { NodeType } from '@/enums/NodeType'
 import useDragAndDrop from '@/hooks/useDnD'
@@ -91,6 +92,7 @@ const nodeTypes = {
     [NodeType.SUBFLOW]: markRaw(SubFlow),
     [NodeType.LOGGER]: markRaw(Logger),
     [NodeType.FLOWREFERENCE]: markRaw(FlowReference),
+    [NodeType.SETPAYLOAD]: markRaw(SetPayload),
 }
 
 function nodeClickHandler(e) {

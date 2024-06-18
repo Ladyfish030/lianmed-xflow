@@ -16,13 +16,25 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
-import { isSave, saveAttributeComplete, drawerClickNode } from '@/hooks/useDrawer'
+import { isSave, saveAttributeComplete, drawerClickNode, haveEdited } from '@/hooks/useDrawer'
 
 const message = ref(drawerClickNode?.value.data.message || '')
 const level = ref(drawerClickNode?.value.data.level || '')
 
 const levelList = ['INFO', 'WARN', 'ERROR']
+
 const { updateNode } = useVueFlow()
+
+watch([message, level], ([newMessageValue, newLevelValue], [oldMessageValue, oldLevelValue]) => {
+    if (newMessageValue !== drawerClickNode?.value.data.message ||
+        newLevelValue !== drawerClickNode?.value.data.level
+    ) {
+        haveEdited.value = true
+    }
+    else {
+        haveEdited.value = false
+    }
+})
 
 watch(isSave, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {

@@ -119,3 +119,15 @@ export function formatFlowReference(config) {
         parentNode: config.parentNode,
     }
 }
+
+export function formatSetPayload(config) {
+    return {
+        id: config.id,
+        type: config.type,
+        data: {
+            displayName: config.data.displayName,
+            payloadValue: config.data.payloadValue,
+        },
+        parentNode: config.parentNode,
+    }
+}

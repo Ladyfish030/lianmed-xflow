@@ -4,7 +4,9 @@
     @click="clickHandler"
   >
     <el-container class="flow-container">
-      <el-aside class="flow-side"><FlowSide /></el-aside>
+      <el-aside class="flow-side">
+        <FlowSide />
+      </el-aside>
       <el-container class="flow-container">
         <el-header class="flow-header">
           <div class="header-container">

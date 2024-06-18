@@ -1,10 +1,8 @@
 <template>
   <div class="form-container">
     <div class="form-item">
-      <label>Flow Name</label>
-      <el-select v-model="flowName" placeholder="" class="input-field">
-        <el-option v-for="(item, index) in flowList" :key="index" :label="item" :value="item" />
-      </el-select>
+      <label>Value</label>
+      <el-input v-model="payloadValue" autosize type="textarea" class="input-field"></el-input>
     </div>
   </div>
 </template>
@@ -13,14 +11,13 @@
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { isSave, saveAttributeComplete, drawerClickNode, haveEdited } from '@/hooks/useDrawer'
-import { flowList } from '@/hooks/useNodeOfFlow'
 
-const flowName = ref(drawerClickNode?.value.data.flowName || '')
+const payloadValue = ref(drawerClickNode?.value.data.payloadValue || '')
 
 const { updateNode } = useVueFlow()
 
-watch(flowName, (newValue, oldValue) => {
-  if (newValue !== drawerClickNode?.value.data.flowName) {
+watch(payloadValue, (newValue, oldValue) => {
+  if (newValue !== drawerClickNode?.value.data.payloadValue) {
     haveEdited.value = true
   }
   else {
@@ -35,7 +32,7 @@ watch(isSave, (newValue, oldValue) => {
         data:
         {
           displayName: drawerClickNode?.value.data.displayName,
-          flowName: flowName.value,
+          payloadValue: payloadValue.value,
         }
       })
     saveAttributeComplete()
