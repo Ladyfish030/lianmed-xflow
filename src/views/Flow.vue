@@ -1,8 +1,5 @@
 <template>
-  <div class="dndflow" 
-    @drop="onDrop" 
-    @click="clickHandler"
-  >
+  <div class="dndflow" @drop="onDrop" @click="clickHandler">
     <el-container class="flow-container">
       <el-aside class="flow-side">
         <FlowSide />
@@ -60,7 +57,6 @@ function clickHandler(e) {
   flowMenuVisible.value = false
   canvasMenuVisible.value = false
 }
-
 </script>
 
 <style scoped>
