@@ -1,35 +1,51 @@
 <template>
     <el-scrollbar>
         <div class="scrollbar-flex-content">
-            <el-tooltip v-for="(item, index) in canvasList" 
-                :key="index"  
-                :content="item.name" 
-                placement="top" 
-                effect="light" 
-                :hide-after="0"
-            >
-                <el-button 
-                    class="scrollbar-item"
-                    :class="{ 'active-item': index === currentCanvasIndex }" 
-                    :disabled="isSwitchingCanvas"
-                    @click.prevent="switchCanvasHandler(index)"
+            <el-tooltip v-for="(item, index) in canvasList" :key="index" :content="item.name" placement="top"
+                effect="light" :hide-after="0">
+                <el-button class="scrollbar-item" :class="{ 'active-item': index === currentCanvasIndex }"
+                    :disabled="isSwitchingCanvas" @click.prevent="switchCanvasHandler(index)"
                     @contextmenu.prevent="(e) => canvasContextMenuHandler(e, index)">
                     <el-text class="scrollbar-item-text" truncated>
                         {{ item.name }}
                     </el-text>
-                    <DotIcon v-if="item.isEdited" class="dot"/>
+                    <DotIcon v-if="item.isEdited" class="dot" />
                 </el-button>
             </el-tooltip>
         </div>
     </el-scrollbar>
 
-    <el-tooltip content="新建画布" placement="top" effect="dark" :hide-after="0">
+    <el-popover 
+        v-model:visible="tipsVisible"
+        :disabled="tipsDisabled"
+        placement="top-start" 
+        title="提示" 
+        :width="200" 
+        :hide-after="0"
+        content="点击这里新建画布吧！"
+        @hide="tipsHideHandler"
+        trigger="click"
+    >
+        <template #reference>
+            <div class="add-canvas-button-container">
+                <el-tooltip content="新建画布" placement="top" effect="dark" :hide-after="0">
+                    <el-button class="add-canvas-button" @click.prevent="createNewCanvasHandler"
+                        :disabled="isCreatingCanvas">
+                        <el-icon color="black" size="18px">
+                            <Plus />
+                        </el-icon>
+                    </el-button>
+                </el-tooltip>
+            </div>
+        </template>
+    </el-popover>
+    <!-- <el-tooltip content="新建画布" placement="top" effect="dark" :hide-after="0">
         <el-button class="add-canvas-button" @click.prevent="createNewCanvasHandler" :disabled="isCreatingCanvas">
             <el-icon color="black" size="18px">
                 <Plus />
             </el-icon>
         </el-button>
-    </el-tooltip>
+    </el-tooltip> -->
 </template>
 
 <script setup>
@@ -45,6 +61,9 @@ const {
     createNewCanvas,
     switchCanvas,
 } = useCanvasManage()
+
+const tipsVisible = ref(true)
+const tipsDisabled = ref(false)
 
 const isCreatingCanvas = ref(false)
 const isSwitchingCanvas = ref(false)
@@ -73,6 +92,11 @@ function createNewCanvasHandler() {
         createNewCanvas()
         isCreatingCanvas.value = false
     }
+}
+
+function tipsHideHandler() {
+    tipsVisible.value = false
+    tipsDisabled.value = true
 }
 </script>
 
@@ -106,6 +130,14 @@ function createNewCanvasHandler() {
     width: 90px;
     font-size: 12px;
     color: #363636;
+}
+
+.add-canvas-button-container {
+    display: flex;
+    height: 100%;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
 }
 
 .add-canvas-button {
