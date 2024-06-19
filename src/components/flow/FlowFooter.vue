@@ -39,13 +39,6 @@
             </div>
         </template>
     </el-popover>
-    <!-- <el-tooltip content="新建画布" placement="top" effect="dark" :hide-after="0">
-        <el-button class="add-canvas-button" @click.prevent="createNewCanvasHandler" :disabled="isCreatingCanvas">
-            <el-icon color="black" size="18px">
-                <Plus />
-            </el-icon>
-        </el-button>
-    </el-tooltip> -->
 </template>
 
 <script setup>
@@ -102,12 +95,19 @@ function tipsHideHandler() {
 
 <style scoped>
 .scrollbar-flex-content {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
 }
 
 .scrollbar-item {
+    -ms-flex-negative: 0;
     flex-shrink: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     position: relative;
     width: 120px;
@@ -133,10 +133,18 @@ function tipsHideHandler() {
 }
 
 .add-canvas-button-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     height: 100%;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
     width: fit-content;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
 }
 
