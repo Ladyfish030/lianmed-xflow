@@ -443,7 +443,8 @@ function updateHeightExceptChoice(parentNode, node) {
   return changeHeight
 }
 function updateNodePositionY(parentHeight, childNode) {
-  childNode.position.y = (parentHeight - parseInt(childNode.style.height)) / 2
+  let height = (parentHeight - parseInt(childNode.style.height)) / 2
+  childNode.position.y = height > 30 ? height : 30
 }
 function updateDeleteHeightExceptChoice(parentNode, node) {
   let childNodes = parentNode.childNodes
@@ -463,7 +464,19 @@ function updateDeleteHeightExceptChoice(parentNode, node) {
   } else {
     parentNode.style.height = parentNode.initDimensions.height + 'px'
   }
-  let changeHeight = parseInt(parentNode.style.height) - oldHeight
+  let nowHeight = parseInt(parentNode.style.height)
+  let changeHeight = nowHeight - oldHeight
+  if (changeHeight) {
+    //如果高度有更新，遍历子节点进行高度居中
+    for (let childNodeId of parentNode.childNodes) {
+      if (childNodeId != node.id) {
+        let childNode = findNodeById(childNodeId)
+        if (childNode) {
+          updateNodePositionY(nowHeight, childNode)
+        }
+      }
+    }
+  }
   return changeHeight
 }
 function updateWidthExceptChoice(node, parentNode, width) {
