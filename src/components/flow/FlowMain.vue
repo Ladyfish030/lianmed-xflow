@@ -80,7 +80,7 @@ const {
     addWhenNode,
 } = useDragAndDrop()
 
-const { currentCanvasIndex, getCurrentCanvas, isImport } = useCanvasManage()
+const { getCurrentCanvas, isShowEditFlag } = useCanvasManage()
 
 const { findNode, removeNodes, screenToFlowCoordinate } = useVueFlow()
 
@@ -149,10 +149,24 @@ function contextMenuHandler(e) {
 }
 
 watch([nodes, globalConfigList], ([newNodes, newGlobalConfigList], [oldNodes, oldGlobalConfigList]) => {
-    if (isImport.value === false) {
-        var canvas = getCurrentCanvas()
-        canvas.isEdited = true
-        isImport.value = true
+    if (newGlobalConfigList !== oldGlobalConfigList) {
+        if (isShowEditFlag.value === false) {
+            return
+        }
+        else {
+            var canvas = getCurrentCanvas()
+            canvas.isEdited = true
+        }
+    }
+    else if (newNodes !== oldNodes) {
+        if (isShowEditFlag.value === false) {
+            isShowEditFlag.value = true
+            return
+        }
+        else {
+            var canvas = getCurrentCanvas()
+            canvas.isEdited = true
+        }
     }
 }, { deep: true })
 

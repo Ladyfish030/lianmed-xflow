@@ -51,6 +51,7 @@ import DotIcon from '@/assets/svg/DotIcon.vue'
 const {
     canvasList,
     currentCanvasIndex,
+    isShowEditFlag,
     createNewCanvas,
     switchCanvas,
 } = useCanvasManage()
@@ -66,6 +67,7 @@ function canvasContextMenuHandler(event, canvasIndex) {
 }
 
 function switchCanvasHandler(index) {
+    isShowEditFlag.value = false
     if (isSwitchingCanvas.value === true) {
         return
     }

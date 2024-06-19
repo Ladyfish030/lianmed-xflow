@@ -8,11 +8,11 @@ const state = {
     canvasList: ref([]),
     currentCanvasIndex: ref(-1),
     historyCanvasList: ref([]),
-    isImport: ref(false),
+    isShowEditFlag: ref(false),
 }
 
 export default function useCanvasManage() {
-    const { canvasList, currentCanvasIndex, historyCanvasList, isImport } = state
+    const { canvasList, currentCanvasIndex, historyCanvasList, isShowEditFlag } = state
     const { toObject, fromObject } = useVueFlow()
 
     function generateCanvasName() {
@@ -40,7 +40,7 @@ export default function useCanvasManage() {
     }
 
     function createNewCanvas() {
-        isImport.value = false
+        isShowEditFlag.value = true
         const name = generateCanvasName()
         const paint = initPaint()
         var newCanvas = {
@@ -56,7 +56,7 @@ export default function useCanvasManage() {
     }
 
     function importCanvas(canvas) {
-        isImport.value = true
+        isShowEditFlag.value = false
         const newCanvas = {
             id: canvas.id,
             name: canvas.name,
@@ -113,7 +113,7 @@ export default function useCanvasManage() {
 
         // 切换到新的画布
         currentCanvasIndex.value = index
-        const nextCanvas = getCanvasByIndex(index)
+        const nextCanvas = getCurrentCanvas()
         setParentPos(nextCanvas.parentPos)
         setGlobalConfig(nextCanvas.globalConfig)
         setFlowList(nextCanvas.flowList)
@@ -121,6 +121,7 @@ export default function useCanvasManage() {
     }
 
     function deleteCanvasByIndex(index) {
+        isShowEditFlag.value = false
         if (index < 0 || index >= canvasList.value.length) {
             return
         }
@@ -129,7 +130,15 @@ export default function useCanvasManage() {
         if (canvasList.value.length === 0) {
             currentCanvasIndex.value = -1
         } else {
-            if (index <= currentCanvasIndex.value) {
+            if (index === currentCanvasIndex.value) {
+                if (index <= canvasList.value.length - 1) {
+                    currentCanvasIndex.value = index
+                }
+                else {
+                    currentCanvasIndex.value = canvasList.value.length - 1
+                }
+            }
+            else if (index < currentCanvasIndex.value) {
                 currentCanvasIndex.value = Math.max(0, currentCanvasIndex.value - 1)
             }
             const nextCanvas = getCurrentCanvas()
@@ -144,7 +153,7 @@ export default function useCanvasManage() {
         canvasList,
         currentCanvasIndex,
         historyCanvasList,
-        isImport,
+        isShowEditFlag,
         createNewCanvas,
         importCanvas,
         getCurrentCanvas,

@@ -25,15 +25,15 @@ function deleteHandler() {
     const canvas = getCanvasByIndex(deleteCanvas.value)
     if (canvas.isEdited === true) {
         ElMessageBox.confirm('确定关闭该画布？请注意保存', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-    })
-        .then(() => {
-            deleteCanvasByIndex(deleteCanvas.value)
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
         })
-        .catch(() => {
+            .then(() => {
+                deleteCanvasByIndex(deleteCanvas.value)
+            })
+            .catch(() => {
 
-        })
+            })
     }
     else {
         deleteCanvasByIndex(deleteCanvas.value)
