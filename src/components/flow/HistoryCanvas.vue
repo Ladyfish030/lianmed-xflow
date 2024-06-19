@@ -212,7 +212,11 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .cell-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   height: 100%;
   width: 100%;
@@ -221,7 +225,11 @@ onBeforeUnmount(() => {
 .text-content,
 .input-content {
   height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   width: 100%;
 }
@@ -258,8 +266,14 @@ onBeforeUnmount(() => {
 
 .tooltip-container {
   height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 </style>

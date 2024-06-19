@@ -11,12 +11,14 @@ const searchResult = ref(null)
 
 const nodeComponents = [
   { type: NodeType.DATABASE, label: 'Database' },
-  { type: NodeType.WEBSERVICE, label: 'WebService' },
+  // { type: NodeType.WEBSERVICE, label: 'WebService' },
+  { type: NodeType.LISTENER, label: 'Listener' },
   { type: NodeType.CHOICE, label: 'Choice' },
   { type: NodeType.FOREACH, label: 'For Each' },
   { type: NodeType.SUBFLOW, label: 'Sub Flow' },
   { type: NodeType.FLOWREFERENCE, label: 'Flow Reference' },
   { type: NodeType.LOGGER, label: 'Logger' },
+  { type: NodeType.SETPAYLOAD, label: 'Set Payload' },
 ]
 
 function filterNode() {
@@ -36,56 +38,36 @@ function searchClearHandler() {
 
 <template>
   <div class="component-library-container">
-  <div class="component-library">
-    <span class="description">组件库</span>
-    <el-divider class="divider" />
-    <el-menu
-      default-active="1"
-      class="el-menu-vertical-demo"
-    >
-      <div class="input-container">
-        <el-input
-          v-model="searchContent"
-          placeholder="请输入关键字"
-          clearable
-          :prefix-icon="Search"
-          @input="filterNode"
-          @clear="searchClearHandler"
-        />
-      </div>
-      <div v-if="isSearch" class="search-result-container">
-        <div
-          v-for="item in searchResult"
-          :key="item.type"
-          class="node-container"
-        >
-          <el-button 
-            class="node" 
-            type="info" 
-            plain 
-            :draggable="true"
-            @dragstart="onDragStart($event, item.type)"
-          >
-            <el-icon class="icon"><Grid /></el-icon>{{ item.label }}
-          </el-button>
+    <div class="component-library">
+      <span class="description">组件库</span>
+      <el-divider class="divider" />
+      <el-menu default-active="1" class="el-menu-vertical-demo">
+        <div class="input-container">
+          <el-input v-model="searchContent" placeholder="请输入关键字" clearable :prefix-icon="Search" @input="filterNode"
+            @clear="searchClearHandler" />
         </div>
-      </div>
-      <el-sub-menu index="1" v-if="!isSearch">
-        <template #title>
-          <span class="menu-title">数据源组件</span>
-        </template>
-        <div class="node-container">
-          <el-button 
-            class="node" 
-            type="info" 
-            plain 
-            :draggable="true"
-            @dragstart="onDragStart($event, NodeType.DATABASE)"
-          >
-            <el-icon><Grid /></el-icon>Database
-          </el-button>
+        <div v-if="isSearch" class="search-result-container">
+          <div v-for="item in searchResult" :key="item.type" class="node-container">
+            <el-button class="node" type="info" plain :draggable="true" @dragstart="onDragStart($event, item.type)">
+              <el-icon class="icon">
+                <Grid />
+              </el-icon>{{ item.label }}
+            </el-button>
+          </div>
         </div>
-        <!-- <div class="node-container">
+        <el-sub-menu index="1" v-if="!isSearch">
+          <template #title>
+            <span class="menu-title">数据源组件</span>
+          </template>
+          <div class="node-container">
+            <el-button class="node" type="info" plain :draggable="true"
+              @dragstart="onDragStart($event, NodeType.DATABASE)">
+              <el-icon>
+                <Grid />
+              </el-icon>Database
+            </el-button>
+          </div>
+          <!-- <div class="node-container">
           <el-button 
             class="node" 
             type="info" 
@@ -96,86 +78,76 @@ function searchClearHandler() {
             <el-icon><Grid /></el-icon>WebService
           </el-button>
         </div> -->
-        <div class="node-container">
-          <el-button 
-            class="node" 
-            type="info" 
-            plain 
-            :draggable="true"
-            @dragstart="onDragStart($event, NodeType.LISTENER)"
-          >
-            <el-icon><Grid /></el-icon>Listener
-          </el-button>
-        </div>
-      </el-sub-menu>
-      <el-sub-menu index="2" v-if="!isSearch">
-        <template #title>
-          <span class="menu-title">逻辑组件</span>
-        </template>
-        <div class="node-container">
-          <el-button 
-            class="node" 
-            type="info" 
-            plain 
-            :draggable="true"
-            @dragstart="onDragStart($event, NodeType.CHOICE)"
-          >
-            <el-icon><Grid /></el-icon>Choice
-          </el-button>
-        </div>
-        <div class="node-container">
-          <el-button 
-            class="node" 
-            type="info" 
-            plain 
-            :draggable="true"
-            @dragstart="onDragStart($event, NodeType.FOREACH)"
-          >
-            <el-icon><Grid /></el-icon>For Each
-          </el-button>
-        </div>
-        <div class="node-container">
-          <el-button 
-            class="node" 
-            type="info" 
-            plain 
-            :draggable="true"
-            @dragstart="onDragStart($event, NodeType.SUBFLOW)"
-          >
-            <el-icon><Grid /></el-icon>Sub Flow
-          </el-button>
-        </div>
-        <div class="node-container">
-          <el-button 
-            class="node" 
-            type="info" 
-            plain 
-            :draggable="true"
-            @dragstart="onDragStart($event, NodeType.FLOWREFERENCE)"
-          >
-            <el-icon><Grid /></el-icon>Flow Reference
-          </el-button>
-        </div>
-      </el-sub-menu>
-      <el-sub-menu index="3" v-if="!isSearch">
-        <template #title>
-          <span class="menu-title">处理组件</span>
-        </template>
-        <div class="node-container">
-          <el-button 
-            class="node" 
-            type="info" 
-            plain 
-            :draggable="true"
-            @dragstart="onDragStart($event, NodeType.LOGGER)"
-          >
-            <el-icon><Grid /></el-icon>Logger
-          </el-button>
-        </div>
-      </el-sub-menu>
-    </el-menu>
+          <div class="node-container">
+            <el-button class="node" type="info" plain :draggable="true"
+              @dragstart="onDragStart($event, NodeType.LISTENER)">
+              <el-icon>
+                <Grid />
+              </el-icon>Listener
+            </el-button>
+          </div>
+        </el-sub-menu>
+        <el-sub-menu index="2" v-if="!isSearch">
+          <template #title>
+            <span class="menu-title">逻辑组件</span>
+          </template>
+          <div class="node-container">
+            <el-button class="node" type="info" plain :draggable="true"
+              @dragstart="onDragStart($event, NodeType.CHOICE)">
+              <el-icon>
+                <Grid />
+              </el-icon>Choice
+            </el-button>
+          </div>
+          <div class="node-container">
+            <el-button class="node" type="info" plain :draggable="true"
+              @dragstart="onDragStart($event, NodeType.FOREACH)">
+              <el-icon>
+                <Grid />
+              </el-icon>For Each
+            </el-button>
+          </div>
+          <div class="node-container">
+            <el-button class="node" type="info" plain :draggable="true"
+              @dragstart="onDragStart($event, NodeType.SUBFLOW)">
+              <el-icon>
+                <Grid />
+              </el-icon>Sub Flow
+            </el-button>
+          </div>
+          <div class="node-container">
+            <el-button class="node" type="info" plain :draggable="true"
+              @dragstart="onDragStart($event, NodeType.FLOWREFERENCE)">
+              <el-icon>
+                <Grid />
+              </el-icon>Flow Reference
+            </el-button>
+          </div>
+        </el-sub-menu>
+        <el-sub-menu index="3" v-if="!isSearch">
+          <template #title>
+            <span class="menu-title">处理组件</span>
+          </template>
+          <div class="node-container">
+            <el-button class="node" type="info" plain :draggable="true"
+              @dragstart="onDragStart($event, NodeType.LOGGER)">
+              <el-icon>
+                <Grid />
+              </el-icon>Logger
+            </el-button>
+          </div>
+          <div class="node-container">
+            <el-button class="node" type="info" plain :draggable="true"
+              @dragstart="onDragStart($event, NodeType.SETPAYLOAD)">
+              <el-icon>
+                <Grid />
+              </el-icon>Set Payload
+            </el-button>
+          </div>
+        </el-sub-menu>
+      </el-menu>
+    </div>
   </div>
-</div>
 </template>
 
 <style scoped>
@@ -290,5 +262,44 @@ function searchClearHandler() {
   font-size: 18px;
   margin-right: 5px;
   margin-left: 3px;
+}
+
+.component-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border: 1px solid #b1b3b8;
+  border-radius: 5px;
+  background-color: white;
+  height: 100%;
+}
+
+.content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.span-text {
+  margin-top: 10px;
+  font-size: 11px;
+  line-height: 100%;
 }
 </style>

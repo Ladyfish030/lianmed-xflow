@@ -165,7 +165,7 @@
 import { ref, reactive, watch, computed } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 
-import { isSave, saveAttributeComplete, drawerClickNode } from '@/hooks/useDrawer'
+import { isSave, saveAttributeComplete, drawerClickNode, haveEdited } from '@/hooks/useDrawer'
 import {
   findGlobalConfigByName,
   getGlobalConfigListByType,
@@ -403,6 +403,19 @@ function saveDatabaseConfig() {
     databaseFormVisible.value = false
   }
 }
+
+watch([operation, connectorConfiguration, sqlCommand, inputParameters], ([newOperationValue, newConnectorConfigurationValue, newSqlCommandValue, newInputParametersValue], [oldOperationValue, oldConnectorConfigurationValue, oldSqlCommandValue, oldInputParametersValue]) => {
+  if (newOperationValue !== drawerClickNode?.value.data.operation ||
+    newConnectorConfigurationValue !== drawerClickNode?.value.data.connectorConfiguration ||
+    newSqlCommandValue !== drawerClickNode?.value.data.sqlCommand ||
+    newInputParametersValue !== drawerClickNode?.value.data.inputParameters
+  ) {
+    haveEdited.value = true
+  }
+  else {
+    haveEdited.value = false
+  }
+})
 
 watch(isSave, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {

@@ -10,11 +10,20 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
-import { isSave, saveAttributeComplete, drawerClickNode } from '@/hooks/useDrawer'
+import { isSave, saveAttributeComplete, drawerClickNode, haveEdited } from '@/hooks/useDrawer'
 
 const expression = ref(drawerClickNode?.value.data.expression || '')
 
 const { updateNode } = useVueFlow()
+
+watch(expression, (newValue, oldValue) => {
+  if (newValue !== drawerClickNode?.value.data.expression) {
+    haveEdited.value = true
+  }
+  else {
+    haveEdited.value = false
+  }
+})
 
 watch(isSave, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {

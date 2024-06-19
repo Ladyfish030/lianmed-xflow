@@ -264,6 +264,30 @@ const FlowReference = {
   adsorption: false,
 }
 
+// 定义 SetPayload 初始化属性
+const SetPayload = {
+  id: '',
+  type: '',
+  data: {
+    displayName: 'Set Payload',
+    payloadValue: '',
+  },
+  position: {
+    x: 0,
+    y: 0,
+  },
+  dimensions: {
+    width: 70,
+    height: 70,
+  },
+  initDimensions: {
+    width: 70,
+    height: 70,
+  },
+  parentNode: '',
+  adsorption: false,
+}
+
 export {
   Flow,
   Database,
@@ -276,4 +300,5 @@ export {
   SubFlow,
   Logger,
   FlowReference,
+  SetPayload,
 }

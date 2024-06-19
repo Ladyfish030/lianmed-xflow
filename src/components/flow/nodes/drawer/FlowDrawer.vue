@@ -11,13 +11,22 @@
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { nodes } from '@/hooks/useNode'
-import { isSave, saveAttributeComplete, drawerClickNode } from '@/hooks/useDrawer'
+import { isSave, saveAttributeComplete, drawerClickNode, haveEdited } from '@/hooks/useDrawer'
 import { findFlow, editFlow } from '@/hooks/useNodeOfFlow'
 import { NodeType } from '@/enums/NodeType'
 
 const displayName = ref(drawerClickNode?.value.data.displayName || '')
 
 const { updateNode } = useVueFlow()
+
+watch(displayName, (newValue, oldValue) => {
+  if (newValue !== drawerClickNode?.value.data.displayName) {
+    haveEdited.value = true
+  }
+  else {
+    haveEdited.value = false
+  }
+})
 
 watch(isSave, (newValue, oldValue) => {
   if (oldValue === false && newValue === true) {

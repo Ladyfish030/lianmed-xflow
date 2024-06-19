@@ -32,6 +32,7 @@ export function formatGenerateXmlData() {
         [NodeType.SUBFLOW]: NodeDTO.formatSubFlow,
         [NodeType.LOGGER]: NodeDTO.formatLogger,
         [NodeType.FLOWREFERENCE]: NodeDTO.formatFlowReference,
+        [NodeType.SETPAYLOAD]: NodeDTO.formatSetPayload,
     }
 
     const configList = globalConfigList.value

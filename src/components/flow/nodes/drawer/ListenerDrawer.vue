@@ -76,7 +76,7 @@
 import { ref, reactive, watch, computed } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 
-import { isSave, saveAttributeComplete, drawerClickNode } from '@/hooks/useDrawer'
+import { isSave, saveAttributeComplete, drawerClickNode, haveEdited } from '@/hooks/useDrawer'
 import {
     findGlobalConfigByName,
     getGlobalConfigListByType,
@@ -218,6 +218,17 @@ function saveListenerConfig() {
         ListenerFormVisible.value = false
     }
 }
+
+watch([connectorConfiguration, path], ([newConnectorConfigurationValue, newPathValue], [oldConnectorConfigurationValue, oldPathValue]) => {
+    if (newConnectorConfigurationValue !== drawerClickNode?.value.data.connectorConfiguration ||
+        newPathValue !== drawerClickNode?.value.data.path
+    ) {
+        haveEdited.value = true
+    }
+    else {
+        haveEdited.value = false
+    }
+})
 
 watch(isSave, (newValue, oldValue) => {
     if (oldValue === false && newValue === true) {
