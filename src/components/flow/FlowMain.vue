@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, watch, markRaw, onMounted } from 'vue'
+import { ref, watch, markRaw, computed } from 'vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
@@ -67,6 +67,8 @@ import {
 } from '@/hooks/useMenu'
 import { removeNodeAdsorption } from '@/hooks/useAdsorption'
 import { deleteFlowByName } from '@/hooks/useNodeOfFlow'
+import { globalConfigList } from '@/hooks/useGlobalConfig'
+import useCanvasManage from '@/hooks/useCanvasManage'
 
 import emitter from '@/utils/emitter'
 
@@ -77,6 +79,8 @@ const {
     onNodeDragStop,
     addWhenNode,
 } = useDragAndDrop()
+
+const { currentCanvasIndex, getCurrentCanvas, isImport } = useCanvasManage()
 
 const { findNode, removeNodes, screenToFlowCoordinate } = useVueFlow()
 
@@ -143,6 +147,14 @@ function contextMenuHandler(e) {
     })
     onFlowContextMenu(e)
 }
+
+watch([nodes, globalConfigList], ([newNodes, newGlobalConfigList], [oldNodes, oldGlobalConfigList]) => {
+    if (isImport.value === false) {
+        var canvas = getCurrentCanvas()
+        canvas.isEdited = true
+        isImport.value = true
+    }
+}, { deep: true })
 
 watch(deleteNodeConfirm, (newValue, oldValue) => {
     if (oldValue === false && newValue === true) {

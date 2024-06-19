@@ -17,6 +17,7 @@
                     <el-text class="scrollbar-item-text" truncated>
                         {{ item.name }}
                     </el-text>
+                    <DotIcon v-if="item.isEdited" class="dot"/>
                 </el-button>
             </el-tooltip>
         </div>
@@ -35,6 +36,8 @@
 import { ref, computed } from 'vue'
 import { onCanvasContextMenu } from '@/hooks/useMenu'
 import useCanvasManage from '@/hooks/useCanvasManage'
+
+import DotIcon from '@/assets/svg/DotIcon.vue'
 
 const {
     canvasList,
@@ -82,17 +85,17 @@ function createNewCanvasHandler() {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 70px;
+    position: relative;
+    width: 120px;
     height: 25px;
     margin: 5px 3px 0 0;
     border-radius: 4px;
     border-color: transparent;
-    background-color: white;
+    background-color: #e9e9eb;
 }
 
 .scrollbar-item:hover {
-    background-color: #e9e9eb;
+    background-color: #c8c9cc;
 }
 
 .scrollbar-item.active-item {
@@ -100,7 +103,7 @@ function createNewCanvasHandler() {
 }
 
 .scrollbar-item-text {
-    width: 60px;
+    width: 90px;
     font-size: 12px;
     color: #363636;
 }
@@ -112,5 +115,10 @@ function createNewCanvasHandler() {
 
 .add-canvas-button:hover {
     background-color: #e9e9eb;
+}
+
+.dot {
+    position: absolute; 
+    right: 5px;
 }
 </style>

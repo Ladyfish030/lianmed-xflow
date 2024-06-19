@@ -18,11 +18,13 @@ import {
 } from '@/hooks/useMenu'
 import useCanvasManage from '@/hooks/useCanvasManage'
 
-const { deleteCanvasByIndex } = useCanvasManage()
+const { deleteCanvasByIndex, getCanvasByIndex } = useCanvasManage()
 
 function deleteHandler() {
     deleteCanvas.value = menuClickCanvas.value
-    ElMessageBox.confirm('确定关闭该画布？请注意保存', {
+    const canvas = getCanvasByIndex(deleteCanvas.value)
+    if (canvas.isEdited === true) {
+        ElMessageBox.confirm('确定关闭该画布？请注意保存', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
     })
@@ -32,6 +34,10 @@ function deleteHandler() {
         .catch(() => {
 
         })
+    }
+    else {
+        deleteCanvasByIndex(deleteCanvas.value)
+    }
 }
 </script>
 

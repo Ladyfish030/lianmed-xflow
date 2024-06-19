@@ -8,10 +8,11 @@ const state = {
     canvasList: ref([]),
     currentCanvasIndex: ref(-1),
     historyCanvasList: ref([]),
+    isImport: ref(false),
 }
 
 export default function useCanvasManage() {
-    const { canvasList, currentCanvasIndex, historyCanvasList } = state
+    const { canvasList, currentCanvasIndex, historyCanvasList, isImport } = state
     const { toObject, fromObject } = useVueFlow()
 
     function generateCanvasName() {
@@ -39,6 +40,7 @@ export default function useCanvasManage() {
     }
 
     function createNewCanvas() {
+        isImport.value = false
         const name = generateCanvasName()
         const paint = initPaint()
         var newCanvas = {
@@ -47,12 +49,14 @@ export default function useCanvasManage() {
             flowList: [],
             parentPos: [],
             globalConfig: [],
+            isEdited: true,
         }
         canvasList.value.push(newCanvas)
         switchCanvas(canvasList.value.length - 1)
     }
 
     function importCanvas(canvas) {
+        isImport.value = true
         const newCanvas = {
             id: canvas.id,
             name: canvas.name,
@@ -60,8 +64,9 @@ export default function useCanvasManage() {
             flowList: canvas.flowList,
             parentPos: canvas.parentPos,
             globalConfig: canvas.globalConfig,
+            isEdited: false,
         }
-        canvasList.value.push(canvas)
+        canvasList.value.push(newCanvas)
         switchCanvas(canvasList.value.length - 1)
     }
 
@@ -139,6 +144,7 @@ export default function useCanvasManage() {
         canvasList,
         currentCanvasIndex,
         historyCanvasList,
+        isImport,
         createNewCanvas,
         importCanvas,
         getCurrentCanvas,
