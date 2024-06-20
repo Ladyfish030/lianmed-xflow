@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { getParentPos, setParentPos } from './useAdsorption'
 import { getGlobalConfig, setGlobalConfig } from './useGlobalConfig'
@@ -68,6 +68,9 @@ export default function useCanvasManage() {
         }
         canvasList.value.push(newCanvas)
         switchCanvas(canvasList.value.length - 1)
+        setTimeout(() => {
+            isShowEditFlag.value = true
+        }, 100)
     }
 
     function getCurrentCanvas() {
@@ -147,6 +150,9 @@ export default function useCanvasManage() {
             setFlowList(nextCanvas.flowList)
             fromObject(nextCanvas.paint)
         }
+        setTimeout(() => {
+            isShowEditFlag.value = true
+        }, 100)
     }
 
     return {

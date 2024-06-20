@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, watch, markRaw, computed } from 'vue'
+import { watch, markRaw, computed, watchEffect } from 'vue'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
@@ -80,7 +80,7 @@ const {
     addWhenNode,
 } = useDragAndDrop()
 
-const { getCurrentCanvas, isShowEditFlag } = useCanvasManage()
+const { currentCanvasIndex, getCurrentCanvas, isShowEditFlag } = useCanvasManage()
 
 const { findNode, removeNodes, screenToFlowCoordinate } = useVueFlow()
 
@@ -148,25 +148,23 @@ function contextMenuHandler(e) {
     onFlowContextMenu(e)
 }
 
-watch([nodes, globalConfigList], ([newNodes, newGlobalConfigList], [oldNodes, oldGlobalConfigList]) => {
-    if (newGlobalConfigList !== oldGlobalConfigList) {
-        if (isShowEditFlag.value === false) {
-            return
-        }
-        else {
-            var canvas = getCurrentCanvas()
-            canvas.isEdited = true
-        }
+watch(globalConfigList, (newValue, oldValue) => {
+    if (isShowEditFlag.value === false) {
+        return
     }
-    else if (newNodes !== oldNodes) {
-        if (isShowEditFlag.value === false) {
-            isShowEditFlag.value = true
-            return
-        }
-        else {
-            var canvas = getCurrentCanvas()
-            canvas.isEdited = true
-        }
+    else {
+        var canvas = getCurrentCanvas()
+        canvas.isEdited = true
+    }
+}, { deep: true })
+
+watch(nodes, (newValue, oldValue) => {
+    if (isShowEditFlag.value === false) {
+        return
+    }
+    else {
+        var canvas = getCurrentCanvas()
+        canvas.isEdited = true
     }
 }, { deep: true })
 

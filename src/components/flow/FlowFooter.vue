@@ -76,6 +76,9 @@ function switchCanvasHandler(index) {
         switchCanvas(index)
         isSwitchingCanvas.value = false
     }
+    setTimeout(() => {
+        isShowEditFlag.value = true
+    }, 100)
 }
 
 function createNewCanvasHandler() {
