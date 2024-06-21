@@ -112,6 +112,7 @@ async function onSaveCanvas() {
             currentCanvas.flowList = res.canvas.flowList
             currentCanvas.parentPos = res.canvas.parentPos
             currentCanvas.globalConfig = res.canvas.globalConfig
+            currentCanvas.isEdited = false
             ElMessage({
               type: 'success',
               message: '保存成功',
@@ -140,6 +141,7 @@ async function onSaveCanvas() {
           type: 'success',
           message: '保存成功',
         })
+        currentCanvas.isEdited = false
       })
       .catch((error) => {
         ElMessage({

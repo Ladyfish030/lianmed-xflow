@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { getParentPos, setParentPos } from './useAdsorption'
 import { getGlobalConfig, setGlobalConfig } from './useGlobalConfig'
@@ -8,10 +8,11 @@ const state = {
     canvasList: ref([]),
     currentCanvasIndex: ref(-1),
     historyCanvasList: ref([]),
+    isShowEditFlag: ref(false),
 }
 
 export default function useCanvasManage() {
-    const { canvasList, currentCanvasIndex, historyCanvasList } = state
+    const { canvasList, currentCanvasIndex, historyCanvasList, isShowEditFlag } = state
     const { toObject, fromObject } = useVueFlow()
 
     function generateCanvasName() {
@@ -39,6 +40,7 @@ export default function useCanvasManage() {
     }
 
     function createNewCanvas() {
+        isShowEditFlag.value = true
         const name = generateCanvasName()
         const paint = initPaint()
         var newCanvas = {
@@ -47,12 +49,14 @@ export default function useCanvasManage() {
             flowList: [],
             parentPos: [],
             globalConfig: [],
+            isEdited: true,
         }
         canvasList.value.push(newCanvas)
         switchCanvas(canvasList.value.length - 1)
     }
 
     function importCanvas(canvas) {
+        isShowEditFlag.value = false
         const newCanvas = {
             id: canvas.id,
             name: canvas.name,
@@ -60,9 +64,13 @@ export default function useCanvasManage() {
             flowList: canvas.flowList,
             parentPos: canvas.parentPos,
             globalConfig: canvas.globalConfig,
+            isEdited: false,
         }
-        canvasList.value.push(canvas)
+        canvasList.value.push(newCanvas)
         switchCanvas(canvasList.value.length - 1)
+        setTimeout(() => {
+            isShowEditFlag.value = true
+        }, 100)
     }
 
     function getCurrentCanvas() {
@@ -108,7 +116,7 @@ export default function useCanvasManage() {
 
         // 切换到新的画布
         currentCanvasIndex.value = index
-        const nextCanvas = getCanvasByIndex(index)
+        const nextCanvas = getCurrentCanvas()
         setParentPos(nextCanvas.parentPos)
         setGlobalConfig(nextCanvas.globalConfig)
         setFlowList(nextCanvas.flowList)
@@ -116,6 +124,7 @@ export default function useCanvasManage() {
     }
 
     function deleteCanvasByIndex(index) {
+        isShowEditFlag.value = false
         if (index < 0 || index >= canvasList.value.length) {
             return
         }
@@ -124,7 +133,15 @@ export default function useCanvasManage() {
         if (canvasList.value.length === 0) {
             currentCanvasIndex.value = -1
         } else {
-            if (index <= currentCanvasIndex.value) {
+            if (index === currentCanvasIndex.value) {
+                if (index <= canvasList.value.length - 1) {
+                    currentCanvasIndex.value = index
+                }
+                else {
+                    currentCanvasIndex.value = canvasList.value.length - 1
+                }
+            }
+            else if (index < currentCanvasIndex.value) {
                 currentCanvasIndex.value = Math.max(0, currentCanvasIndex.value - 1)
             }
             const nextCanvas = getCurrentCanvas()
@@ -133,12 +150,16 @@ export default function useCanvasManage() {
             setFlowList(nextCanvas.flowList)
             fromObject(nextCanvas.paint)
         }
+        setTimeout(() => {
+            isShowEditFlag.value = true
+        }, 100)
     }
 
     return {
         canvasList,
         currentCanvasIndex,
         historyCanvasList,
+        isShowEditFlag,
         createNewCanvas,
         importCanvas,
         getCurrentCanvas,
