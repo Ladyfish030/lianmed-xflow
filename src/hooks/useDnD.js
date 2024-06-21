@@ -158,8 +158,8 @@ export default function useDragAndDrop() {
       type: NodeType.FLOW,
       data: flowNode.data,
       position: {
-        x: newNode.position.x,
-        y: newNode.position.y,
+        x: newNode.position.x - 1,
+        y: newNode.position.y - 1,
       },
       dimensions: flowNode.dimensions,
       initDimensions: flowNode.initDimensions,
@@ -174,8 +174,8 @@ export default function useDragAndDrop() {
       flowNode.childNodes = []
     }
     let pos = {
-      layerX: flowNode.position.x,
-      layerY: flowNode.position.y,
+      layerX: flowNode.position.x - 1,
+      layerY: flowNode.position.y - 1,
     }
     newNode.parentNode = nodeId
     dragAdsorption(flowNode, pos)
@@ -255,6 +255,7 @@ export default function useDragAndDrop() {
         layerX: dragNode.position.x,
         layerY: dragNode.position.y,
       }
+      console.log(1111111)
       dragAdsorption(dragNode, pos)
     }
   }
