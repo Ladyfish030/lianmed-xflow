@@ -22,7 +22,7 @@
         title="提示" 
         :width="200" 
         :hide-after="0"
-        content="点击这里新建画布吧！"
+        content="点击这里新建业务流吧！"
         @hide="tipsHideHandler"
         trigger="click"
     >

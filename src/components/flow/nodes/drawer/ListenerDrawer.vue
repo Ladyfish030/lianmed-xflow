@@ -1,54 +1,57 @@
 <template>
-    <div class="form-container">
-        <div class="listener-container">
-            <div class="listener-span-container">
-                <span class="listener-span">监听器配置</span>
-            </div>
-            <div class="listener-right-container">
-                <div class="scrollbar-container">
-                    <el-scrollbar>
-                        <div class="listener-button-container" v-for="(item, index) in listenerConfigList" :key="index">
-                            <el-button class="listener-button" plain @click="showListenerConfig(item)" type="primary">
-                                <el-text class="listener-text" truncated>
-                                    {{ item.name }}
-                                </el-text>
-                            </el-button>
-                            <el-button class="delete-button" @click="removeListenerConfigHandler(item.name)">
-                                <el-icon :size="20" color="#f89898">
-                                    <Delete />
-                                </el-icon>
-                            </el-button>
-                        </div>
-                    </el-scrollbar>
+    <el-scrollbar>
+        <div class="form-container">
+            <div class="listener-container">
+                <div class="listener-span-container">
+                    <span class="listener-span">监听器配置</span>
                 </div>
-                <div class="add-button-container">
-                    <ChoiceAddIcon class="add-button" @click="handleBeforeAddListenerConfig" />
+                <div class="listener-right-container">
+                    <div class="scrollbar-container">
+                        <el-scrollbar>
+                            <div class="listener-button-container" v-for="(item, index) in listenerConfigList"
+                                :key="index">
+                                <el-button class="listener-button" plain @click="showListenerConfig(item)"
+                                    type="primary">
+                                    <el-text class="listener-text" truncated>
+                                        {{ item.name }}
+                                    </el-text>
+                                </el-button>
+                                <el-button class="delete-button" @click="removeListenerConfigHandler(item.name)">
+                                    <el-icon :size="20" color="#f89898">
+                                        <Delete />
+                                    </el-icon>
+                                </el-button>
+                            </div>
+                        </el-scrollbar>
+                    </div>
+                    <div class="add-button-container">
+                        <ChoiceAddIcon class="add-button" @click="handleBeforeAddListenerConfig" />
+                    </div>
                 </div>
             </div>
+            <el-divider class="divider" />
+            <div class="form-item">
+                <label>连接配置</label>
+                <el-select v-model="connectorConfiguration" placeholder="" class="input-field">
+                    <el-option v-for="(item, index) in listenerConfigList" :key="index" :label="item.name"
+                        :value="item.name" />
+                </el-select>
+            </div>
+            <div class="form-item">
+                <label>Path</label>
+                <el-input v-model="path" autosize type="textarea" resize="none" class="input-field"></el-input>
+            </div>
         </div>
-        <el-divider class="divider" />
-        <div class="form-item">
-            <label>连接配置</label>
-            <el-select v-model="connectorConfiguration" placeholder="" class="input-field">
-                <el-option v-for="(item, index) in listenerConfigList" :key="index" :label="item.name"
-                    :value="item.name" />
-            </el-select>
-        </div>
-        <div class="form-item">
-            <label>path</label>
-            <el-input v-model="path" autosize type="textarea" class="input-field"></el-input>
-        </div>
-    </div>
+    </el-scrollbar>
 
-    <el-dialog v-model="ListenerFormVisible" title="监听器属性" width="400">
+    <el-dialog v-model="ListenerFormVisible" title="监听器属性" width="400" :close-on-click-modal="false">
         <el-form :model="listenerConfigForm">
             <el-form-item label="名称" :label-width="formLabelWidth">
                 <el-input v-model="listenerConfigForm.name" autocomplete="off" />
             </el-form-item>
             <el-form-item label="协议" :label-width="formLabelWidth">
                 <el-select v-model="listenerConfigForm.protocol" placeholder="" class="input-field">
-                    <el-option v-for="(item, index) in protocolTypeList" :key="index" :label="item"
-                        :value="item" />
+                    <el-option v-for="(item, index) in protocolTypeList" :key="index" :label="item" :value="item" />
                 </el-select>
             </el-form-item>
             <el-form-item label="主机名" :label-width="formLabelWidth">
@@ -57,7 +60,7 @@
             <el-form-item label="端口号" :label-width="formLabelWidth">
                 <el-input v-model="listenerConfigForm.port" autocomplete="off" />
             </el-form-item>
-            <el-form-item label="base path" :label-width="formLabelWidth">
+            <el-form-item label="Base Path" :label-width="formLabelWidth">
                 <el-input v-model="listenerConfigForm.basePath" autocomplete="off" />
             </el-form-item>
         </el-form>
@@ -256,6 +259,8 @@ watch(isSave, (newValue, oldValue) => {
     -ms-flex-direction: column;
     flex-direction: column;
     gap: 20px;
+    width: 95%;
+    margin-left: 2%;
 }
 
 .listener-container {

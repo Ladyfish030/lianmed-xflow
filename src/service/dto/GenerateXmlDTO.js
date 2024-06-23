@@ -20,6 +20,7 @@ export function formatGenerateXmlData() {
         [GlobalConfigTypeInDetail.DATABASE_ORACLE_CONFIG]: ConfigDTO.formatOracle,
         [GlobalConfigTypeInDetail.DATABASE_POSTGRESQL_CONFIG]: ConfigDTO.formatPostgreSQL,
         [GlobalConfigTypeInDetail.LISTENER_CONFIG]: ConfigDTO.formatListener,
+        [GlobalConfigTypeInDetail.REQUEST_CONFIG]: ConfigDTO.formatRequest,
     }
     const nodeMappings = {
         [NodeType.FLOW]: NodeDTO.formatFlow,
@@ -33,6 +34,7 @@ export function formatGenerateXmlData() {
         [NodeType.LOGGER]: NodeDTO.formatLogger,
         [NodeType.FLOWREFERENCE]: NodeDTO.formatFlowReference,
         [NodeType.SETPAYLOAD]: NodeDTO.formatSetPayload,
+        [NodeType.REQUEST]: NodeDTO.formatRequest,
     }
 
     const configList = globalConfigList.value

@@ -37,6 +37,25 @@ export function formatListener(config) {
     }
 }
 
+export function formatRequest(config) {
+    return {
+        id: config.id,
+        type: config.type,
+        data: {
+            displayName: config.data.displayName,
+            connectorConfiguration: config.data.connectorConfiguration,
+            method: config.data.method,
+            path: config.data.path,
+            url: config.data.url,
+            body: config.data.body,
+            headers: config.data.headers,
+            queryParameters: config.data.queryParameters,
+            urlParameters: config.data.urlParameters,
+        },
+        parentNode: config.parentNode,
+    }
+}
+
 export function formatChoice(config) {
     return {
         id: config.id,

@@ -1,10 +1,12 @@
 <template>
+  <el-scrollbar>
     <div class="form-container">
-        <div class="form-item">
-            <label>名称</label>
-            <el-input v-model="displayName" autosize type="textarea" class="input-field"></el-input>
-        </div>
+      <div class="form-item">
+        <label>名称</label>
+        <el-input v-model="displayName" autosize type="textarea" class="input-field"></el-input>
+      </div>
     </div>
+  </el-scrollbar>
 </template>
 
 <script setup>
@@ -77,6 +79,8 @@ watch(isSave, (newValue, oldValue) => {
     -ms-flex-direction: column;
     flex-direction: column;
     gap: 20px;
+    width: 95%;
+    margin-left: 2%;
 }
 
 .form-item {

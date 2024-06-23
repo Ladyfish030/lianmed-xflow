@@ -1,12 +1,14 @@
 <template>
-  <div class="form-container">
-    <div class="form-item">
-      <label>Flow Name</label>
-      <el-select v-model="flowName" placeholder="" class="input-field">
-        <el-option v-for="(item, index) in flowList" :key="index" :label="item" :value="item" />
-      </el-select>
+  <el-scrollbar>
+    <div class="form-container">
+      <div class="form-item">
+        <label>Flow Name</label>
+        <el-select v-model="flowName" placeholder="" class="input-field">
+          <el-option v-for="(item, index) in flowList" :key="index" :label="item" :value="item" />
+        </el-select>
+      </div>
     </div>
-  </div>
+  </el-scrollbar>
 </template>
 
 <script setup>
@@ -45,14 +47,16 @@ watch(isSave, (newValue, oldValue) => {
 
 <style scoped>
 .form-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  gap: 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    gap: 20px;
+    width: 95%;
+    margin-left: 2%;
 }
 
 .form-item {

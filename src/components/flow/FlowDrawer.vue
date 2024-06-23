@@ -27,6 +27,7 @@ import FlowDrawer from '../flow/nodes/drawer/FlowDrawer.vue'
 import FlowReferenceDrawer from '../flow/nodes/drawer/FlowReferenceDrawer.vue'
 import LoggerDrawer from '../flow/nodes/drawer/LoggerDrawer.vue'
 import SetPayloadDrawer from '../flow/nodes/drawer/SetPayloadDrawer.vue'
+import RequestDrawer from './nodes/drawer/RequestDrawer.vue'
 
 import { drawer, drawerClickNode, handleClose, saveAttribute, saveComplete } from '@/hooks/useDrawer'
 import { NodeType } from '@/enums/NodeType'
@@ -51,6 +52,8 @@ const currentDrawer = computed(() => {
       return LoggerDrawer
     case NodeType.SETPAYLOAD:
       return SetPayloadDrawer
+    case NodeType.REQUEST:
+      return RequestDrawer
     default:
       return null
   }

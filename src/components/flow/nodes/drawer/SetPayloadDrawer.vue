@@ -1,10 +1,12 @@
 <template>
-  <div class="form-container">
-    <div class="form-item">
-      <label>Value</label>
-      <el-input v-model="payloadValue" autosize type="textarea" class="input-field"></el-input>
+  <el-scrollbar>
+    <div class="form-container">
+      <div class="form-item">
+        <label>Value</label>
+        <el-input v-model="payloadValue" autosize type="textarea" resize="none" class="input-field"></el-input>
+      </div>
     </div>
-  </div>
+  </el-scrollbar>
 </template>
 
 <script setup>
@@ -42,14 +44,16 @@ watch(isSave, (newValue, oldValue) => {
 
 <style scoped>
 .form-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  gap: 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    gap: 20px;
+    width: 95%;
+    margin-left: 2%;
 }
 
 .form-item {

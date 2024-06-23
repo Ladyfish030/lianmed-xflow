@@ -37,6 +37,8 @@ function getNewNode(newNodeType) {
       return NodeInitAttribute.FlowReference
     case NodeType.SETPAYLOAD:
       return NodeInitAttribute.SetPayload
+    case NodeType.REQUEST:
+      return NodeInitAttribute.Request
     default:
       return null
   }
