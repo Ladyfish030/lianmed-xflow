@@ -17,9 +17,19 @@
         <GenerateXmlFileIcon />
       </button>
     </el-tooltip>
+    <el-tooltip content="XML转画布" placement="bottom" effect="dark">
+      <button class="tool-button" @click="generateXmlFile">
+        <XMLturnPaint />
+      </button>
+    </el-tooltip>
   </div>
 
-  <el-dialog v-model="xmlGeneratedResultVisible" title="XML" width="800" top="5vh">
+  <el-dialog
+    v-model="xmlGeneratedResultVisible"
+    title="XML"
+    width="800"
+    top="5vh"
+  >
     <div class="xml-container">
       <div class="xml-scrollbar-container">
         <el-scrollbar>
@@ -46,6 +56,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 
 import SaveFlowIcon from '@/assets/svg/SaveFlowIcon.vue'
 import GenerateXmlFileIcon from '@/assets/svg/GenerateXmlFileIcon.vue'
+import XMLturnPaint from '@/assets/svg/XMLturnPaint.vue'
 
 import HistoryCanvas from '@/components/flow/HistoryCanvas.vue'
 
@@ -54,7 +65,11 @@ import { getParentPos } from '@/hooks/useAdsorption'
 import { getGlobalConfig } from '@/hooks/useGlobalConfig'
 import { getFlowList } from '@/hooks/useNodeOfFlow'
 
-import { saveCanvas, updateCanvas, downloadXML } from '@/service/CanvasService.js'
+import {
+  saveCanvas,
+  updateCanvas,
+  downloadXML,
+} from '@/service/CanvasService.js'
 import { formatGenerateXmlData } from '@/service/dto/GenerateXmlDTO'
 
 const { toObject } = useVueFlow()
@@ -116,11 +131,10 @@ async function onSaveCanvas() {
           message: '取消保存',
         })
       })
-  }
-  else {
+  } else {
     await updateCanvas({
       id: String(currentCanvas.id),
-      canvas: canvas
+      canvas: canvas,
     })
       .then((res) => {
         ElMessage({
