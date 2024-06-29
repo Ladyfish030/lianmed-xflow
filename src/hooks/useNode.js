@@ -1,5 +1,7 @@
 import { ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
+import { NodeType } from '../enums/NodeType'
+import * as NodeInitAttribute from '../components/flow/nodes/attribute/NodeInitAttribute'
 
 const nodes = ref([])
 
@@ -38,6 +40,39 @@ function findAbsolutePositionByNodeId(nodeId) {
     return absolutePosition
 }
 
+function getNewNode(newNodeType) {
+    switch (newNodeType) {
+      case NodeType.FLOW:
+        return NodeInitAttribute.Flow
+      case NodeType.DATABASE:
+        return NodeInitAttribute.Database
+      case NodeType.WEBSERVICE:
+        return NodeInitAttribute.WebService
+      case NodeType.LISTENER:
+        return NodeInitAttribute.Listener
+      case NodeType.CHOICE:
+        return NodeInitAttribute.Choice
+      case NodeType.CHOICEWHEN:
+        return NodeInitAttribute.ChoiceWhen
+      case NodeType.CHOICEDEFAULT:
+        return NodeInitAttribute.ChoiceDefault
+      case NodeType.FOREACH:
+        return NodeInitAttribute.ForEach
+      case NodeType.SUBFLOW:
+        return NodeInitAttribute.SubFlow
+      case NodeType.LOGGER:
+        return NodeInitAttribute.Logger
+      case NodeType.FLOWREFERENCE:
+        return NodeInitAttribute.FlowReference
+      case NodeType.SETPAYLOAD:
+        return NodeInitAttribute.SetPayload
+      case NodeType.REQUEST:
+        return NodeInitAttribute.Request
+      default:
+        return null
+    }
+  }
+
 export {
     nodes,
     getNodeId,
@@ -45,4 +80,5 @@ export {
     addNode,
     findAncestorsNodeById,
     findAbsolutePositionByNodeId,
+    getNewNode,
 }

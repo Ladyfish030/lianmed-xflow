@@ -1,8 +1,9 @@
 import { ref } from 'vue'
-import { addNode, findNodeById, getNodeId } from '@/hooks/useNode'
+import { NodeType } from '@/enums/NodeType'
+
+import { addNode, findNodeById, getNodeId, getNewNode } from '@/hooks/useNode'
 import { generateUniqueFlowName } from '@/hooks/useNodeOfFlow'
 import { dragAdsorption, dragPasteAdsorption } from '@/hooks/useAdsorption'
-import { NodeType } from '@/enums/NodeType'
 
 const nodeMenuVisible = ref(false)
 const edgeMenuVisible = ref(false)
@@ -140,11 +141,45 @@ function pasteNodeOnFlow() {
   }
 
   temporaryParentNode = findNodeById(temporaryParentNode.id)
+
   let pos = {
     layerX: temporaryParentNode.position.x,
     layerY: temporaryParentNode.position.y,
   }
   dragAdsorption(temporaryParentNode, pos)
+
+
+  if (temporaryParentNode.type !== NodeType.FLOW && temporaryParentNode.type !== NodeType.SUBFLOW) {
+    const nodeId = getNodeId()
+    var flowNode = JSON.parse(JSON.stringify(getNewNode(NodeType.FLOW)))
+    flowNode = {
+      id: nodeId,
+      type: NodeType.FLOW,
+      data: flowNode.data,
+      position: {
+        x: temporaryParentNode.position.x - 1,
+        y: temporaryParentNode.position.y - 1,
+      },
+      dimensions: flowNode.dimensions,
+      initDimensions: flowNode.initDimensions,
+      style: {
+        width: `${flowNode.dimensions.width}px`,
+        height: `${flowNode.dimensions.height}px`,
+      },
+      adsorption: flowNode.adsorption,
+    }
+    flowNode.data.displayName = generateUniqueFlowName()
+    if (flowNode.adsorption) {
+      flowNode.childNodes = []
+    }
+    addNode(flowNode)
+    let pos = {
+      layerX: flowNode.position.x,
+      layerY: flowNode.position.y,
+    }
+    dragAdsorption(flowNode, pos)
+    dragPasteAdsorption(temporaryParentNode, flowNode)
+  }
 }
 
 function pasteNodeIntoNode() {

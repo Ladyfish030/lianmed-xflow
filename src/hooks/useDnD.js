@@ -7,42 +7,9 @@ import {
   updateNodePosAddWhenNode,
   dragPasteAdsorption,
 } from './useAdsorption'
-import * as NodeInitAttribute from '../components/flow/nodes/attribute/NodeInitAttribute'
-import { findNodeById, getNodeId } from './useNode'
+import { findNodeById, getNodeId, getNewNode } from './useNode'
 import { generateUniqueFlowName } from './useNodeOfFlow'
 
-function getNewNode(newNodeType) {
-  switch (newNodeType) {
-    case NodeType.FLOW:
-      return NodeInitAttribute.Flow
-    case NodeType.DATABASE:
-      return NodeInitAttribute.Database
-    case NodeType.WEBSERVICE:
-      return NodeInitAttribute.WebService
-    case NodeType.LISTENER:
-      return NodeInitAttribute.Listener
-    case NodeType.CHOICE:
-      return NodeInitAttribute.Choice
-    case NodeType.CHOICEWHEN:
-      return NodeInitAttribute.ChoiceWhen
-    case NodeType.CHOICEDEFAULT:
-      return NodeInitAttribute.ChoiceDefault
-    case NodeType.FOREACH:
-      return NodeInitAttribute.ForEach
-    case NodeType.SUBFLOW:
-      return NodeInitAttribute.SubFlow
-    case NodeType.LOGGER:
-      return NodeInitAttribute.Logger
-    case NodeType.FLOWREFERENCE:
-      return NodeInitAttribute.FlowReference
-    case NodeType.SETPAYLOAD:
-      return NodeInitAttribute.SetPayload
-    case NodeType.REQUEST:
-      return NodeInitAttribute.Request
-    default:
-      return null
-  }
-}
 /**
  * In a real world scenario you'd want to avoid creating refs in a global scope like this as they might not be cleaned up properly.
  * @type {{draggedType: Ref<string|null>, isDragOver: Ref<boolean>, isDragging: Ref<boolean>}}
@@ -257,7 +224,6 @@ export default function useDragAndDrop() {
         layerX: dragNode.position.x,
         layerY: dragNode.position.y,
       }
-      console.log(1111111)
       dragAdsorption(dragNode, pos)
     }
   }

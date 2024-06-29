@@ -133,6 +133,7 @@ function tipsHideHandler() {
 
 .scrollbar-item-text {
     width: 90px;
+    line-height: 1.5;
     font-size: 12px;
     color: #363636;
 }

@@ -3,6 +3,7 @@ import { useVueFlow } from '@vue-flow/core'
 import { getParentPos, setParentPos } from './useAdsorption'
 import { getGlobalConfig, setGlobalConfig } from './useGlobalConfig'
 import { getFlowList, setFlowList } from '@/hooks/useNodeOfFlow'
+import { findNodeById, nodes } from './useNode'
 
 const state = {
     canvasList: ref([]),
