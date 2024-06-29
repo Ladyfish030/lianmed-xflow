@@ -58,7 +58,14 @@ function clickHandler(e) {
   canvasMenuVisible.value = false
 }
 </script>
-
+<style>
+.vue-flow .vue-flow__edges {
+  z-index: 2000 !important;
+}
+.vue-flow__edges {
+  z-index: 2000 !important;
+}
+</style>
 <style scoped>
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.33.4/dist/style.css';
 @import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.33.4/dist/theme-default.css';

@@ -47,6 +47,8 @@ declare module 'vue' {
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElText: typeof import('element-plus/es')['ElText']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
+    ElUpload: typeof import('element-plus/es')['ElUpload']
+    FileUpload: typeof import('./src/components/flow/FileUpload.vue')['default']
     Flow: typeof import('./src/components/flow/nodes/Flow.vue')['default']
     FlowDrawer: typeof import('./src/components/flow/FlowDrawer.vue')['default']
     FlowEdgeMenu: typeof import('./src/components/flow/FlowEdgeMenu.vue')['default']

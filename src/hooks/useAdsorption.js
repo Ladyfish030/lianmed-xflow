@@ -1,20 +1,37 @@
 import { NodeType } from '../enums/NodeType'
 import { findNodeById } from './useNode'
-import { updateEdge } from './useEdge'
+import {
+  updateEdge,
+  removeEdgeById,
+  findEdgeBySource,
+  findEdgeByTarget,
+  onConnect,
+  findEdgeBySourceTarget,
+} from './useEdge'
 
 //存储吸附位置
 let parentNodePosition = []
 
 //拉动节点判断是否进行吸附
-function dragAdsorption(node, pos) {
+function dragAdsorption(node, pos, oldRemPos) {
   let hasParentNode = false
+  let remPos = {}
+  let nowHasParentNode = false
   if (node.parentNode) {
     hasParentNode = true
-    removeNodeAdsorption(node.id)
-    let { x, y } = getTruePos(findNodeById(node.parentNode))
-    node.parentNode = null
+    let parentNode = findNodeById(node.parentNode)
+    let { x, y } = getTruePos(parentNode)
+    if (remPos) {
+      remPos.layerX = oldRemPos.layerX + x
+      remPos.layerY = oldRemPos.layerY + y
+    } else {
+      remPos.layerX = node.position.x + x
+      remPos.layerY = 30 + y
+    }
     pos.layerX = pos.layerX + x
     pos.layerY = pos.layerY + y
+    removeNodeAdsorption(node.id)
+    node.parentNode = null
   }
   if (node.type == NodeType.CHOICEWHEN || node.type == NodeType.CHOICEDEFAULT) {
     return
@@ -37,7 +54,6 @@ function dragAdsorption(node, pos) {
       // !isChild(node, item.id)
     ) {
       if (node.type == NodeType.FLOW) {
-        console.log(1111)
         ElMessage({
           message: '流程节点不可被吸附',
           type: 'warning',
@@ -51,7 +67,7 @@ function dragAdsorption(node, pos) {
         })
         return
       }
-
+      nowHasParentNode = true
       let parentNode = findNodeById(item.id)
       let { width, height } = setNodePos(node, parentNode, pos) //放置新节点的位置
       // node.draggable = false
@@ -62,12 +78,20 @@ function dragAdsorption(node, pos) {
       updateParentNodeStyle(node, parentNode, width, height)
       updateParentNode(node) //更新祖上节点的parentNodePos和位置
       // updateChildNodeAdsorptionPos(node) //更新孩子节点的parentNodePos
+      // addEdge(node)
       return
     }
   }
-  if (hasParentNode) {
-    node.position.x = pos.layerX
-    node.position.y = pos.layerY
+  if (hasParentNode && !nowHasParentNode) {
+    // node.position.x = pos.layerX
+    // node.position.y = pos.layerY
+    ElMessage({
+      message: '节点不可放置于flow流程外',
+      type: 'warning',
+    })
+    // console.log(12313)
+    // console.log(JSON.stringify(parentNodePosition))
+    dragAdsorption(node, remPos)
   }
 }
 //粘贴节点 一定吸附 node：需要吸附的copy节点 parentNode:被吸附的节点
@@ -80,7 +104,6 @@ function dragPasteAdsorption(node, parentNode) {
     return
   }
   if (node.type == NodeType.FLOW) {
-    console.log(1111)
     ElMessage({
       message: '流程节点不可被吸附',
       type: 'warning',
@@ -114,17 +137,55 @@ function dragPasteAdsorption(node, parentNode) {
   //更新父节点的大小
   updateParentNodeStyle(node, parentNode, width, height)
   updateParentNode(node, parentNode) //更新祖上节点的parentNodePos和位置
+  // addEdge(node)
 }
-function isChild(node, isChildId) {
-  if (node.adsorption || node.type == NodeType.CHOICE) {
-    for (let childNodeId of node.childNodes) {
-      if (childNodeId == isChildId) {
-        //则不考虑这个item
-        return true
-      }
+function removeEdge(node, deleteNode = false) {
+  let oldPrevNodeId = undefined,
+    oldNextNodeId = undefined,
+    oldPrevEdge = findEdgeByTarget(node.id),
+    oldNextEdge = findEdgeBySource(node.id)
+  if (oldPrevEdge) {
+    oldPrevNodeId = oldPrevEdge.source
+    removeEdgeById(oldPrevEdge.id)
+  }
+  if (oldNextEdge) {
+    oldNextNodeId = oldNextEdge.target
+    removeEdgeById(oldNextEdge.id)
+  }
+  if (deleteNode) {
+    if ((oldPrevNodeId, oldNextNodeId)) {
+      onConnect({ source: oldPrevNodeId, target: oldNextNodeId })
     }
   }
-  return false
+  // if ((oldPrevNodeId, oldNextNodeId)) {
+  // onConnect({ source: oldPrevNodeId, target: oldNextNodeId })
+  // }
+}
+function addEdge(node) {
+  removeEdge(node)
+  if (node.parentNode) {
+    let childNodeIds = findNodeById(node.parentNode)
+      ? findNodeById(node.parentNode).childNodes
+      : []
+    let sourceId = undefined,
+      targetId = undefined
+    for (let i = 0, len = childNodeIds.length; i < len; i++) {
+      if (childNodeIds[i] === node.id) {
+        if (i > 0) sourceId = childNodeIds[i - 1]
+        if (i < len - 1) targetId = childNodeIds[i + 1]
+      }
+    }
+    if (sourceId && targetId) {
+      let nowEdge = findEdgeBySourceTarget(sourceId, targetId)
+      if (nowEdge) removeEdgeById(nowEdge.id)
+    }
+    if (sourceId) {
+      onConnect({ source: sourceId, target: node.id })
+    }
+    if (targetId) {
+      onConnect({ source: node.id, target: targetId })
+    }
+  }
 }
 //由于子节点的position是相对父节点的，该函数可以拿到子节点真正的position
 function getTruePos(node, parentNode) {
@@ -162,7 +223,10 @@ function getLastPos(node, parentNode) {
     }
     let positionY =
       (parseInt(parentNode.style.height) -
-        parseInt(node.initDimensions.height)) /
+        Math.max(
+          parseInt(node.initDimensions.height),
+          parseInt(node.style.height)
+        )) /
       2
     y = positionY > 30 ? positionY : 30
     node.position.x = x
@@ -170,6 +234,7 @@ function getLastPos(node, parentNode) {
     let parentWidth = x + parseInt(node.style.width) + 20
     let parentHeight = y + parseInt(node.style.height) + y
     parentNode.childNodes.push(node.id)
+    node.parentNode = parentNode.id
     return {
       width: parentWidth - parseInt(parentNode.style.width),
       height: parentHeight - parseInt(parentNode.style.height),
@@ -178,12 +243,15 @@ function getLastPos(node, parentNode) {
 }
 function setNodePos(node, parentNode, pos) {
   // console.log(12314)
-  let childNodes = parentNode.childNodes
+  let childNodes = parentNode.childNodes ? parentNode.childNodes : []
   let len = childNodes.length
   let changeWidth = 0
   //若posX大于nodeId左边界值，返回true
   function compareMaxX(nodeId, posX) {
     let compareNode = findNodeById(nodeId)
+    if (!compareNode) {
+      return true
+    }
     let { x } = getTruePos(compareNode, parentNode)
     if (posX > x) {
       return true
@@ -314,7 +382,7 @@ function updateChildNodeAdsorptionPos(node) {
             item.xMax = x + parseInt(childNode.style.width)
             item.yMin = y
             item.yMax = y + parseInt(childNode.style.height)
-            updateChildNodeAdsorptionPos(childNode)
+            // updateChildNodeAdsorptionPos(childNode)
             break
           }
         }
@@ -328,8 +396,9 @@ function updateChildNodeAdsorptionPos(node) {
           id: childNode.id,
         }
         parentNodePosition.push(pos)
-        updateChildNodeAdsorptionPos(childNode)
+        // updateChildNodeAdsorptionPos(childNode)
       }
+      updateChildNodeAdsorptionPos(childNode)
     } else if (childNode.type == NodeType.CHOICE) {
       updateChildNodeAdsorptionPos(childNode)
     }
@@ -382,6 +451,9 @@ function updateWidthChoice(parentNode) {
   let childNode
   for (let item of childNodes) {
     childNode = findNodeById(item)
+    if (!childNode) {
+      break
+    }
     if (parseInt(childNode.style.width) + 70 > maxWidth) {
       maxWidth = parseInt(childNode.style.width) + 70
     }
@@ -427,8 +499,8 @@ function updateHeightExceptChoice(parentNode, node) {
     } else {
       childNode = findNodeById(item)
     }
-    if (parseInt(childNode.style.height) + 50 > maxHeight) {
-      maxHeight = parseInt(childNode.style.height) + 50
+    if (childNode && parseInt(childNode.style.height) + 60 > maxHeight) {
+      maxHeight = parseInt(childNode.style.height) + 60
     }
   }
   let oldHeight = parseInt(parentNode.style.height)
@@ -461,8 +533,8 @@ function updateDeleteHeightExceptChoice(parentNode, node) {
   for (let item of childNodes) {
     if (item != node.id) {
       childNode = findNodeById(item)
-      if (parseInt(childNode.style.height) + 50 > maxHeight) {
-        maxHeight = parseInt(childNode.style.height) + 50
+      if (parseInt(childNode.style.height) + 60 > maxHeight) {
+        maxHeight = parseInt(childNode.style.height) + 60
       }
     }
   }
@@ -509,7 +581,7 @@ function updateWidthExceptChoice(node, parentNode, width) {
   return width
 }
 function updateNodePosAddWhenNode(whenNode, parentNode) {
-  let { x, y } = getTruePos(whenNode)
+  let { x, y } = getTruePos(whenNode, parentNode)
   let pos = {
     xMin: x,
     xMax: x + whenNode.dimensions.width,
@@ -522,7 +594,7 @@ function updateNodePosAddWhenNode(whenNode, parentNode) {
     whenNode,
     parentNode,
     0,
-    whenNode.dimensions.height + 20
+    whenNode.dimensions.height + 30
   )
   updateParentNode(parentNode) //更新祖上节点的parentNodePos和位置
   updateChildNodeAdsorptionPos(whenNode) //更新孩子节点的parentNodePos
@@ -537,7 +609,7 @@ function removeNodeAdsorption(deleteNodeId) {
       node,
       parentNode,
       0 - parseInt(node.style.width) - 20,
-      0 - parseInt(node.style.height) - 20
+      0 - parseInt(node.style.height) - 30
     )
     parentNode.childNodes.splice(
       parentNode.childNodes.findIndex((i) => i == deleteNodeId),
@@ -545,6 +617,7 @@ function removeNodeAdsorption(deleteNodeId) {
     )
   }
   removeParentNode(node)
+  removeEdge(node, true)
 }
 //删除可吸附节点
 function removeParentNode(node) {
