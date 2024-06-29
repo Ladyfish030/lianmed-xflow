@@ -10,10 +10,10 @@
     </template>
     <el-table :data="historyCanvasList" v-loading="loading" border size="small" style="width: fit-content;"
       max-height="300">
-      <el-table-column label="画布名" width="150">
+      <el-table-column label="业务名" width="150">
         <template #default="scope">
           <div class="cell-content">
-            <el-text v-if="editingIndex !== scope.$index" size="small" class="text-content" truncated>
+            <el-text v-if="editingIndex !== scope.$index" size="small" style="width: 100%;" truncated>
               {{ scope.row.name }}
             </el-text>
             <el-input v-else v-model="editingContent" size="small" class="input-content"
@@ -222,7 +222,6 @@ onBeforeUnmount(() => {
   width: 100%;
 }
 
-.text-content,
 .input-content {
   height: 100%;
   display: -webkit-box;

@@ -1,55 +1,57 @@
 <template>
-  <div class="form-container">
-    <div class="database-container">
-      <div class="database-span-container">
-        <span class="database-span">数据库配置</span>
-      </div>
-      <div class="database-right-container">
-        <div class="scrollbar-container">
-          <el-scrollbar>
-            <div class="database-button-container" v-for="(item, index) in databaseConfigList" :key="index">
-              <el-button class="database-button" plain @click="showDatabaseConfig(item)" type="primary">
-                <el-text class="database-text" truncated>
-                  {{ item.name }}
-                </el-text>
-              </el-button>
-              <el-button class="delete-button" @click="removeDatabaseConfigHandler(item.name)">
-                <el-icon :size="20" color="#f89898">
-                  <Delete />
-                </el-icon>
-              </el-button>
-            </div>
-          </el-scrollbar>
+  <el-scrollbar>
+    <div class="form-container">
+      <div class="database-container">
+        <div class="database-span-container">
+          <span class="database-span">数据库配置</span>
         </div>
-        <div class="add-button-container">
-          <ChoiceAddIcon class="add-button" @click="handleBeforeAddDatabaseConfig" />
+        <div class="database-right-container">
+          <div class="scrollbar-container">
+            <el-scrollbar>
+              <div class="database-button-container" v-for="(item, index) in databaseConfigList" :key="index">
+                <el-button class="database-button" plain @click="showDatabaseConfig(item)" type="primary">
+                  <el-text class="database-text" truncated>
+                    {{ item.name }}
+                  </el-text>
+                </el-button>
+                <el-button class="delete-button" @click="removeDatabaseConfigHandler(item.name)">
+                  <el-icon :size="20" color="#f89898">
+                    <Delete />
+                  </el-icon>
+                </el-button>
+              </div>
+            </el-scrollbar>
+          </div>
+          <div class="add-button-container">
+            <ChoiceAddIcon class="add-button" @click="handleBeforeAddDatabaseConfig" />
+          </div>
         </div>
       </div>
+      <el-divider class="divider" />
+      <div class="form-item">
+        <label>操作</label>
+        <el-select v-model="operation" placeholder="" class="input-field">
+          <el-option v-for="(item, index) in databaseOperationList" :key="index" :label="item" :value="item" />
+        </el-select>
+      </div>
+      <div class="form-item">
+        <label>数据库连接</label>
+        <el-select v-model="connectorConfiguration" placeholder="" class="input-field">
+          <el-option v-for="(item, index) in databaseConfigList" :key="index" :label="item.name" :value="item.name" />
+        </el-select>
+      </div>
+      <div class="form-item">
+        <label>SQL执行语句</label>
+        <el-input v-model="sqlCommand" autosize type="textarea" resize="none" class="input-field"></el-input>
+      </div>
+      <div class="form-item">
+        <label>输入参数</label>
+        <el-input v-model="inputParameters" autosize type="textarea" resize="none" class="input-field"></el-input>
+      </div>
     </div>
-    <el-divider class="divider" />
-    <div class="form-item">
-      <label>操作</label>
-      <el-select v-model="operation" placeholder="" class="input-field">
-        <el-option v-for="(item, index) in databaseOperationList" :key="index" :label="item" :value="item" />
-      </el-select>
-    </div>
-    <div class="form-item">
-      <label>数据库连接</label>
-      <el-select v-model="connectorConfiguration" placeholder="" class="input-field">
-        <el-option v-for="(item, index) in databaseConfigList" :key="index" :label="item.name" :value="item.name" />
-      </el-select>
-    </div>
-    <div class="form-item">
-      <label>SQL执行语句</label>
-      <el-input v-model="sqlCommand" autosize type="textarea" class="input-field"></el-input>
-    </div>
-    <div class="form-item">
-      <label>输入参数</label>
-      <el-input v-model="inputParameters" autosize type="textarea" class="input-field"></el-input>
-    </div>
-  </div>
+  </el-scrollbar>
 
-  <el-dialog v-model="databaseFormVisible" title="数据库属性" width="400">
+  <el-dialog v-model="databaseFormVisible" title="数据库属性" width="400" :close-on-click-modal="false">
     <el-form :model="databaseConfigForm">
       <el-form-item label="名称" :label-width="formLabelWidth">
         <el-input v-model="databaseConfigForm.name" autocomplete="off" />
@@ -437,14 +439,16 @@ watch(isSave, (newValue, oldValue) => {
 
 <style scoped>
 .form-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  gap: 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    gap: 20px;
+    width: 95%;
+    margin-left: 2%;
 }
 
 .database-container {

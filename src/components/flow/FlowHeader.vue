@@ -6,7 +6,7 @@
       </button>
     </el-tooltip>
 
-    <el-tooltip content="历史画布" placement="top" effect="dark">
+    <el-tooltip content="历史业务流" placement="top" effect="dark">
       <div>
         <HistoryCanvas />
       </div>

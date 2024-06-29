@@ -288,6 +288,37 @@ const SetPayload = {
   adsorption: false,
 }
 
+// 定义 Request 初始化属性
+const Request = {
+  id: '',
+  type: '',
+  data: {
+    displayName: 'Request',
+    connectorConfiguration: '',
+    method: '',
+    path: '',
+    url: '',
+    body: '',
+    headers: [],
+    queryParameters: [],
+    urlParameters: [],
+  },
+  position: {
+    x: 0,
+    y: 0,
+  },
+  dimensions: {
+    width: 70,
+    height: 70,
+  },
+  initDimensions: {
+    width: 70,
+    height: 70,
+  },
+  parentNode: '',
+  adsorption: false,
+}
+
 export {
   Flow,
   Database,
@@ -301,4 +332,5 @@ export {
   Logger,
   FlowReference,
   SetPayload,
+  Request,
 }

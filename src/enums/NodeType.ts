@@ -11,4 +11,5 @@ export enum NodeType {
     LOGGER = 'Logger',
     FLOWREFERENCE = 'FlowReference',
     SETPAYLOAD = 'SetPayload',
+    REQUEST = 'Request',
 }

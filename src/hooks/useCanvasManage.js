@@ -17,7 +17,7 @@ export default function useCanvasManage() {
   const { toObject, fromObject } = useVueFlow()
 
   function generateCanvasName() {
-    let baseName = '新建画布'
+    let baseName = '新建业务流'
     let index = 1
     let newName = baseName + `${index}`
 

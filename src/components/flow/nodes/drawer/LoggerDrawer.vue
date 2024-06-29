@@ -1,16 +1,18 @@
 <template>
-    <div class="form-container">
-        <div class="form-item">
-            <label>消息</label>
-            <el-input v-model="message" autosize type="textarea" class="input-field"></el-input>
+    <el-scrollbar>
+        <div class="form-container">
+            <div class="form-item">
+                <label>消息</label>
+                <el-input v-model="message" autosize type="textarea" resize="none" class="input-field"></el-input>
+            </div>
+            <div class="form-item">
+                <label>等级</label>
+                <el-select v-model="level" placeholder="" class="input-field">
+                    <el-option v-for="(item, index) in levelList" :key="index" :label="item" :value="item" />
+                </el-select>
+            </div>
         </div>
-        <div class="form-item">
-            <label>等级</label>
-            <el-select v-model="level" placeholder="" class="input-field">
-                <el-option v-for="(item, index) in levelList" :key="index" :label="item" :value="item" />
-            </el-select>
-        </div>
-    </div>
+    </el-scrollbar>
 </template>
 
 <script setup>
@@ -62,6 +64,8 @@ watch(isSave, (newValue, oldValue) => {
     -ms-flex-direction: column;
     flex-direction: column;
     gap: 20px;
+    width: 95%;
+    margin-left: 2%;
 }
 
 .form-item {

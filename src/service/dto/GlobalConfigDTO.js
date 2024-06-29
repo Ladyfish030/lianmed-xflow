@@ -71,3 +71,16 @@ export function formatListener(config) {
         basePath: config.basePath,
     }
 }
+
+export function formatRequest(config) {
+    return {
+        id: config.id,
+        name: config.name,
+        type: config.type,
+        protocol: config.protocol,
+        host: config.host,
+        port: config.port,
+        basePath: config.basePath,
+        ConnectionIdleTimeout: config.ConnectionIdleTimeout
+    }
+}

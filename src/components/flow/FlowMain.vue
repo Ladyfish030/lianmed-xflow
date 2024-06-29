@@ -48,6 +48,7 @@ import SubFlow from '@/components/flow/nodes/SubFlow.vue'
 import Logger from '@/components/flow/nodes/Logger.vue'
 import FlowReference from '@/components/flow/nodes/FlowReference.vue'
 import SetPayload from './nodes/SetPayload.vue'
+import Request from './nodes/Request.vue'
 
 import { NodeType } from '@/enums/NodeType'
 import useDragAndDrop from '@/hooks/useDnD'
@@ -81,29 +82,29 @@ const {
   addWhenNode,
 } = useDragAndDrop()
 
-const { currentCanvasIndex, getCurrentCanvas, isShowEditFlag } =
-  useCanvasManage()
+const { getCurrentCanvas, isShowEditFlag } = useCanvasManage()
 
 const { findNode, removeNodes, screenToFlowCoordinate } = useVueFlow()
 
 const nodeTypes = {
+<<<<<<< HEAD
   [NodeType.FLOW]: markRaw(Flow),
   [NodeType.DATABASE]: markRaw(Database),
   [NodeType.WEBSERVICE]: markRaw(WebService),
   [NodeType.LISTENER]: markRaw(Listener),
-  [NodeType.CHOICE]: markRaw(Choice),
-  [NodeType.CHOICEWHEN]: markRaw(ChoiceWhen),
-  [NodeType.CHOICEDEFAULT]: markRaw(ChoiceDefault),
-  [NodeType.FOREACH]: markRaw(ForEach),
-  [NodeType.SUBFLOW]: markRaw(SubFlow),
-  [NodeType.LOGGER]: markRaw(Logger),
-  [NodeType.FLOWREFERENCE]: markRaw(FlowReference),
-  [NodeType.SETPAYLOAD]: markRaw(SetPayload),
+    [NodeType.CHOICEWHEN]: markRaw(ChoiceWhen),
+    [NodeType.CHOICEDEFAULT]: markRaw(ChoiceDefault),
+    [NodeType.FOREACH]: markRaw(ForEach),
+    [NodeType.SUBFLOW]: markRaw(SubFlow),
+    [NodeType.LOGGER]: markRaw(Logger),
+    [NodeType.FLOWREFERENCE]: markRaw(FlowReference),
+    [NodeType.SETPAYLOAD]: markRaw(SetPayload),
+    [NodeType.REQUEST]: markRaw(Request),
+>>>>>>> f07de77aa1f29131e5dc6692b5df0df96fb8e8c6
 }
 
 function nodeClickHandler(e) {
   console.log('点击节点：', e.node)
-}
 
 function nodeDoubleClickHandler(e) {
   drawerClickNode.value = findNode(e.node.id)
@@ -182,7 +183,7 @@ watch(deleteNodeConfirm, (newValue, oldValue) => {
       deleteNode.value.type == NodeType.FLOW ||
       deleteNode.value.type == NodeType.SUBFLOW
     ) {
-      
+
       nodes.value.forEach((node, index) => {
         if (
           node.type == NodeType.FLOWREFERENCE &&

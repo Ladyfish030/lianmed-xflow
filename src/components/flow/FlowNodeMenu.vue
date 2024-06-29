@@ -20,6 +20,7 @@ import FlowMenu from '../flow/nodes/menu/FlowMenu.vue'
 import LoggerMenu from '../flow/nodes/menu/LoggerMenu.vue'
 import FlowReferenceMenu from '../flow/nodes/menu/FlowReferenceMenu.vue'
 import SetPayloadMenu from '../flow/nodes/menu/SetPayloadMenu.vue'
+import RequestMenu from '../flow/nodes/menu/RequestMenu.vue'
 
 const currentMenu = computed(() => {
   switch (menuClickNode.value.type) {
@@ -47,6 +48,8 @@ const currentMenu = computed(() => {
       return FlowReferenceMenu
     case NodeType.SETPAYLOAD:
       return SetPayloadMenu
+    case NodeType.REQUEST:
+      return RequestMenu
     default:
       return null
   }

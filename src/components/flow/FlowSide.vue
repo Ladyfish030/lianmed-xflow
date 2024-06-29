@@ -86,6 +86,14 @@ function searchClearHandler() {
               </el-icon>Listener
             </el-button>
           </div>
+          <div class="node-container">
+            <el-button class="node" type="info" plain :draggable="true"
+              @dragstart="onDragStart($event, NodeType.REQUEST)">
+              <el-icon>
+                <Grid />
+              </el-icon>Request
+            </el-button>
+          </div>
         </el-sub-menu>
         <el-sub-menu index="2" v-if="!isSearch">
           <template #title>
