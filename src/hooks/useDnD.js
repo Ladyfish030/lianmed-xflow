@@ -7,7 +7,7 @@ import {
   updateNodePosAddWhenNode,
   dragPasteAdsorption,
 } from './useAdsorption'
-import { findNodeById, getNodeId, getNewNode } from './useNode'
+import { addNode, findNodeById, getNodeId, getNewNode } from './useNode'
 import { generateUniqueFlowName } from './useNodeOfFlow'
 
 /**
@@ -115,6 +115,7 @@ export default function useDragAndDrop() {
     initFlow(newNode)
     addNodes(newNode)
   }
+
   //将json转成画布上的点
   function jsonTurnNode(nodeObj, pos, parentNode) {
     const nodeId = getNodeId()
@@ -142,18 +143,12 @@ export default function useDragAndDrop() {
       layerX: newNode.position.x,
       layerY: newNode.position.y,
     }
-    // nodes.value.push(newNode)
-    // await nextTick()
     if (!parentNode) {
       dragAdsorption(newNode, posLayer)
     }
     if (newNode.type == NodeType.SUBFLOW) {
       newNode.data.displayName = generateUniqueFlowName()
     }
-    // if (newNode.type == NodeType.CHOICE) {
-    //   newNode.childNodes = []
-    //   newNode.defaultNode = initChoice(newNode)
-    // }
     let defaultNode
     if (newNode.type == NodeType.CHOICE) {
       newNode.childNodes = []
@@ -163,21 +158,16 @@ export default function useDragAndDrop() {
 
     if (parentNode) {
       dragPasteAdsorption(newNode, parentNode)
-      // newNode.parentNode = parentNode.id
     }
 
-    // addNodes(newNode)
     addNode(newNode)
     if (newNode.type == NodeType.CHOICE) {
       return [defaultNode, newNode]
     }
 
-    // if (!findNodeById(newNode.id)) {
-    // nodes.value.push(newNode)
-    // }
-
     return [newNode]
   }
+
   function initFlow(newNode) {
     if (newNode.parentNode != undefined || newNode.type == NodeType.SUBFLOW) {
       return
@@ -241,6 +231,7 @@ export default function useDragAndDrop() {
     node.childNodes.push(defaultNodeId)
     return defaultNodeId
   }
+  
   function initChoiceJson(node) {
     var defaultNode = getNewNode(NodeType.CHOICEDEFAULT)
     const defaultNodeId = getNodeId()
@@ -263,18 +254,12 @@ export default function useDragAndDrop() {
     })
     defaultNode.childNodes = []
     updateParentNode(defaultNode, node)
-    // addNodes(defaultNode)
-
-    // nextTick(() => )
-    // if (!findNodeById(defaultNode.id)) {
-    // nodes.value.push(defaultNode)
-    // }
-    // addNodes(defaultNode)
     addNode(defaultNode)
-    // nodes.value.push(defaultNode)
     node.childNodes.push(defaultNodeId)
+
     return defaultNode
   }
+
   function addWhenNode(parentNodeId) {
     let parentNode = findNodeById(parentNodeId)
     var whenNode = getNewNode(NodeType.CHOICEWHEN)
@@ -303,6 +288,7 @@ export default function useDragAndDrop() {
     updateNodePosAddWhenNode(whenNode, parentNode)
     parentNode.childNodes.push(whenNodeId)
   }
+
   function addWhenNodeJson(parentNode, nodeJson) {
     var whenNode = getNewNode(NodeType.CHOICEWHEN)
     const whenNodeId = getNodeId()
@@ -326,19 +312,11 @@ export default function useDragAndDrop() {
       childNodes: nodeJson.childNodes,
       data: nodeJson.data,
     })
-    // addNodes(whenNode)
 
-    // nextTick(() => {
-
-    // })
     updateNodePosAddWhenNode(whenNode, parentNode)
     parentNode.childNodes.push(whenNodeId)
-    // if (!findNodeById(whenNode.id)) {
-    // nodes.value.push(whenNode)
-    // }
-    // nodes.value.push(whenNode)
-    // addNodes(whenNode)
     addNode(whenNode)
+
     return [whenNode]
   }
   let remPos = {}
