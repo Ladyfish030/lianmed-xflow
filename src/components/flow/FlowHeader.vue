@@ -18,7 +18,7 @@
       </button>
     </el-tooltip>
     <el-tooltip content="XML转画布" placement="bottom" effect="dark">
-      <button class="tool-button" @click="generateXmlFile">
+      <button class="tool-button" @click="xmlTurnPaint">
         <XMLturnPaint />
       </button>
     </el-tooltip>
@@ -47,17 +47,31 @@
       </div>
     </template>
   </el-dialog>
+  <el-dialog
+    v-model="isFileUploadShow"
+    title="XML文件转业务流"
+    width="300"
+    align-center="center"
+  >
+    <file-upload></file-upload>
+    <!-- <template #footer>
+      <div>
+        <el-button @click="copyToClipboard">复制</el-button>
+        <el-button type="primary" @click="downloadXmlFile">下载</el-button>
+      </div>
+    </template> -->
+  </el-dialog>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, h } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, ElUpload } from 'element-plus'
 
 import SaveFlowIcon from '@/assets/svg/SaveFlowIcon.vue'
 import GenerateXmlFileIcon from '@/assets/svg/GenerateXmlFileIcon.vue'
 import XMLturnPaint from '@/assets/svg/XMLturnPaint.vue'
-
+import FileUpload from '@/components/flow/FileUpload.vue'
 import HistoryCanvas from '@/components/flow/HistoryCanvas.vue'
 
 import useCanvasManage from '@/hooks/useCanvasManage'
@@ -72,6 +86,7 @@ import {
 } from '@/service/CanvasService.js'
 import { formatGenerateXmlData } from '@/service/dto/GenerateXmlDTO'
 
+let isFileUploadShow = ref(false)
 const { toObject } = useVueFlow()
 const { canvasList, getCurrentCanvas } = useCanvasManage()
 const xmlGeneratedResultVisible = ref(false)
@@ -201,6 +216,23 @@ function downloadXmlFile() {
   a.click()
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
+}
+let checked = ref()
+function xmlTurnPaint() {
+  isFileUploadShow.value = true
+  // await ElMessageBox({
+  //   title: '请点击上传XML文件',
+  //   showConfirmButton: false,
+  //   message: () =>
+  //     h(FileUpload, {
+  //       modelValue: checked.value,
+  //       'onUpdate:modelValue': (val) => {
+  //         checked.value = val
+  //       },
+  //     }),
+  // }).then(({ value }) => {
+  //   console.log(value)
+  // })
 }
 </script>
 

@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue'
+import { nextTick, reactive, ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { NodeType } from '../enums/NodeType'
 import {
@@ -24,7 +24,7 @@ const state = {
 
 export default function useDragAndDrop() {
   const { draggedId, draggedType, isDragOver, isDragging, newNodeType } = state
-  const { screenToFlowCoordinate, addNodes } = useVueFlow()
+  const { screenToFlowCoordinate, addNodes, findNode } = useVueFlow()
 
   watch(isDragging, (dragging) => {
     document.body.style.userSelect = dragging ? 'none' : ''
@@ -115,7 +115,69 @@ export default function useDragAndDrop() {
     initFlow(newNode)
     addNodes(newNode)
   }
+  //将json转成画布上的点
+  function jsonTurnNode(nodeObj, pos, parentNode) {
+    const nodeId = getNodeId()
+    if (nodeObj.type === NodeType.CHOICEWHEN) {
+      return addWhenNodeJson(parentNode, nodeObj)
+    }
+    var newNode = JSON.parse(JSON.stringify(getNewNode(nodeObj.type)))
+    newNode = reactive({
+      id: nodeId,
+      type: nodeObj.type,
+      data: nodeObj.data,
+      position: pos,
+      dimensions: newNode.dimensions,
+      initDimensions: newNode.initDimensions,
+      style: {
+        width: `${newNode.dimensions.width}px`,
+        height: `${newNode.dimensions.height}px`,
+      },
+      adsorption: newNode.adsorption,
+    })
+    if (nodeObj.childNodes) {
+      newNode.childNodes = nodeObj.childNodes
+    }
+    let posLayer = {
+      layerX: newNode.position.x,
+      layerY: newNode.position.y,
+    }
+    // nodes.value.push(newNode)
+    // await nextTick()
+    if (!parentNode) {
+      dragAdsorption(newNode, posLayer)
+    }
+    if (newNode.type == NodeType.SUBFLOW) {
+      newNode.data.displayName = generateUniqueFlowName()
+    }
+    // if (newNode.type == NodeType.CHOICE) {
+    //   newNode.childNodes = []
+    //   newNode.defaultNode = initChoice(newNode)
+    // }
+    let defaultNode
+    if (newNode.type == NodeType.CHOICE) {
+      newNode.childNodes = []
+      defaultNode = initChoiceJson(newNode)
+      newNode.defaultNode = defaultNode.id
+    }
 
+    if (parentNode) {
+      dragPasteAdsorption(newNode, parentNode)
+      // newNode.parentNode = parentNode.id
+    }
+
+    // addNodes(newNode)
+    addNode(newNode)
+    if (newNode.type == NodeType.CHOICE) {
+      return [defaultNode, newNode]
+    }
+
+    // if (!findNodeById(newNode.id)) {
+    // nodes.value.push(newNode)
+    // }
+
+    return [newNode]
+  }
   function initFlow(newNode) {
     if (newNode.parentNode != undefined || newNode.type == NodeType.SUBFLOW) {
       return
@@ -179,7 +241,40 @@ export default function useDragAndDrop() {
     node.childNodes.push(defaultNodeId)
     return defaultNodeId
   }
+  function initChoiceJson(node) {
+    var defaultNode = getNewNode(NodeType.CHOICEDEFAULT)
+    const defaultNodeId = getNodeId()
+    defaultNode = reactive({
+      id: defaultNodeId,
+      type: NodeType.CHOICEDEFAULT,
+      position: {
+        x: 50,
+        y: 20,
+      },
+      dimensions: defaultNode.dimensions,
+      initDimensions: defaultNode.initDimensions,
+      style: {
+        width: `${defaultNode.dimensions.width}px`,
+        height: `${defaultNode.dimensions.height}px`,
+      },
+      parentNode: node.id,
+      draggable: false,
+      adsorption: defaultNode.adsorption,
+    })
+    defaultNode.childNodes = []
+    updateParentNode(defaultNode, node)
+    // addNodes(defaultNode)
 
+    // nextTick(() => )
+    // if (!findNodeById(defaultNode.id)) {
+    // nodes.value.push(defaultNode)
+    // }
+    // addNodes(defaultNode)
+    addNode(defaultNode)
+    // nodes.value.push(defaultNode)
+    node.childNodes.push(defaultNodeId)
+    return defaultNode
+  }
   function addWhenNode(parentNodeId) {
     let parentNode = findNodeById(parentNodeId)
     var whenNode = getNewNode(NodeType.CHOICEWHEN)
@@ -208,9 +303,49 @@ export default function useDragAndDrop() {
     updateNodePosAddWhenNode(whenNode, parentNode)
     parentNode.childNodes.push(whenNodeId)
   }
+  function addWhenNodeJson(parentNode, nodeJson) {
+    var whenNode = getNewNode(NodeType.CHOICEWHEN)
+    const whenNodeId = getNodeId()
+    whenNode = reactive({
+      id: whenNodeId,
+      type: NodeType.CHOICEWHEN,
+      data: whenNode.data,
+      position: {
+        x: 50,
+        y: parseInt(parentNode.style.height) - 20,
+      },
+      dimensions: whenNode.dimensions,
+      initDimensions: whenNode.initDimensions,
+      style: {
+        width: `${whenNode.dimensions.width}px`,
+        height: `${whenNode.dimensions.height}px`,
+      },
+      parentNode: parentNode.id,
+      draggable: false,
+      adsorption: whenNode.adsorption,
+      childNodes: nodeJson.childNodes,
+      data: nodeJson.data,
+    })
+    // addNodes(whenNode)
 
+    // nextTick(() => {
+
+    // })
+    updateNodePosAddWhenNode(whenNode, parentNode)
+    parentNode.childNodes.push(whenNodeId)
+    // if (!findNodeById(whenNode.id)) {
+    // nodes.value.push(whenNode)
+    // }
+    // nodes.value.push(whenNode)
+    // addNodes(whenNode)
+    addNode(whenNode)
+    return [whenNode]
+  }
+  let remPos = {}
   function onNodeDragStart(e) {
     const dragNode = e.event == undefined ? e : e.nodes[0]
+    remPos.layerX = dragNode.position.x
+    remPos.layerY = dragNode.position.y
     isDragging.value = true
     draggedId.value = dragNode.id
   }
@@ -224,7 +359,7 @@ export default function useDragAndDrop() {
         layerX: dragNode.position.x,
         layerY: dragNode.position.y,
       }
-      dragAdsorption(dragNode, pos)
+      dragAdsorption(dragNode, pos, remPos)
     }
   }
 
@@ -240,5 +375,6 @@ export default function useDragAndDrop() {
     onNodeDragStart,
     onNodeDragStop,
     addWhenNode,
+    jsonTurnNode,
   }
 }

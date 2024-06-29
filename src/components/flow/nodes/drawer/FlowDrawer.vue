@@ -3,7 +3,12 @@
     <div class="form-container">
       <div class="form-item">
         <label>名称</label>
-        <el-input v-model="displayName" autosize type="textarea" class="input-field"></el-input>
+        <el-input
+          v-model="displayName"
+          autosize
+          type="textarea"
+          class="input-field"
+        ></el-input>
       </div>
     </div>
   </el-scrollbar>
@@ -13,7 +18,12 @@
 import { ref, watch } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { nodes } from '@/hooks/useNode'
-import { isSave, saveAttributeComplete, drawerClickNode, haveEdited } from '@/hooks/useDrawer'
+import {
+  isSave,
+  saveAttributeComplete,
+  drawerClickNode,
+  haveEdited,
+} from '@/hooks/useDrawer'
 import { findFlow, editFlow } from '@/hooks/useNodeOfFlow'
 import { NodeType } from '@/enums/NodeType'
 
@@ -24,8 +34,7 @@ const { updateNode } = useVueFlow()
 watch(displayName, (newValue, oldValue) => {
   if (newValue !== drawerClickNode?.value.data.displayName) {
     haveEdited.value = true
-  }
-  else {
+  } else {
     haveEdited.value = false
   }
 })
@@ -39,29 +48,30 @@ watch(isSave, (newValue, oldValue) => {
       })
       isSave.value = false
       return
-    }
-    else if (drawerClickNode.value.data.displayName !== displayName.value
-        && findFlow(displayName.value) !== -1) {
+    } else if (
+      drawerClickNode.value.data.displayName !== displayName.value &&
+      findFlow(displayName.value) !== -1
+    ) {
       ElMessage({
         message: '保存失败，名称不能重复',
         type: 'error',
       })
       isSave.value = false
       return
-    }
-    else {
+    } else {
       nodes.value.forEach((node, index) => {
-          if (node.type == NodeType.FLOWREFERENCE && node.data.flowName == drawerClickNode.value.data.displayName) {
-            node.data.flowName = displayName.value
-          }
-        });
-      editFlow(drawerClickNode.value.data.displayName, displayName.value)
-      updateNode(drawerClickNode.value.id,
-      {
-        data:
-        {
-          displayName: displayName.value,
+        if (
+          node.type == NodeType.FLOWREFERENCE &&
+          node.data.flowName == drawerClickNode.value.data.displayName
+        ) {
+          node.data.flowName = displayName.value
         }
+      })
+      editFlow(drawerClickNode.value.data.displayName, displayName.value)
+      updateNode(drawerClickNode.value.id, {
+        data: {
+          displayName: displayName.value,
+        },
       })
       saveAttributeComplete()
     }
@@ -71,34 +81,34 @@ watch(isSave, (newValue, oldValue) => {
 
 <style scoped>
 .form-container {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    gap: 20px;
-    width: 95%;
-    margin-left: 2%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  gap: 20px;
+  width: 95%;
+  margin-left: 2%;
 }
 
 .form-item {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
 }
 
 .form-item label {
-    font-size: 15px;
+  font-size: 15px;
 }
 
 .input-field {
-    margin-top: 5px;
-    margin-bottom: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 </style>

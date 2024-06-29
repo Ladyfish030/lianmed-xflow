@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 const edges = ref([])
 
 function getEdgeId() {
-  const edgeId = uuidv4();
+  const edgeId = uuidv4()
   return edgeId
 }
 
@@ -16,11 +16,27 @@ function isEdgeExist(source, target) {
   if (edge) return true
   else return false
 }
-
+function findEdgeBySourceTarget(source, target) {
+  const edge = edges.value.find(
+    (edge) => edge.source === source && edge.target === target
+  )
+  if (edge) return edge
+  else return undefined
+}
+function findEdgeBySource(source) {
+  const edge = edges.value.find((edge) => edge.source === source)
+  if (edge) return edge
+  else return undefined
+}
+function findEdgeByTarget(target) {
+  const edge = edges.value.find((edge) => edge.target === target)
+  if (edge) return edge
+  else return undefined
+}
 function onConnect(params) {
-  if (isEdgeExist(params.source, params.target)) {
-    return null
-  }
+  // if (isEdgeExist(params.source, params.target)) {
+  //   return null
+  // }
   const edgeId = getEdgeId()
   const newEdge = {
     id: edgeId,
@@ -29,17 +45,20 @@ function onConnect(params) {
     animated: true,
     style: {
       stroke: '#73767a',
-      strokeWidth: 2
-    }
+      strokeWidth: 2,
+    },
   }
 
-  if (findNodeById(params.source).parentNode || findNodeById(params.target).parentNode) {
-      ElMessage({
-        message: '提醒：不允许对群组内节点进行连线',
-        type: 'warning',
-      })
-    return
-  }
+  // if (
+  //   findNodeById(params.source).parentNode ||
+  //   findNodeById(params.target).parentNode
+  // ) {
+  //   ElMessage({
+  //     message: '提醒：不允许对群组内节点进行连线',
+  //     type: 'warning',
+  //   })
+  //   return
+  // }
   edges.value.push(newEdge)
 }
 
@@ -67,4 +86,13 @@ function removeEdgeById(edgeId) {
   edges.value = edges.value.filter((edge) => edge.id !== edgeId)
 }
 
-export { edges, onConnect, findEdgeById, removeEdgeById, updateEdge }
+export {
+  edges,
+  onConnect,
+  findEdgeById,
+  removeEdgeById,
+  updateEdge,
+  findEdgeBySource,
+  findEdgeByTarget,
+  findEdgeBySourceTarget,
+}
