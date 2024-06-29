@@ -49,7 +49,7 @@
   </el-dialog>
   <el-dialog
     v-model="isFileUploadShow"
-    title="XML文件转画布"
+    title="XML文件转业务流"
     width="300"
     align-center="center"
   >

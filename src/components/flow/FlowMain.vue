@@ -87,7 +87,6 @@ const { getCurrentCanvas, isShowEditFlag } = useCanvasManage()
 const { findNode, removeNodes, screenToFlowCoordinate } = useVueFlow()
 
 const nodeTypes = {
-<<<<<<< HEAD
   [NodeType.FLOW]: markRaw(Flow),
   [NodeType.DATABASE]: markRaw(Database),
   [NodeType.WEBSERVICE]: markRaw(WebService),
@@ -99,13 +98,12 @@ const nodeTypes = {
     [NodeType.LOGGER]: markRaw(Logger),
     [NodeType.FLOWREFERENCE]: markRaw(FlowReference),
     [NodeType.SETPAYLOAD]: markRaw(SetPayload),
-    [NodeType.REQUEST]: markRaw(Request),
->>>>>>> f07de77aa1f29131e5dc6692b5df0df96fb8e8c6
+    [NodeType.REQUEST]: markRaw(Request)
 }
 
 function nodeClickHandler(e) {
   console.log('点击节点：', e.node)
-
+}
 function nodeDoubleClickHandler(e) {
   drawerClickNode.value = findNode(e.node.id)
   onNodeDoubleClick()

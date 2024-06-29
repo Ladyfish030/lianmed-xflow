@@ -16,7 +16,7 @@
       >
     </template>
     <el-button class="ml-3" type="success" @click="submitUpload">
-      转成画布
+      转成业务流
     </el-button>
   </el-upload>
 </template>
