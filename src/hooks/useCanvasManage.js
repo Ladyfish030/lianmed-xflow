@@ -154,7 +154,6 @@ export default function useCanvasManage() {
       setParentPos(nextCanvas.parentPos)
       setGlobalConfig(nextCanvas.globalConfig)
       setFlowList(nextCanvas.flowList)
-      console.log(JSON.stringify(nextCanvas.paint))
       fromObject(nextCanvas.paint)
     }
     setTimeout(() => {
