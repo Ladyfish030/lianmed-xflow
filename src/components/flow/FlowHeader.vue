@@ -51,7 +51,7 @@
     v-model="isFileUploadShow"
     title="XML文件转业务流"
     width="300"
-    align-center="center"
+    :align-center="true"
   >
     <file-upload></file-upload>
     <!-- <template #footer>

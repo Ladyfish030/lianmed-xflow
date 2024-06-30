@@ -91,14 +91,15 @@ const nodeTypes = {
   [NodeType.DATABASE]: markRaw(Database),
   [NodeType.WEBSERVICE]: markRaw(WebService),
   [NodeType.LISTENER]: markRaw(Listener),
-    [NodeType.CHOICEWHEN]: markRaw(ChoiceWhen),
-    [NodeType.CHOICEDEFAULT]: markRaw(ChoiceDefault),
-    [NodeType.FOREACH]: markRaw(ForEach),
-    [NodeType.SUBFLOW]: markRaw(SubFlow),
-    [NodeType.LOGGER]: markRaw(Logger),
-    [NodeType.FLOWREFERENCE]: markRaw(FlowReference),
-    [NodeType.SETPAYLOAD]: markRaw(SetPayload),
-    [NodeType.REQUEST]: markRaw(Request)
+  [NodeType.CHOICE]: markRaw(Choice),
+  [NodeType.CHOICEWHEN]: markRaw(ChoiceWhen),
+  [NodeType.CHOICEDEFAULT]: markRaw(ChoiceDefault),
+  [NodeType.FOREACH]: markRaw(ForEach),
+  [NodeType.SUBFLOW]: markRaw(SubFlow),
+  [NodeType.LOGGER]: markRaw(Logger),
+  [NodeType.FLOWREFERENCE]: markRaw(FlowReference),
+  [NodeType.SETPAYLOAD]: markRaw(SetPayload),
+  [NodeType.REQUEST]: markRaw(Request)
 }
 
 function nodeClickHandler(e) {
