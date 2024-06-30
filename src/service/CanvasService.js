@@ -8,11 +8,11 @@ export function downloadXML(data) {
   })
 }
 
-export function uploadXML(file) {
+export function uploadXML(data) {
   return request({
     url: '/XmlToJson/json',
     method: 'post',
-    file,
+    data,
   })
 }
 

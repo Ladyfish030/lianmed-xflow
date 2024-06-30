@@ -413,6 +413,13 @@ function updateChildNodeAdsorptionPos(node) {
       }
       updateChildNodeAdsorptionPos(childNode)
     } else if (childNode.type == NodeType.CHOICE) {
+      let nodeIndex = indexOfParentNodePos(childNode.childNodes[0])
+      let parentIndex = indexOfParentNodePos(childNode.parentNode)
+      if (nodeIndex > -1 && parentIndex > -1 && nodeIndex < parentIndex) {
+        let posCatch = parentNodePosition[nodeIndex]
+        parentNodePosition[nodeIndex] = parentNodePosition[parentIndex]
+        parentNodePosition[parentIndex] = posCatch
+      }
       updateChildNodeAdsorptionPos(childNode)
     }
   }

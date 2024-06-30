@@ -25,6 +25,7 @@
 import { ref } from 'vue'
 import { genFileId, ElMessageBox } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { findNodeById, nodes } from '@/hooks/useNode'
 import useDragAndDrop from '@/hooks/useDnD'
 import useCanvasManage from '@/hooks/useCanvasManage'
@@ -33,6 +34,7 @@ import { useVueFlow } from '@vue-flow/core'
 import { NodeType } from '../../enums/NodeType'
 import { uploadXML } from '@/service/CanvasService.js'
 const { jsonTurnNode } = useDragAndDrop()
+const emit = defineEmits(['close'])
 const upload = ref<UploadInstance>()
 const { createNewCanvas } = useCanvasManage()
 const handleExceed: UploadProps['onExceed'] = (files) => {
@@ -57,11 +59,23 @@ const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
 }
 async function fileSubmit(file: UploadRawFile) {
   console.log(file.file)
-  await uploadXML(file.file).then((res) => {
-    console.log(res)
-  })
-  //如果转成data.json成功，则调用下面方法新建画布
-  createXmlTurnPaint()
+  await uploadXML({ file: file.file }).then(
+    (res) => {
+      console.log(res)
+      ElMessage({
+        message: '转换成功',
+        type: 'success',
+      })
+      createXmlTurnPaint()
+    },
+    () => {
+      ElMessage({
+        message: '转换失败，请检查XML文件中是否存在错误',
+        type: 'error',
+      })
+    }
+  )
+  emit('close', true)
 }
 async function createXmlTurnPaint() {
   let data = {

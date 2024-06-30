@@ -53,20 +53,14 @@
     width="300"
     align-center="center"
   >
-    <file-upload></file-upload>
-    <!-- <template #footer>
-      <div>
-        <el-button @click="copyToClipboard">复制</el-button>
-        <el-button type="primary" @click="downloadXmlFile">下载</el-button>
-      </div>
-    </template> -->
+    <file-upload @close="closeFileUpload"></file-upload>
   </el-dialog>
 </template>
 
 <script setup>
 import { ref, h } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
-import { ElMessage, ElMessageBox, ElUpload } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 import SaveFlowIcon from '@/assets/svg/SaveFlowIcon.vue'
 import GenerateXmlFileIcon from '@/assets/svg/GenerateXmlFileIcon.vue'
@@ -217,22 +211,11 @@ function downloadXmlFile() {
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
 }
-let checked = ref()
 function xmlTurnPaint() {
   isFileUploadShow.value = true
-  // await ElMessageBox({
-  //   title: '请点击上传XML文件',
-  //   showConfirmButton: false,
-  //   message: () =>
-  //     h(FileUpload, {
-  //       modelValue: checked.value,
-  //       'onUpdate:modelValue': (val) => {
-  //         checked.value = val
-  //       },
-  //     }),
-  // }).then(({ value }) => {
-  //   console.log(value)
-  // })
+}
+function closeFileUpload() {
+  isFileUploadShow.value = false
 }
 </script>
 

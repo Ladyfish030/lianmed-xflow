@@ -8,10 +8,14 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   (config) => {
+    console.log(config)
     // 添加请求头等前置处理
     if (localStorage.getItem('token')) {
       config.headers['Authorization'] =
         'Bearer ' + localStorage.getItem('token')
+    }
+    if (config.url == '/XmlToJson/json') {
+      config.headers['Content-Type'] = 'multipart/form-data;'
     }
     return config
   },
@@ -33,9 +37,10 @@ service.interceptors.response.use(
     }
   },
   (error) => {
+    console.log(error)
     // 响应错误处理
     let errorMessage = 'Unknown error'
-    
+
     if (error.response) {
       // 服务器返回的响应码非 2xx 范围
       switch (error.response.status) {
