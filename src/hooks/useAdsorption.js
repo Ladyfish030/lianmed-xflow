@@ -78,7 +78,7 @@ function dragAdsorption(node, pos, oldRemPos) {
       updateParentNodeStyle(node, parentNode, width, height)
       updateParentNode(node) //更新祖上节点的parentNodePos和位置
       // updateChildNodeAdsorptionPos(node) //更新孩子节点的parentNodePos
-      // addEdge(node)
+      addEdge(node)
       return
     }
   }
@@ -137,7 +137,7 @@ function dragPasteAdsorption(node, parentNode) {
   //更新父节点的大小
   updateParentNodeStyle(node, parentNode, width, height)
   updateParentNode(node, parentNode) //更新祖上节点的parentNodePos和位置
-  // addEdge(node)
+  addEdge(node)
 }
 function removeEdge(node, deleteNode = false) {
   let oldPrevNodeId = undefined,
@@ -383,6 +383,19 @@ function updateChildNodeAdsorptionPos(node) {
             item.yMin = y
             item.yMax = y + parseInt(childNode.style.height)
             // updateChildNodeAdsorptionPos(childNode)
+            if (childNode.parentNode) {
+              let nodeIndex = indexOfParentNodePos(childNode.id)
+              let parentIndex = indexOfParentNodePos(childNode.parentNode)
+              if (
+                nodeIndex > -1 &&
+                parentIndex > -1 &&
+                nodeIndex < parentIndex
+              ) {
+                let posCatch = parentNodePosition[nodeIndex]
+                parentNodePosition[nodeIndex] = parentNodePosition[parentIndex]
+                parentNodePosition[parentIndex] = posCatch
+              }
+            }
             break
           }
         }

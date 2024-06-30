@@ -56,10 +56,10 @@ const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
   )
 }
 async function fileSubmit(file: UploadRawFile) {
-  console.log(file)
-  // await uploadXML(file).then((res) => {
-  //   console.log(res)
-  // })
+  console.log(file.file)
+  await uploadXML(file.file).then((res) => {
+    console.log(res)
+  })
   //如果转成data.json成功，则调用下面方法新建画布
   createXmlTurnPaint()
 }
