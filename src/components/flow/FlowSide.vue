@@ -38,7 +38,6 @@ function searchClearHandler() {
 
 <template>
   <div class="component-library-container">
-    <div class="component-library">
       <span class="description">组件库</span>
       <el-divider class="divider" />
       <el-menu default-active="1" class="el-menu-vertical-demo">
@@ -154,52 +153,31 @@ function searchClearHandler() {
           </div>
         </el-sub-menu>
       </el-menu>
-    </div>
   </div>
 </template>
 
 <style scoped>
 .component-library-container {
-  width: 220px;
-  height: 97%;
+  width: 100%;
+  height: 100%;
   border: 0px solid white; 
   border-radius: 10px;
+  padding-bottom: 10px;
   -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
           box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); 
   display: -webkit-box; 
   display: -ms-flexbox; 
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  background-color: white;
-}
-.component-library {
-  width: 220px;
-  height: 95%;
-  margin-top: 0px;
-  margin-bottom: auto;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
+  background-color: white;
 }
+
 .description {
   height: 45px;
   font-size: 15px;

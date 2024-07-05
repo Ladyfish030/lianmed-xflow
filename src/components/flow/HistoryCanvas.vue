@@ -13,9 +13,12 @@
       <el-table-column label="业务名" width="150">
         <template #default="scope">
           <div class="cell-content">
-            <el-text v-if="editingIndex !== scope.$index" size="small" style="width: 100%;" truncated>
-              {{ scope.row.name }}
-            </el-text>
+            <el-tooltip v-if="editingIndex !== scope.$index" effect="dark" placement="top-start" :hide-after="0">
+              <template #content>{{ scope.row.name }}</template>
+              <el-text  size="small" style="width: 100%;" truncated>
+                {{ scope.row.name }}
+              </el-text>
+            </el-tooltip>
             <el-input v-else v-model="editingContent" size="small" class="input-content"
               @change="renameCanvasHandler(scope.row)">
             </el-input>
@@ -158,7 +161,6 @@ function importCanvasHandler(newCanvas) {
       paint: newCanvas.canvas.paint,
       flowList: newCanvas.canvas.flowList,
       parentPos: newCanvas.canvas.parentPos,
-      globalConfig: newCanvas.canvas.globalConfig,
     }
     importCanvas(canvas)
   }

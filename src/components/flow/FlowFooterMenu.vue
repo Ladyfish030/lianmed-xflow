@@ -1,10 +1,8 @@
 <template>
     <div v-if="canvasMenuVisible" class="menu-container" :style="{ left: menuPosition.x + 'px', top: '630px' }">
         <div @click="deleteHandler" class="button-container">
-            <el-icon :size="20" color="#f89898">
-                <Delete />
-            </el-icon>
-            <span style="color: #f89898;">删除</span>
+            <el-icon :size="20" color="#f89898"><Close /></el-icon>
+            <span style="color: #f89898;">关闭</span>
         </div>
     </div>
 </template>
@@ -24,7 +22,7 @@ function deleteHandler() {
     deleteCanvas.value = menuClickCanvas.value
     const canvas = getCanvasByIndex(deleteCanvas.value)
     if (canvas.isEdited === true) {
-        ElMessageBox.confirm('确定关闭该画布？请注意保存', {
+        ElMessageBox.confirm('确定关闭该业务流？请注意保存', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
         })

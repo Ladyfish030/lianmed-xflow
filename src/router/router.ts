@@ -33,6 +33,11 @@ const router = createRouter({
           name: 'flow',
           component: () => import('../views/Flow.vue'),
         },
+        {
+          path: '/global_config',
+          name: 'global_config',
+          component: () => import('../views/GlobalConfig.vue'),
+        },
       ],
     },
   ],

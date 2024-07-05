@@ -8,7 +8,6 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   (config) => {
-    console.log(config)
     // 添加请求头等前置处理
     if (localStorage.getItem('token')) {
       config.headers['Authorization'] =

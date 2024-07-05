@@ -29,6 +29,7 @@ import { RouterView } from 'vue-router'
   --el-header-padding: 0 0px;
 }
 .base-side {
+  height: 100%;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;

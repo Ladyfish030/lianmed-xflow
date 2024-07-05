@@ -28,7 +28,7 @@
     >
         <template #reference>
             <div class="add-canvas-button-container">
-                <el-tooltip content="新建画布" placement="top" effect="dark" :hide-after="0">
+                <el-tooltip content="新建业务流" placement="top" effect="dark" :hide-after="0">
                     <el-button class="add-canvas-button" @click.prevent="createNewCanvasHandler"
                         :disabled="isCreatingCanvas">
                         <el-icon color="black" size="18px">
@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { onCanvasContextMenu } from '@/hooks/useMenu'
 import useCanvasManage from '@/hooks/useCanvasManage'
 

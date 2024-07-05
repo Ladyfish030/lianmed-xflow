@@ -91,8 +91,8 @@ function loginHandler() {
         })
       } else {
         ElMessage({
-          message: '登录失败，请联系管理员',
-          type: 'warning',
+          message: '登录失败，请检查用户名、密码或网络连接',
+          type: 'error',
         })
       }
     })

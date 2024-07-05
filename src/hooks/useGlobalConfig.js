@@ -1,7 +1,13 @@
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 
 const globalConfigList = ref([])
+const typeConfigList = ref([])
+const addGlobalConfigDialogVisible = ref(false)
+const configDialogVisible = ref(false)
+var currentConfigForm = reactive({})
+const temporaryConfigForm = {}
+const isAddConfig = ref(true)
 
 function getGlobalConfig() {
     return globalConfigList.value
@@ -54,6 +60,12 @@ function removeGlobalConfig(configName) {
 
 export {
     globalConfigList,
+    typeConfigList,
+    addGlobalConfigDialogVisible,
+    configDialogVisible,
+    currentConfigForm,
+    temporaryConfigForm,
+    isAddConfig,
     getGlobalConfig,
     setGlobalConfig,
     findGlobalConfigByName,

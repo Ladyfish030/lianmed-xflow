@@ -1,23 +1,23 @@
 <template>
   <div class="button-container">
-    <el-tooltip content="保存" placement="bottom" effect="dark">
+    <el-tooltip content="保存" placement="bottom" effect="dark" :hide-after="0">
       <button class="tool-button" @click="onSaveCanvas">
         <SaveFlowIcon />
       </button>
     </el-tooltip>
 
-    <el-tooltip content="历史业务流" placement="top" effect="dark">
+    <el-tooltip content="历史业务流" placement="bottom" effect="dark" :hide-after="0">
       <div>
         <HistoryCanvas />
       </div>
     </el-tooltip>
 
-    <el-tooltip content="生成XML" placement="bottom" effect="dark">
+    <el-tooltip content="生成XML" placement="bottom" effect="dark" :hide-after="0">
       <button class="tool-button" @click="generateXmlFile">
         <GenerateXmlFileIcon />
       </button>
     </el-tooltip>
-    <el-tooltip content="XML转画布" placement="bottom" effect="dark">
+    <el-tooltip content="XML转业务流" placement="bottom" effect="dark" :hide-after="0">
       <button class="tool-button" @click="xmlTurnPaint">
         <XMLturnPaint />
       </button>
@@ -211,9 +211,11 @@ function downloadXmlFile() {
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
 }
+
 function xmlTurnPaint() {
   isFileUploadShow.value = true
 }
+
 function closeFileUpload() {
   isFileUploadShow.value = false
 }
@@ -263,13 +265,6 @@ function closeFileUpload() {
   transition: 0.25s all ease-in-out;
   cursor: pointer;
   background-color: #e9e9eb;
-}
-
-.tooltip-container {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .history-paint {
