@@ -79,7 +79,9 @@ function clickHandler(e) {
 }
 .flow-header {
   --el-header-padding: 0 0px;
-  height: 56px;
+  padding-top: 10px;
+  padding-right: 10px;
+  height: 45px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -95,8 +97,8 @@ function clickHandler(e) {
 }
 .header-container {
   position: relative;
-  width: 99%;
-  height: 65%;
+  width: 100%;
+  height: 100%;
   border: 1px solid white;
   border-radius: 10px;
   -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -119,6 +121,7 @@ function clickHandler(e) {
 .flow-side {
   --el-side-padding: 0 0px;
   width: 240px;
+  padding: 10px;
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
@@ -136,11 +139,14 @@ function clickHandler(e) {
   width: 100%;
   --el-main-padding: 0px;
   background-color: #fafafa;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
 }
 
 .main-container {
-  width: 99%;
-  height: 98.4%;
+  width: 100%;
+  height: 100%;
   border: 1px solid white;
   -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -160,14 +166,16 @@ function clickHandler(e) {
 
 .flow-footer {
   --el-footer-padding: 0px;
-  height: 47px;
+  height: 45px;
   width: 100%;
   background-color: #fafafa;
+  padding-bottom: 10px;
+  padding-right: 10px;
 }
 
 .footer-container {
-  width: 99%;
-  height: 37px;
+  width: 100%;
+  height: 100%;
   border: 1px solid white;
   border-radius: 10px;
   -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);

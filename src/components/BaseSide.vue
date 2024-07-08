@@ -1,10 +1,8 @@
 <template>
   <el-menu
-    default-active="2"
+    default-active="home"
     class="el-menu-vertical-demo"
     :collapse="isCollapse"
-    @open="handleOpen"
-    @close="handleClose"
     :router="true"
   >
     <el-menu-item index="home">
@@ -17,10 +15,18 @@
     </el-menu-item>
     <el-menu-item index="flow">
       <el-icon>
-        <Share />
+        <FlowMenuIcon />
       </el-icon>
       <template #title>
         <span>Flow</span>
+      </template>
+    </el-menu-item>
+    <el-menu-item index="global_config">
+      <el-icon>
+        <GlobalConfigMenuIcon />
+      </el-icon>
+      <template #title>
+        <span>全局配置</span>
       </template>
     </el-menu-item>
     <div class="button-container">
@@ -40,24 +46,14 @@
   </el-menu>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'BaseSide',
-}
-</script>
-
-<script lang="ts" setup>
+<script setup>
 import { ref } from 'vue'
+import FlowMenuIcon from '@/assets/svg/FlowMenuIcon.vue'
+import GlobalConfigMenuIcon from '@/assets/svg/GlobalConfigMenuIcon.vue'
 
 const isCollapse = ref(true)
 function ExpandOrFoldClickHandle() {
   isCollapse.value = !isCollapse.value
-}
-const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
-const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
 }
 </script>
 
@@ -74,7 +70,7 @@ const handleClose = (key: string, keyPath: string[]) => {
 }
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 100px;
+  width: fit-content;
   min-height: 400px;
   height: 100%;
   display: -webkit-box;
@@ -105,5 +101,6 @@ const handleClose = (key: string, keyPath: string[]) => {
 .expand-or-fold-button:hover {
   display: block;
   background-color: white;
+  border-top-color: #dedfe0;
 }
 </style>
