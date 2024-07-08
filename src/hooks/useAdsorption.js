@@ -7,6 +7,7 @@ import {
   findEdgeByTarget,
   onConnect,
   findEdgeBySourceTarget,
+  edges,
 } from './useEdge'
 
 //存储吸附位置
@@ -137,7 +138,7 @@ function dragPasteAdsorption(node, parentNode) {
   //更新父节点的大小
   updateParentNodeStyle(node, parentNode, width, height)
   updateParentNode(node, parentNode) //更新祖上节点的parentNodePos和位置
-  addEdge(node)
+  addChildEdges(parentNode)
 }
 function removeEdge(node, deleteNode = false) {
   let oldPrevNodeId = undefined,
@@ -146,23 +147,28 @@ function removeEdge(node, deleteNode = false) {
     oldNextEdge = findEdgeBySource(node.id)
   if (oldPrevEdge) {
     oldPrevNodeId = oldPrevEdge.source
-    removeEdgeById(oldPrevEdge.id)
   }
   if (oldNextEdge) {
     oldNextNodeId = oldNextEdge.target
-    removeEdgeById(oldNextEdge.id)
   }
   if (deleteNode) {
     if ((oldPrevNodeId, oldNextNodeId)) {
       onConnect({ source: oldPrevNodeId, target: oldNextNodeId })
     }
   }
-  // if ((oldPrevNodeId, oldNextNodeId)) {
-  // onConnect({ source: oldPrevNodeId, target: oldNextNodeId })
-  // }
+}
+function moveEdge(node) {
+  let oldPrevEdge = findEdgeByTarget(node.id),
+    oldNextEdge = findEdgeBySource(node.id)
+  if (oldPrevEdge) {
+    removeEdgeById(oldPrevEdge.id)
+  }
+  if (oldNextEdge) {
+    removeEdgeById(oldNextEdge.id)
+  }
 }
 function addEdge(node) {
-  removeEdge(node)
+  moveEdge(node)
   if (node.parentNode) {
     let childNodeIds = findNodeById(node.parentNode)
       ? findNodeById(node.parentNode).childNodes
@@ -184,6 +190,27 @@ function addEdge(node) {
     }
     if (targetId) {
       onConnect({ source: node.id, target: targetId })
+    }
+  }
+}
+//递归给子节点连线
+function addChildEdges(node, once = false) {
+  if (!node) {
+    return
+  }
+  if (node.type === NodeType.CHOICE && !once) {
+    addChildEdges(findNodeById(node.childNodes[0]))
+    return
+  }
+  let childNodeIds = node.childNodes ? node.childNodes : []
+  let len = childNodeIds.length
+  if (len >= 1 && !once) {
+    addChildEdges(findNodeById(childNodeIds[0]))
+  }
+  for (let i = 1; i < len; i++) {
+    onConnect({ source: childNodeIds[i - 1], target: childNodeIds[i] })
+    if (!once) {
+      addChildEdges(findNodeById(childNodeIds[i]))
     }
   }
 }
@@ -700,4 +727,5 @@ export {
   getParentPos,
   setParentPos,
   dragPasteAdsorption,
+  addChildEdges,
 }
