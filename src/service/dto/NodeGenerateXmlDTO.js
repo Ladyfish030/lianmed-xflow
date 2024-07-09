@@ -38,6 +38,35 @@ export function formatListener(config) {
 }
 
 export function formatRequest(config) {
+    let headers = config.data.headers
+    let queryParameters = config.data.queryParameters
+    let urlParameters = config.data.urlParameters
+
+    if (headers.length !== 0) {
+        let obj = headers.reduce((result, header) => {
+            result[header.key] = header.value
+            return result
+        }, {})
+        
+        headers =  JSON.stringify(obj, null, "\t")
+    }
+    if (queryParameters.length !== 0) {
+        let obj = queryParameters.reduce((result, queryParameter) => {
+            result[queryParameter.key] = queryParameter.value
+            return result
+        }, {})
+        
+        queryParameters =  JSON.stringify(obj, null, "\t")
+    }
+    if (urlParameters.length !== 0) {
+        let obj = urlParameters.reduce((result, urlParameter) => {
+            result[urlParameter.key] = urlParameter.value
+            return result
+        }, {})
+        
+        urlParameters =  JSON.stringify(obj, null, "\t")
+    }
+
     return {
         id: config.id,
         type: config.type,
@@ -48,9 +77,9 @@ export function formatRequest(config) {
             path: config.data.path,
             url: config.data.url,
             body: config.data.body,
-            headers: config.data.headers,
-            queryParameters: config.data.queryParameters,
-            urlParameters: config.data.urlParameters,
+            headers: headers,
+            queryParameters: queryParameters,
+            urlParameters: urlParameters,
         },
         parentNode: config.parentNode,
     }

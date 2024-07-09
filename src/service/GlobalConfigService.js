@@ -36,3 +36,11 @@ export function deleteGlobalConfig(id) {
     method: 'delete',
   })
 }
+
+export function downloadGlobalConfigXML(data) {
+  return request({
+    url: '/JsonToXml/globalXml',
+    method: 'post',
+    data,
+  })
+}

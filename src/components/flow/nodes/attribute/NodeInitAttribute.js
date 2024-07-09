@@ -27,7 +27,7 @@ const Database = {
   type: '',
   data: {
     displayName: 'Database',
-    operation: '',
+    operation: 'Select',
     connectorConfiguration: '',
     sqlCommand: '',
     inputParameters: '',

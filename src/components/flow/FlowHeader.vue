@@ -24,29 +24,12 @@
     </el-tooltip>
   </div>
 
-  <el-dialog
-    v-model="xmlGeneratedResultVisible"
-    title="XML"
-    width="800"
-    top="5vh"
-  >
-    <div class="xml-container">
-      <div class="xml-scrollbar-container">
-        <el-scrollbar>
-          <div class="xml-content-container">
-            <highlightjs language="xml" :code="xmlData" />
-          </div>
-        </el-scrollbar>
-      </div>
-    </div>
+  <XmlGeneratedResultDialog 
+    v-if="xmlGeneratedResultVisible"
+    :data="xmlData"
+    @close="handleCloseXmlDialog"
+  />
 
-    <template #footer>
-      <div>
-        <el-button @click="copyToClipboard">复制</el-button>
-        <el-button type="primary" @click="downloadXmlFile">下载</el-button>
-      </div>
-    </template>
-  </el-dialog>
   <el-dialog
     v-model="isFileUploadShow"
     title="XML文件转业务流"
@@ -67,18 +50,18 @@ import GenerateXmlFileIcon from '@/assets/svg/GenerateXmlFileIcon.vue'
 import XMLturnPaint from '@/assets/svg/XMLturnPaint.vue'
 import FileUpload from '@/components/flow/FileUpload.vue'
 import HistoryCanvas from '@/components/flow/HistoryCanvas.vue'
+import XmlGeneratedResultDialog from '@/components/XmlGeneratedResultDialog.vue'
 
 import useCanvasManage from '@/hooks/useCanvasManage'
 import { getParentPos } from '@/hooks/useAdsorption'
-import { getGlobalConfig } from '@/hooks/useGlobalConfig'
 import { getFlowList } from '@/hooks/useNodeOfFlow'
 
 import {
   saveCanvas,
   updateCanvas,
-  downloadXML,
+  downloadFlowXML,
 } from '@/service/CanvasService.js'
-import { formatGenerateXmlData } from '@/service/dto/GenerateXmlDTO'
+import { formatGenerateFlowXmlData } from '@/service/dto/GenerateXmlDTO'
 
 let isFileUploadShow = ref(false)
 const { toObject } = useVueFlow()
@@ -90,7 +73,7 @@ async function onSaveCanvas() {
   if (canvasList.value.length === 0) {
     ElMessage({
       type: 'warning',
-      message: '当前无画布',
+      message: '当前无业务流',
     })
     return
   }
@@ -98,16 +81,15 @@ async function onSaveCanvas() {
     paint: toObject(),
     flowList: getFlowList(),
     parentPos: getParentPos(),
-    globalConfig: getGlobalConfig(),
   }
   var currentCanvas = getCurrentCanvas()
   if (currentCanvas.id === undefined) {
-    await ElMessageBox.prompt('', '请输入画布名字', {
+    await ElMessageBox.prompt('', '请输入业务流名称', {
       confirmButtonText: '保存',
       cancelButtonText: '取消',
       inputValue: currentCanvas.name,
       inputPattern: /\S/,
-      inputErrorMessage: '画布名不能为空',
+      inputErrorMessage: '业务流名称不能为空',
     })
       .then(({ value }) => {
         saveCanvas({
@@ -120,7 +102,6 @@ async function onSaveCanvas() {
             currentCanvas.paint = res.canvas.paint
             currentCanvas.flowList = res.canvas.flowList
             currentCanvas.parentPos = res.canvas.parentPos
-            currentCanvas.globalConfig = res.canvas.globalConfig
             currentCanvas.isEdited = false
             ElMessage({
               type: 'success',
@@ -165,51 +146,27 @@ async function generateXmlFile() {
   if (canvasList.value.length === 0) {
     ElMessage({
       type: 'warning',
-      message: '当前无画布',
+      message: '当前无业务流',
     })
     return
   }
-  const sendData = formatGenerateXmlData()
-  await downloadXML(sendData)
+  const sendData = formatGenerateFlowXmlData()
+  console.log(JSON.stringify(sendData))
+  await downloadFlowXML(sendData)
     .then((res) => {
       xmlData.value = res
+      xmlGeneratedResultVisible.value = true
     })
     .catch((err) => {
       ElMessage({
         message: '生成XML失败',
-        type: 'warning',
-      })
-    })
-  xmlGeneratedResultVisible.value = true
-}
-
-function copyToClipboard() {
-  navigator.clipboard
-    .writeText(xmlData.value)
-    .then(() => {
-      ElMessage({
-        message: '复制成功',
-        type: 'success',
-      })
-    })
-    .catch(() => {
-      ElMessage({
-        message: '复制失败',
         type: 'error',
       })
     })
 }
 
-function downloadXmlFile() {
-  const blob = new Blob([xmlData.value], { type: 'application/xml' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'mule_xml.xml'
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
+function handleCloseXmlDialog() {
+  xmlGeneratedResultVisible.value = false
 }
 
 function xmlTurnPaint() {
@@ -272,46 +229,5 @@ function closeFileUpload() {
   display: block;
   height: 10px;
   width: 300px;
-}
-
-.xml-container {
-  width: 100%;
-  height: 400px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-.xml-scrollbar-container {
-  width: 765px;
-  height: 395px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.xml-content-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  width: 100%;
-  height: 100%;
-  text-align: left;
-  font-family: 'Consolas';
-  font-size: 14px;
-  line-height: 1.5;
 }
 </style>

@@ -8,20 +8,10 @@ import { NodeType } from '../../enums/NodeType'
 import { GlobalConfigTypeInGeneral } from '../../enums/GlobalConfigTypeInGeneral'
 import { GlobalConfigTypeInDetail } from '../../enums/GlobalConfigTypeInDetail'
 
-export function formatGenerateXmlData() {
+export function formatGenerateFlowXmlData() {
   var result = {
-      globalConfig: [],
-      nodes: [],
+    nodes: [],
   }
-
-  // const configMappings = {
-  //   [GlobalConfigTypeInDetail.DATABASE_MYSQL_CONFIG]: ConfigDTO.formatMySQL,
-  //   [GlobalConfigTypeInDetail.DATABASE_SQLSERVER_CONFIG]: ConfigDTO.formatSQLServer,
-  //   [GlobalConfigTypeInDetail.DATABASE_ORACLE_CONFIG]: ConfigDTO.formatOracle,
-  //   [GlobalConfigTypeInDetail.DATABASE_POSTGRESQL_CONFIG]: ConfigDTO.formatPostgreSQL,
-  //   [GlobalConfigTypeInDetail.LISTENER_CONFIG]: ConfigDTO.formatListener,
-  //   [GlobalConfigTypeInDetail.REQUEST_CONFIG]: ConfigDTO.formatRequest,
-  // }
 
   const nodeMappings = {
     [NodeType.FLOW]: NodeDTO.formatFlow,
@@ -38,25 +28,42 @@ export function formatGenerateXmlData() {
     [NodeType.SETPAYLOAD]: NodeDTO.formatSetPayload,
   }
 
-  // const configList = globalConfigList.value
-  // for (const config of configList) {
-  //   var type = config.type
-  //   if (type == GlobalConfigTypeInGeneral.DATABASE_CONFIG) {
-  //     type = config.connection
-  //   }
-
-  //   if (configMappings.hasOwnProperty(type)) {
-  //     const targetConfig = configMappings[type](config)
-  //     result.globalConfig.push(targetConfig)
-  //   }
-  // }
-
   const nodeList = nodes.value
   for (const node of nodeList) {
     const type = node.type
     if (nodeMappings.hasOwnProperty(type)) {
       const targetNode = nodeMappings[type](node)
       result.nodes.push(targetNode)
+    }
+  }
+
+  return result
+}
+
+export function formatGenerateGlobalConfigXmlData() {
+  var result = {
+      globalConfig: [],
+  }
+
+  const configMappings = {
+    [GlobalConfigTypeInDetail.DATABASE_MYSQL_CONFIG]: ConfigDTO.formatMySQL,
+    [GlobalConfigTypeInDetail.DATABASE_SQLSERVER_CONFIG]: ConfigDTO.formatSQLServer,
+    [GlobalConfigTypeInDetail.DATABASE_ORACLE_CONFIG]: ConfigDTO.formatOracle,
+    [GlobalConfigTypeInDetail.DATABASE_POSTGRESQL_CONFIG]: ConfigDTO.formatPostgreSQL,
+    [GlobalConfigTypeInDetail.LISTENER_CONFIG]: ConfigDTO.formatListener,
+    [GlobalConfigTypeInDetail.REQUEST_CONFIG]: ConfigDTO.formatRequest,
+  }
+
+  const configList = globalConfigList.value
+  for (const config of configList) {
+    var type = config.type
+    if (type == GlobalConfigTypeInGeneral.DATABASE_CONFIG) {
+      type = config.connection
+    }
+
+    if (configMappings.hasOwnProperty(type)) {
+      const targetConfig = configMappings[type](config)
+      result.globalConfig.push(targetConfig)
     }
   }
 

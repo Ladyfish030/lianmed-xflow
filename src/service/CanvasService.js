@@ -1,8 +1,8 @@
 import request from './request'
 
-export function downloadXML(data) {
+export function downloadFlowXML(data) {
   return request({
-    url: '/JsonToXml/xml',
+    url: '/JsonToXml/flowXml',
     method: 'post',
     data,
   })

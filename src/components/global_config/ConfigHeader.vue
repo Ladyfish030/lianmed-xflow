@@ -1,22 +1,69 @@
 <template>
   <div class="button-container">
-    <el-tooltip content="新增全局配置" placement="bottom" effect="dark">
+    <el-tooltip content="新增全局配置" placement="bottom" effect="dark" :hide-after="0">
       <button class="tool-button" @click="addGlobalConfigHandler()">
         <AddGlobalConfigIcon />
       </button>
     </el-tooltip>
+    <el-tooltip content="生成XML" placement="bottom" effect="dark" :hide-after="0">
+      <button class="tool-button" @click="generateXmlFile">
+        <GenerateXmlFileIcon />
+      </button>
+    </el-tooltip>
   </div>
   <AddGlobalConfigDialog v-if="addGlobalConfigDialogVisible"/>
+  <XmlGeneratedResultDialog 
+    v-if="xmlGeneratedResultVisible"
+    :data="xmlData"
+    @close="handleCloseXmlDialog"
+  />
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import AddGlobalConfigIcon from '@/assets/svg/AddGlobalConfigIcon.vue'
+import GenerateXmlFileIcon from '@/assets/svg/GenerateXmlFileIcon.vue'
 import AddGlobalConfigDialog from '@/components/global_config/AddGlobalConfigDialog.vue'
-import { addGlobalConfigDialogVisible } from '@/hooks/useGlobalConfig'
+import {
+  globalConfigList,
+  addGlobalConfigDialogVisible
+} from '@/hooks/useGlobalConfig'
+import { formatGenerateGlobalConfigXmlData } from '@/service/dto/GenerateXmlDTO'
+import { downloadGlobalConfigXML } from '@/service/GlobalConfigService.js'
+
+import XmlGeneratedResultDialog from '@/components/XmlGeneratedResultDialog.vue'
+
+const xmlGeneratedResultVisible = ref(false)
+const xmlData = ref('')
 
 function addGlobalConfigHandler() {
   addGlobalConfigDialogVisible.value = true
+}
+
+function handleCloseXmlDialog() {
+  xmlGeneratedResultVisible.value = false
+}
+
+async function generateXmlFile() {
+  if (globalConfigList.value.length === 0) {
+    ElMessage({
+      type: 'warning',
+      message: '无可生成的全局配置',
+    })
+    return
+  }
+  const sendData = formatGenerateGlobalConfigXmlData()
+  await downloadGlobalConfigXML(sendData)
+    .then((res) => {
+      xmlData.value = res
+      xmlGeneratedResultVisible.value = true
+    })
+    .catch((err) => {
+      ElMessage({
+        message: '生成XML失败',
+        type: 'error',
+      })
+    })
 }
 </script>
 

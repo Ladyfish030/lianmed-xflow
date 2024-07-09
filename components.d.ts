@@ -7,7 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    AddConfigDialog: typeof import('./src/components/global_config/AddConfigDialog.vue')['default']
     AddGlobalConfigDialog: typeof import('./src/components/global_config/AddGlobalConfigDialog.vue')['default']
     BaseHeader: typeof import('./src/components/BaseHeader.vue')['default']
     BaseSide: typeof import('./src/components/BaseSide.vue')['default']
@@ -94,6 +93,7 @@ declare module 'vue' {
     WebService: typeof import('./src/components/flow/nodes/WebService.vue')['default']
     WebServiceDrawer: typeof import('./src/components/flow/nodes/drawer/WebServiceDrawer.vue')['default']
     WebServiceMenu: typeof import('./src/components/flow/nodes/menu/WebServiceMenu.vue')['default']
+    XmlGeneratedResultDialog: typeof import('./src/components/XmlGeneratedResultDialog.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
