@@ -99,7 +99,7 @@ const nodeTypes = {
   [NodeType.LOGGER]: markRaw(Logger),
   [NodeType.FLOWREFERENCE]: markRaw(FlowReference),
   [NodeType.SETPAYLOAD]: markRaw(SetPayload),
-  [NodeType.REQUEST]: markRaw(Request)
+  [NodeType.REQUEST]: markRaw(Request),
 }
 
 function nodeClickHandler(e) {
@@ -182,7 +182,6 @@ watch(deleteNodeConfirm, (newValue, oldValue) => {
       deleteNode.value.type == NodeType.FLOW ||
       deleteNode.value.type == NodeType.SUBFLOW
     ) {
-
       nodes.value.forEach((node, index) => {
         if (
           node.type == NodeType.FLOWREFERENCE &&

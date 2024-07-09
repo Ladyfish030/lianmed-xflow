@@ -3,7 +3,11 @@ import { NodeType } from '@/enums/NodeType'
 
 import { addNode, findNodeById, getNodeId, getNewNode } from '@/hooks/useNode'
 import { generateUniqueFlowName } from '@/hooks/useNodeOfFlow'
-import { dragAdsorption, dragPasteAdsorption } from '@/hooks/useAdsorption'
+import {
+  dragAdsorption,
+  dragPasteAdsorption,
+  addChildEdges,
+} from '@/hooks/useAdsorption'
 
 const nodeMenuVisible = ref(false)
 const edgeMenuVisible = ref(false)
@@ -55,8 +59,8 @@ function onCanvasContextMenu(event, canvasIndex) {
   canvasMenuVisible.value = true
   menuClickCanvas.value = canvasIndex
   menuPosition.value = {
-      x: event.screenX - 10,
-      y: event.screenY,
+    x: event.screenX - 10,
+    y: event.screenY,
   }
 }
 
@@ -106,7 +110,10 @@ function pasteNodeOnFlow() {
   copyParentNode.position = menuToFlowCoordinatePosition.value
   copyParentNode.parentNode = null
   copyParentNode.draggable = true
-  if (copyParentNode.type == NodeType.FLOW || copyParentNode.type == NodeType.SUBFLOW) {
+  if (
+    copyParentNode.type == NodeType.FLOW ||
+    copyParentNode.type == NodeType.SUBFLOW
+  ) {
     copyParentNode.data.displayName = generateUniqueFlowName()
   }
   if (copyParentNode.childNodes && copyParentNode.childNodes.length > 0) {
@@ -148,8 +155,10 @@ function pasteNodeOnFlow() {
   }
   dragAdsorption(temporaryParentNode, pos)
 
-
-  if (temporaryParentNode.type !== NodeType.FLOW && temporaryParentNode.type !== NodeType.SUBFLOW) {
+  if (
+    temporaryParentNode.type !== NodeType.FLOW &&
+    temporaryParentNode.type !== NodeType.SUBFLOW
+  ) {
     const nodeId = getNodeId()
     var flowNode = JSON.parse(JSON.stringify(getNewNode(NodeType.FLOW)))
     flowNode = {
@@ -179,6 +188,9 @@ function pasteNodeOnFlow() {
     }
     dragAdsorption(flowNode, pos)
     dragPasteAdsorption(temporaryParentNode, flowNode)
+    addChildEdges(flowNode)
+  } else {
+    addChildEdges(temporaryParentNode)
   }
 }
 

@@ -1,9 +1,10 @@
 import { ref } from 'vue'
 import { findNodeById } from './useNode'
 import { v4 as uuidv4 } from 'uuid'
-
+import { reactive } from 'vue'
 const edges = ref([])
-
+import { useVueFlow } from '@vue-flow/core'
+const { addEdges } = useVueFlow()
 function getEdgeId() {
   const edgeId = uuidv4()
   return edgeId
@@ -34,11 +35,11 @@ function findEdgeByTarget(target) {
   else return undefined
 }
 function onConnect(params) {
-  // if (isEdgeExist(params.source, params.target)) {
-  //   return null
-  // }
+  if (isEdgeExist(params.source, params.target)) {
+    return null
+  }
   const edgeId = getEdgeId()
-  const newEdge = {
+  const newEdge = reactive({
     id: edgeId,
     source: params.source,
     target: params.target,
@@ -47,7 +48,7 @@ function onConnect(params) {
       stroke: '#73767a',
       strokeWidth: 2,
     },
-  }
+  })
 
   // if (
   //   findNodeById(params.source).parentNode ||
@@ -60,6 +61,7 @@ function onConnect(params) {
   //   return
   // }
   edges.value.push(newEdge)
+  addEdges(newEdge)
 }
 
 function updateEdge(nodeId) {
