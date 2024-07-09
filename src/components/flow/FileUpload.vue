@@ -83,83 +83,28 @@ async function createXmlTurnPaint(data) {
   //   globalConfig: [],
   //   nodes: [
   //     {
-  //       id: '0e1d208e-feea-445b-b98c-9c5f06f27cc6',
-  //       type: 'ChoiceDefault',
-  //       data: {},
-  //       parentNode: '71a038a3-504a-4204-9f0b-a1698f500f12',
-  //       childNodes: ['2146f6ca-5462-42ee-911a-86aaf59f88c8'],
-  //     },
-  //     {
-  //       id: 'cf5a0bea-3869-4de9-9ec6-30960ab2ee87',
+  //       id: 'bf81aaa8-4564-4cdb-91ae-a9a6ef763603',
   //       type: 'Flow',
   //       data: { displayName: 'flow' },
-  //       childNodes: ['71a038a3-504a-4204-9f0b-a1698f500f12'],
+  //       childNodes: ['53338e03-11be-45b9-b094-bc1357e7b958'],
   //     },
   //     {
-  //       id: '71a038a3-504a-4204-9f0b-a1698f500f12',
-  //       type: 'Choice',
-  //       data: { displayName: 'Choice' },
-  //       parentNode: 'cf5a0bea-3869-4de9-9ec6-30960ab2ee87',
-  //       defaultNode: '0e1d208e-feea-445b-b98c-9c5f06f27cc6',
-  //       childNodes: [
-  //         '0e1d208e-feea-445b-b98c-9c5f06f27cc6',
-  //         '2316fd69-5644-4473-ac4e-74e1425c7bca',
-  //       ],
-  //     },
-  //     {
-  //       id: '2316fd69-5644-4473-ac4e-74e1425c7bca',
-  //       type: 'ChoiceWhen',
-  //       data: { expression: '' },
-  //       parentNode: '71a038a3-504a-4204-9f0b-a1698f500f12',
-  //       childNodes: ['8caa2543-1e69-409f-b8ec-67d00c5cfbff'],
-  //     },
-  //     {
-  //       id: '2146f6ca-5462-42ee-911a-86aaf59f88c8',
-  //       type: 'Database',
+  //       id: '53338e03-11be-45b9-b094-bc1357e7b958',
+  //       type: 'Request',
   //       data: {
-  //         displayName: 'Database',
-  //         operation: '',
+  //         displayName: 'Request',
   //         connectorConfiguration: '',
-  //         sqlCommand: '',
-  //         inputParameters: '',
+  //         method: '',
+  //         path: '',
+  //         url: '',
+  //         body: '',
+  //         headers: '{"Key":"Value","Key_1":"Value","Key_2":"Value"}',
   //       },
-  //       parentNode: '0e1d208e-feea-445b-b98c-9c5f06f27cc6',
-  //     },
-  //     {
-  //       id: '8caa2543-1e69-409f-b8ec-67d00c5cfbff',
-  //       type: 'Database',
-  //       data: {
-  //         displayName: 'Database',
-  //         operation: '',
-  //         connectorConfiguration: '',
-  //         sqlCommand: '',
-  //         inputParameters: '',
-  //       },
-  //       parentNode: '2316fd69-5644-4473-ac4e-74e1425c7bca',
-  //     },
-  //     {
-  //       id: '53f86805-6b11-4ca4-86e1-7a496dc65a40',
-  //       type: 'ChoiceDefault',
-  //       data: {},
-  //       parentNode: 'b019ecf0-ea73-4f88-9eb5-0bf4daaabdb1',
-  //       childNodes: [],
-  //     },
-  //     {
-  //       id: '6d91e8c5-8f07-4e44-8fa8-15bf5a8e1537',
-  //       type: 'Flow',
-  //       data: { displayName: 'flow_1' },
-  //       childNodes: ['b019ecf0-ea73-4f88-9eb5-0bf4daaabdb1'],
-  //     },
-  //     {
-  //       id: 'b019ecf0-ea73-4f88-9eb5-0bf4daaabdb1',
-  //       type: 'Choice',
-  //       data: { displayName: 'Choice' },
-  //       parentNode: '6d91e8c5-8f07-4e44-8fa8-15bf5a8e1537',
-  //       defaultNode: '53f86805-6b11-4ca4-86e1-7a496dc65a40',
-  //       childNodes: ['53f86805-6b11-4ca4-86e1-7a496dc65a40'],
+  //       parentNode: 'bf81aaa8-4564-4cdb-91ae-a9a6ef763603',
   //     },
   //   ],
   // }
+
   let getFlowPos = []
   await createNewCanvas()
 

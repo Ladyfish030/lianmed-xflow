@@ -140,20 +140,20 @@ function dragPasteAdsorption(node, parentNode) {
   updateParentNode(node, parentNode) //更新祖上节点的parentNodePos和位置
   addChildEdges(parentNode)
 }
-function removeEdge(node, deleteNode = false) {
-  let oldPrevNodeId = undefined,
-    oldNextNodeId = undefined,
-    oldPrevEdge = findEdgeByTarget(node.id),
-    oldNextEdge = findEdgeBySource(node.id)
-  if (oldPrevEdge) {
-    oldPrevNodeId = oldPrevEdge.source
-  }
-  if (oldNextEdge) {
-    oldNextNodeId = oldNextEdge.target
-  }
-  if (deleteNode) {
-    if ((oldPrevNodeId, oldNextNodeId)) {
-      onConnect({ source: oldPrevNodeId, target: oldNextNodeId })
+function removeEdge(node) {
+  if (node.parentNode) {
+    let parentNode = findNodeById(node.parentNode)
+    if (parentNode) {
+      let childNodeIds = parentNode.childNodes,
+        len = childNodeIds.length
+      for (let i = 0; i < len; i++) {
+        if (childNodeIds[i] == node.id && i > 0 && i < len - 1) {
+          onConnect({
+            source: childNodeIds[i - 1],
+            target: childNodeIds[i + 1],
+          })
+        }
+      }
     }
   }
 }
@@ -650,6 +650,7 @@ function updateNodePosAddWhenNode(whenNode, parentNode) {
 function removeNodeAdsorption(deleteNodeId) {
   // console.log('进来删除节点')
   let node = findNodeById(deleteNodeId)
+  removeEdge(node)
   if (node.parentNode) {
     let parentNode = findNodeById(node.parentNode)
     updateDeleteParentNodeStyle(
@@ -664,7 +665,7 @@ function removeNodeAdsorption(deleteNodeId) {
     )
   }
   removeParentNode(node)
-  removeEdge(node, true)
+  // removeEdge(node, true)
 }
 //删除可吸附节点
 function removeParentNode(node) {

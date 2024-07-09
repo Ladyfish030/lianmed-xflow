@@ -123,10 +123,11 @@ export default function useDragAndDrop() {
       return addWhenNodeJson(parentNode, nodeObj)
     }
     var newNode = JSON.parse(JSON.stringify(getNewNode(nodeObj.type)))
+    let newData = turnJsonData(nodeObj.data)
     newNode = reactive({
       id: nodeId,
       type: nodeObj.type,
-      data: nodeObj.data,
+      data: newData,
       position: pos,
       dimensions: newNode.dimensions,
       initDimensions: newNode.initDimensions,
@@ -159,7 +160,6 @@ export default function useDragAndDrop() {
     if (parentNode) {
       dragPasteAdsorption(newNode, parentNode)
     }
-
     addNode(newNode)
     if (newNode.type == NodeType.CHOICE) {
       return [defaultNode, newNode]
@@ -167,7 +167,40 @@ export default function useDragAndDrop() {
 
     return [newNode]
   }
-
+  function turnJsonData(data) {
+    console.log(data)
+    if (!data) {
+      return data
+    }
+    if (data.headers && data.headers != []) {
+      let obj = JSON.parse(data.headers)
+      data.headers = Object.keys(obj).map((key) => {
+        return {
+          key,
+          value: obj[key],
+        }
+      })
+    }
+    if (data.queryParameters && data.queryParameters != []) {
+      let obj = JSON.parse(data.queryParameters)
+      data.queryParameters = Object.keys(obj).map((key) => {
+        return {
+          key,
+          value: obj[key],
+        }
+      })
+    }
+    if (data.urlParameters && data.urlParameters != []) {
+      let obj = JSON.parse(data.urlParameters)
+      data.urlParameters = Object.keys(obj).map((key) => {
+        return {
+          key,
+          value: obj[key],
+        }
+      })
+    }
+    return data
+  }
   function initFlow(newNode) {
     if (newNode.parentNode != undefined || newNode.type == NodeType.SUBFLOW) {
       return
@@ -231,7 +264,7 @@ export default function useDragAndDrop() {
     node.childNodes.push(defaultNodeId)
     return defaultNodeId
   }
-  
+
   function initChoiceJson(node) {
     var defaultNode = getNewNode(NodeType.CHOICEDEFAULT)
     const defaultNodeId = getNodeId()

@@ -7,7 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    AddConfigDialog: typeof import('./src/components/global_config/AddConfigDialog.vue')['default']
     AddGlobalConfigDialog: typeof import('./src/components/global_config/AddGlobalConfigDialog.vue')['default']
     BaseHeader: typeof import('./src/components/BaseHeader.vue')['default']
     BaseSide: typeof import('./src/components/BaseSide.vue')['default']
