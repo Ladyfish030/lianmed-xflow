@@ -33,15 +33,17 @@
   <el-dialog
     v-model="isFileUploadShow"
     title="XML文件转业务流"
-    width="300"
-    :align-center="true"
+    top="30vh"
+    width="400px"
+    style="height: 150px;"
+    :append-to-body="true"
   >
-    <file-upload @close="closeFileUpload"></file-upload>
+    <FileUpload @close="closeFileUpload" />
   </el-dialog>
 </template>
 
 <script setup>
-import { ref, h } from 'vue'
+import { ref } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -151,7 +153,6 @@ async function generateXmlFile() {
     return
   }
   const sendData = formatGenerateFlowXmlData()
-  console.log(JSON.stringify(sendData))
   await downloadFlowXML(sendData)
     .then((res) => {
       xmlData.value = res

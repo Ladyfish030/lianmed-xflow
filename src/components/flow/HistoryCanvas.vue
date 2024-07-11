@@ -84,7 +84,7 @@ async function loadHistoryCanvas() {
       historyCanvasList.value = res
     })
     .catch((err) => {
-      console.log(err)
+
     })
   loading.value = false
 }
@@ -131,7 +131,7 @@ async function renameCanvasHandler(editedCanvas) {
           historyCanvasList.value = res
         })
         .catch((err) => {
-          console.log(err)
+
         })
       loading.value = false
     })
@@ -188,7 +188,7 @@ async function deleteCanvasHandler(id) {
               historyCanvasList.value = res
             })
             .catch((err) => {
-              console.log(err)
+              
             })
         })
         .catch((error) => {

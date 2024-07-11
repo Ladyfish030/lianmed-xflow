@@ -59,7 +59,6 @@ const selectedConfigType = ref(null)
 
 function showConfigDialogHandler(configType) {
     selectedConfigType.value = configType
-    console.log("selectedConfigType.value:", selectedConfigType.value)
     switch (configType) {
         case GlobalConfigTypeInGeneral.DATABASE_CONFIG:
             Object.keys(currentConfigForm).forEach(key => {

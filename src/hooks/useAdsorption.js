@@ -90,8 +90,6 @@ function dragAdsorption(node, pos, oldRemPos) {
       message: '节点不可放置于flow流程外',
       type: 'warning',
     })
-    // console.log(12313)
-    // console.log(JSON.stringify(parentNodePosition))
     dragAdsorption(node, remPos)
   }
 }
@@ -269,7 +267,6 @@ function getLastPos(node, parentNode) {
   }
 }
 function setNodePos(node, parentNode, pos) {
-  // console.log(12314)
   let childNodes = parentNode.childNodes ? parentNode.childNodes : []
   let len = childNodes.length
   let changeWidth = 0
@@ -286,7 +283,6 @@ function setNodePos(node, parentNode, pos) {
     return false
   }
   if (len <= 0 || compareMaxX(childNodes[len - 1], pos.layerX)) {
-    // console.log('进来到这')
     return getLastPos(node, parentNode)
   }
   for (let i = 0; i < len; i++) {
@@ -648,7 +644,6 @@ function updateNodePosAddWhenNode(whenNode, parentNode) {
 }
 //删除节点
 function removeNodeAdsorption(deleteNodeId) {
-  // console.log('进来删除节点')
   let node = findNodeById(deleteNodeId)
   removeEdge(node)
   if (node.parentNode) {
@@ -697,7 +692,6 @@ function updateDeleteParentNodeStyle(node, parentNode, width, height) {
     width = updateWidthExceptChoice(node, parentNode, width)
   }
   if (parentNode.parentNode) {
-    // console.log(parentNode)
     updateParentNodeStyle(
       parentNode,
       findNodeById(parentNode.parentNode),

@@ -48,7 +48,7 @@ const PostgreSqlConfig = {
 
 const ListenerConfig = {
     name: '',
-    protocol: '',
+    protocol: 'HTTP',
     host: '',
     port: '',
     basePath: '',
@@ -57,7 +57,7 @@ const ListenerConfig = {
 const RequestConfig = {
     name: '',
     basePath: '',
-    protocol: '',
+    protocol: 'HTTP',
     host: '',
     port: '',
     connectionIdleTimeout: '30000',

@@ -44,7 +44,7 @@ function handleClose() {
 
 function copyToClipboard() {
   navigator.clipboard
-    .writeText(xmlData.value)
+    .writeText(props.data)
     .then(() => {
       ElMessage({
         message: '复制成功',
@@ -60,7 +60,7 @@ function copyToClipboard() {
 }
 
 function downloadXmlFile() {
-  const blob = new Blob([xmlData.value], { type: 'application/xml' })
+  const blob = new Blob([props.data], { type: 'application/xml' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url

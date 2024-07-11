@@ -5,7 +5,6 @@
     class="el-menu-demo"
     mode="horizontal"
     :ellipsis="false"
-    @select="handleSelect"
     >
       <div class="logo-div">
         <img :src="logoUrl" alt="Icon" class="logo"/>
@@ -24,9 +23,6 @@ import { ref } from 'vue'
 
 const logoUrl = import.meta.env.BASE_URL + 'favicon.ico';
 const activeIndex = ref('1')
-const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
 </script>
 
 <style>

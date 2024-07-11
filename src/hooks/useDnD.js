@@ -167,8 +167,8 @@ export default function useDragAndDrop() {
 
     return [newNode]
   }
+
   function turnJsonData(data) {
-    console.log(data)
     if (!data) {
       return data
     }
@@ -201,6 +201,7 @@ export default function useDragAndDrop() {
     }
     return data
   }
+
   function initFlow(newNode) {
     if (newNode.parentNode != undefined || newNode.type == NodeType.SUBFLOW) {
       return
@@ -352,6 +353,7 @@ export default function useDragAndDrop() {
 
     return [whenNode]
   }
+  
   let remPos = {}
   function onNodeDragStart(e) {
     const dragNode = e.event == undefined ? e : e.nodes[0]

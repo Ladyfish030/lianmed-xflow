@@ -103,8 +103,9 @@ const nodeTypes = {
 }
 
 function nodeClickHandler(e) {
-  console.log('点击节点：', e.node)
+  // console.log('点击节点：', e.node)
 }
+
 function nodeDoubleClickHandler(e) {
   drawerClickNode.value = findNode(e.node.id)
   onNodeDoubleClick()
