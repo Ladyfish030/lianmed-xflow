@@ -56,7 +56,7 @@ const {
     switchCanvas,
 } = useCanvasManage()
 
-const tipsVisible = ref(true)
+const tipsVisible = ref(false)
 const tipsDisabled = ref(false)
 
 const isCreatingCanvas = ref(false)
@@ -96,6 +96,12 @@ function tipsHideHandler() {
     tipsVisible.value = false
     tipsDisabled.value = true
 }
+
+onMounted(() => {
+    if (canvasList.value.length === 0) {
+        tipsVisible.value = true
+    }
+})
 </script>
 
 <style scoped>

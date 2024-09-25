@@ -20,6 +20,7 @@
     "axios": "^1.7.2",
     "element-plus": "^2.7.5",
     "highlight.js": "^11.9.0",
+    "html-to-image": "^1.11.11",
     "jsencrypt": "^3.3.2",
     "mitt": "^3.0.1",
     "pinia": "^2.1.7",

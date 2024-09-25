@@ -38,6 +38,11 @@ const router = createRouter({
           name: 'global_config',
           component: () => import('../views/GlobalConfig.vue'),
         },
+        {
+          path: '/family_tree',
+          name: 'family_tree',
+          component: () => import('../views/FamilyTree.vue'),
+        },
       ],
     },
   ],

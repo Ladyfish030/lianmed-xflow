@@ -1,6 +1,11 @@
 <template>
-  <el-drawer v-model="drawer" direction="rtl" :before-close="handleClose" :append-to-body="true"
-    :destroy-on-close="true">
+  <el-drawer 
+    v-model="drawer" 
+    direction="rtl" 
+    :before-close="handleClose" 
+    :append-to-body="true"
+    :destroy-on-close="true"
+  >
     <template #header>
       <span class="drawer-header-span">组件属性</span>
     </template>

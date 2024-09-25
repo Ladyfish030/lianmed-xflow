@@ -1,10 +1,11 @@
 import { ref } from 'vue'
-import { findNodeById } from './useNode'
 import { v4 as uuidv4 } from 'uuid'
 import { reactive } from 'vue'
-const edges = ref([])
 import { useVueFlow } from '@vue-flow/core'
+
+const edges = ref([])
 const { addEdges } = useVueFlow()
+
 function getEdgeId() {
   const edgeId = uuidv4()
   return edgeId
@@ -17,6 +18,7 @@ function isEdgeExist(source, target) {
   if (edge) return true
   else return false
 }
+
 function findEdgeBySourceTarget(source, target) {
   const edge = edges.value.find(
     (edge) => edge.source === source && edge.target === target
@@ -24,16 +26,19 @@ function findEdgeBySourceTarget(source, target) {
   if (edge) return edge
   else return undefined
 }
+
 function findEdgeBySource(source) {
   const edge = edges.value.find((edge) => edge.source === source)
   if (edge) return edge
   else return undefined
 }
+
 function findEdgeByTarget(target) {
   const edge = edges.value.find((edge) => edge.target === target)
   if (edge) return edge
   else return undefined
 }
+
 function onConnect(params) {
   if (isEdgeExist(params.source, params.target)) {
     return null

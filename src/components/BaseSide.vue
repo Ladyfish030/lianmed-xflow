@@ -26,7 +26,15 @@
         <GlobalConfigMenuIcon />
       </el-icon>
       <template #title>
-        <span>全局配置</span>
+        <span>Flow全局配置</span>
+      </template>
+    </el-menu-item>
+    <el-menu-item index="family_tree">
+      <el-icon>
+        <FamilyTreeMenuIcon />
+      </el-icon>
+      <template #title>
+        <span>家系图</span>
       </template>
     </el-menu-item>
     <div class="button-container">
@@ -50,6 +58,7 @@
 import { ref } from 'vue'
 import FlowMenuIcon from '@/assets/svg/FlowMenuIcon.vue'
 import GlobalConfigMenuIcon from '@/assets/svg/GlobalConfigMenuIcon.vue'
+import FamilyTreeMenuIcon from '@/assets/svg/family_tree/FamilyTreeMenuIcon.vue'
 
 const isCollapse = ref(true)
 function ExpandOrFoldClickHandle() {

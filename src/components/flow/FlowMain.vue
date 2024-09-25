@@ -5,14 +5,14 @@
     :node-types="nodeTypes"
     @dragover="onDragOver"
     @dragleave="onDragLeave"
-    @connect="onConnect"
     @node-click="nodeClickHandler"
     @node-double-click="nodeDoubleClickHandler"
     @node-drag-start="nodeDragStartHandler"
     @node-drag-stop="onNodeDragStop"
     @node-context-menu="nodeContextMenuHandler"
-    @edge-context-menu="edgeContextMenuHandler"
     @contextmenu.prevent="contextMenuHandler"
+    @move-start="moveStartHandler"
+    @viewport-change-start="viewportChangeStartHandler"
     :zoomOnDoubleClick="false"
     :delete-key-code="null"
   >
@@ -149,6 +149,20 @@ function contextMenuHandler(e) {
     y: e.clientY,
   })
   onFlowContextMenu(e)
+}
+
+function moveStartHandler(e) {
+  nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
+  flowMenuVisible.value = false
+  canvasMenuVisible.value = false
+}
+
+function viewportChangeStartHandler(e) {
+  nodeMenuVisible.value = false
+  edgeMenuVisible.value = false
+  flowMenuVisible.value = false
+  canvasMenuVisible.value = false
 }
 
 watch(
