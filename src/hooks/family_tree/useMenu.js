@@ -57,7 +57,7 @@ function addParentsNode(sourceNode) {
     fatherNode.childrenId.push(sourceNode.id)
     fatherNode.position = {
         x: sourceNode.position.x - 75,
-        y: sourceNode.position.y - 100
+        y: sourceNode.position.y - 120
     }
 
     motherNode.data.sex = 0
@@ -67,7 +67,7 @@ function addParentsNode(sourceNode) {
     motherNode.childrenId.push(sourceNode.id)
     motherNode.position = {
         x: sourceNode.position.x + 75,
-        y: sourceNode.position.y - 100
+        y: sourceNode.position.y - 120
     }
 
     nodeStore.addNode(fatherNode)
@@ -462,7 +462,7 @@ function addSonNode(sourceNode) {
         // 计算sonNode的位置
         sonNode.position = {
             x: fatherNode.position.x + (motherNode.position.x - fatherNode.position.x) / 2,
-            y: fatherNode.position.y + 100
+            y: fatherNode.position.y + 120
         }
 
         // 计算sonNode的horizontalPosition属性
@@ -607,7 +607,7 @@ function addDaughterNode(sourceNode) {
         // 计算sonNode的位置
         daughterNode.position = {
             x: fatherNode.position.x + (motherNode.position.x - fatherNode.position.x) / 2,
-            y: fatherNode.position.y + 100
+            y: fatherNode.position.y + 120
         }
 
         // 计算sonNode的horizontalPosition属性
@@ -843,126 +843,6 @@ function deleteNode(sourceNode) {
         // 移动 i 指针到下一个不同 generation 的位置
         i = j;
     }
-
-    // // 调整删除节点后的家系图
-    // deleteNodeAdjustPosition(sourceNode)
-
-    // nodeStore.deleteNodes.push(sourceNode.id)
-    // // 如果sourceNode有父母节点，则修改父母节点的childrenId数组
-    // if (sourceNode.fatherId !== '' && sourceNode.motherId !== '') {
-    //     let fatherNode = nodeStore.findNodeById(sourceNode.fatherId)
-    //     let motherNode = nodeStore.findNodeById(sourceNode.motherId)
-
-    //     fatherNode.childrenId = fatherNode.childrenId.filter(childId => childId !== sourceNode.id)
-    //     motherNode.childrenId = motherNode.childrenId.filter(childId => childId !== sourceNode.id)
-    // }
-    // // 如果sourceNode有配偶节点，则修改配偶的mateId属性
-    // if (sourceNode.mateId !== '') {
-    //     let mateNode = nodeStore.findNodeById(sourceNode.mateId)
-    //     mateNode.mateId = ''
-    // }
-    // deleteDescendantsNode(sourceNode)
-
-    // // 当该节点有父母，且有配偶时，则还需要删除配偶及配偶的祖辈
-    // if (sourceNode.fatherId !== '' && sourceNode.mateId !== '') {
-    //     const mateNode = nodeStore.findNodeById(sourceNode.mateId)
-    //     nodeStore.deleteNodes.push(mateNode.id)
-    //     deleteAncestorsNode(mateNode)
-    // }
-
-    // // 删除节点
-    // nodeStore.deleteNodes = Array.from(new Set(nodeStore.deleteNodes))
-    // nodeStore.deleteNodes.forEach(nodeId => {
-    //     nodeStore.deleteNodeById(nodeId)
-    // })
-
-    // // 修改每个节点的generation和horizontalPosition属性
-    // nodeStore.sortNodesByGenerationAndHorizontalPosition()
-    // // 重新赋值 generation
-    // let currentGeneration = 1
-    // let previousGeneration = nodeStore.nodes[0].data.generation
-    // nodeStore.nodes[0].data.generation = currentGeneration
-
-    // for (let i = 1; i < nodeStore.nodes.length; i++) {
-    //     if (nodeStore.nodes[i].data.generation !== previousGeneration) {
-    //         currentGeneration++
-    //         previousGeneration = nodeStore.nodes[i].data.generation
-    //     }
-    //     nodeStore.nodes[i].data.generation = currentGeneration
-    // }
-
-    // // 对每个相同 generation 的节点按 horizontalPosition 重新赋值
-    // let i = 0
-    // while (i < nodeStore.nodes.length) {
-    //     let j = i
-    //     // 找到相同 generation 的范围
-    //     while (j < nodeStore.nodes.length && nodeStore.nodes[j].data.generation === nodeStore.nodes[i].data.generation) {
-    //         j++
-    //     }
-
-    //     // 对相同 generation 的节点进行按 horizontalPosition 重新编号
-    //     let currentPosition = 1;
-    //     for (let k = i; k < j; k++) {
-    //         nodeStore.nodes[k].data.horizontalPosition = currentPosition++;
-    //     }
-
-    //     // 移动 i 指针到下一个不同 generation 的位置
-    //     i = j;
-    // }
-
-    // function deleteDescendantsNode(currentNode) {
-    //     if (!currentNode || currentNode.childrenId.length === 0) return
-    
-    //     currentNode.childrenId.forEach(childId => {
-    //         const childNode = nodeStore.findNodeById(childId)
-    //         nodeStore.deleteNodes.push(childNode.id)
-    //         deleteDescendantsNode(childNode)
-    
-    //         // 判断该节点是否有配偶，如果有，则还需要遍历配偶的祖辈
-    //         if (childNode.mateId !== '') {
-    //             const mateNode = nodeStore.findNodeById(childNode.mateId)
-    //             nodeStore.deleteNodes.push(mateNode.id)
-    //             deleteAncestorsNode(mateNode)
-    //         }
-    //     });
-    // }
-    
-    // function deleteAncestorsNode(currentNode) {
-    //     if (!currentNode || (!currentNode.fatherId && !currentNode.motherId)) return
-        
-    //     // 遍历父亲及其祖辈
-    //     if (currentNode.fatherId) {
-    //         const fatherNode = nodeStore.findNodeById(currentNode.fatherId)
-    //         nodeStore.deleteNodes.push(fatherNode.id)
-    //         deleteAncestorsNode(fatherNode)
-    //     }
-    
-    //     // 遍历母亲及其祖辈
-    //     if (currentNode.motherId) {
-    //         const motherNode = nodeStore.findNodeById(currentNode.motherId)
-    //         nodeStore.deleteNodes.push(motherNode.id)
-    //         deleteAncestorsNode(motherNode)
-    //     }
-    
-    //     //如果该节点的父母有其他子女，则遍历该节点的父母的所有子女及其子辈
-    //     if (currentNode.fatherId && currentNode.motherId) {
-    //         const motherNode = nodeStore.findNodeById(currentNode.motherId)
-    //         motherNode.childrenId.forEach(childId => { 
-    //             if (childId !== currentNode.id) {
-    //                 const childNode = nodeStore.findNodeById(childId)
-    //                 nodeStore.deleteNodes.push(childNode.id)
-    //                 deleteDescendantsNode(childNode)
-    
-    //                 // 判断该节点是否有配偶，如果有，则还需要遍历配偶的祖辈
-    //                 if (childNode.mateId !== '') {
-    //                     const mateNode = nodeStore.findNodeById(childNode.mateId)
-    //                     nodeStore.deleteNodes.push(mateNode.id)
-    //                     deleteAncestorsNode(mateNode)
-    //                 }
-    //             }
-    //         })
-    //     }
-    // }
 }
 
 export {

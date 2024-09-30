@@ -6,11 +6,29 @@
     <Handle id="source-left" type="source" :position="Position.Left" class="handle"/>
     <Handle id="source-right" type="source" :position="Position.Right" class="handle"/>
     <div class="content">
-      <el-text v-if="name !== ''" class="name-text" size="small" truncated>{{name}}</el-text>
+      <el-tooltip 
+        v-if="name !== ''"
+        effect="dark" 
+        placement="top" 
+        :hide-after="0"
+      >
+        <template #content>{{name}}</template>
+        <el-text class="name-text" size="small" truncated>{{name}}</el-text>
+      </el-tooltip>
+      
       <el-text class="serial-number-text" size="small" truncated>{{`${arabicToRoman(generation)}-${horizontalPosition}`}}</el-text>
       <el-text v-if="status === 0 && dateOfBirth !== ''" class="date-text" size="small" truncated>{{`b. ${dateOfBirth.split('-')[0]}`}}</el-text>
       <el-text v-if="status === 1 && dateOfDeath !== ''" class="date-text" size="small" truncated>{{`d. ${dateOfDeath.split('-')[0]}`}}</el-text>
-      <el-text v-if="annotation !== ''" class="annotation-text" size="small" truncated>{{annotation}}</el-text>
+      
+      <el-tooltip 
+        v-if="annotation !== ''"
+        effect="dark" 
+        placement="bottom" 
+        :hide-after="0"
+      >
+        <template #content>{{annotation}}</template>
+        <el-text class="annotation-text" size="small" truncated>{{annotation}}</el-text>
+      </el-tooltip>
 
       <ProbandIcon v-if="isProband" class="proband-icon" />
       <ExaminationIcon v-if="isGeneticOrMedicalExamination" class="examination-icon" />
@@ -88,7 +106,7 @@ const annotation = computed(() => node?.data.annotation)
 
 .content {
   display: grid;
-  grid-template-columns: 40px 50px 40px;
+  grid-template-columns: 50px 50px 50px;
   grid-template-rows: 15px 50px 15px 20px;
   grid-template-areas: 
     "name serial-number ."
@@ -97,7 +115,7 @@ const annotation = computed(() => node?.data.annotation)
     "annotation annotation annotation";
   justify-items: center;
   align-items: center;
-  width: 130px;
+  width: 150px;
   height: 100px;
   margin-bottom: auto;
   margin-top: -15px;
@@ -110,6 +128,8 @@ const annotation = computed(() => node?.data.annotation)
   width: 100%;
   margin-right: 0px;
   margin-left: auto;
+  min-width: 4em;
+  pointer-events: all;
 }
 
 .serial-number-text {
@@ -147,6 +167,8 @@ const annotation = computed(() => node?.data.annotation)
 .annotation-text {
   grid-area: annotation;
   line-height: 1.5;
+  pointer-events: all;
+  max-width: 10em;
 }
 
 .span-text {

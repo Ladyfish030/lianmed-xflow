@@ -8,7 +8,7 @@ const initFamilyTreeNode = {
         horizontalPosition: 1,                 // 表示在家系图中位于某一代从左往右第几个位置
         medicalCardNumber: '',                 // 就诊卡号（住院号）
         sex: 0,                                // 性别，0表示女性，1表示男性，2表示未知
-        diseaseConditions: 0,                  // 疾病情况，0表示正常，1表示患病，2表示携带者
+        diseaseConditions: 0,                  // 疾病情况，0表示正常，1表示患病，2表示携带者， 3表示未知
         status: 0,                             // 状态，0表示存活，1表示死亡
         dateOfBirth: '',                       // 出生日期
         dateOfDeath: '',                       // 死亡日期

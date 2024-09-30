@@ -18,6 +18,20 @@
         <NodeInformationDrawer v-if="nodeInformationDrawerVisible"/>
         <NodeContextMenu v-if="nodeMenuVisible"/>
     </VueFlow>
+
+    <el-dialog 
+        v-model="isScreenshotClicked" 
+        title="图片预览"
+        width="800" 
+        top="10vh"
+        :close-on-click-modal="false" 
+        :append-to-body="true"
+    >
+        <img class="screenshot-preview" :src="dataUrl" />
+        <template #footer>
+            <el-button type="primary" @click="downloadScreenshotHandler">下载</el-button>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup>
@@ -44,8 +58,8 @@ import { isScreenshotClicked, useScreenshot } from '@/hooks/family_tree/useScree
 const nodeTypes = {
     [FamilyTreeNodeType.FAMILY_TREE_NODE]: markRaw(FamilyTreeNode),
 }
-const { vueFlowRef, setViewport } = useVueFlow()
-const { doScreenshot } = useScreenshot()
+const { vueFlowRef } = useVueFlow()
+const { dataUrl, download, doScreenshot } = useScreenshot()
 const nodeStore = useNodeStore()
 const { nodes } = storeToRefs(nodeStore)
 
@@ -63,15 +77,18 @@ watch(isScreenshotClicked, async (newValue, oldValue) => {
         }
         isCapturing.value = true
 
-        await doScreenshot(vueFlowRef.value, { shouldDownload: true }).finally(() => {
+        await doScreenshot(vueFlowRef.value).finally(() => {
             // 截屏结束后显示这些组件
             isCapturing.value = false
         });
     }
 });
 
+function downloadScreenshotHandler() {
+    download()
+}
+
 function nodeClickHandler(e) {
-    // console.log('点击节点：', e.node)
     nodeMenuVisible.value = false
     drawerClickNode.value = nodeStore.findNodeById(e.node.id)
     onNodeClickHandler()
@@ -132,5 +149,11 @@ onMounted(() => {
     -ms-flex-positive: 1;
     flex-grow: 1;
     height: 100%;
+}
+
+.screenshot-preview{
+    width: 100%; 
+    height: auto; 
+    border: 1px solid #c8c9cc;
 }
 </style>

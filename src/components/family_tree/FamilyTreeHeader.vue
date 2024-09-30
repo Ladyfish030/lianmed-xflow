@@ -5,7 +5,6 @@
           <ExportAsImageIcon />
         </button>
       </el-tooltip>
-      
     </div>
 </template>
 

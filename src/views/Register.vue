@@ -28,8 +28,8 @@ const username = ref('');
 const password = ref('');
 const repeatPassword = ref('')
 
-// 正则表达式匹配英文字母大小写、下划线、星号
-const validPattern = /^[a-zA-Z_*]+$/
+// 正则表达式匹配英文字母大小写、下划线、星号和数字
+const validPattern = /^[a-zA-Z0-9_*]+$/
 
 function registerHandler() {
     if (username.value == '' || password.value == '') {
@@ -42,7 +42,7 @@ function registerHandler() {
 
     if (!validPattern.test(username.value) || !validPattern.test(password.value)) {
         ElMessage({
-            message: '用户名和密码只能由英文字母大小写、下划线（_）、星号（*）组成',
+            message: '用户名和密码只能由数字、英文字母大小写、下划线（_）、星号（*）组成',
             type: 'warning',
         })
         return

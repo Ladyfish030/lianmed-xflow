@@ -305,7 +305,7 @@ export default function useCanvasManage() {
     await fromObject(nextCanvas.paint)
   }
 
-  function deleteCanvasByIndex(index) {
+  async function deleteCanvasByIndex(index) {
     isShowEditFlag.value = false
     if (index < 0 || index >= canvasList.value.length) {
       return
@@ -327,7 +327,7 @@ export default function useCanvasManage() {
       const nextCanvas = getCurrentCanvas()
       setParentPos(nextCanvas.parentPos)
       setFlowList(nextCanvas.flowList)
-      fromObject(nextCanvas.paint)
+      await fromObject(nextCanvas.paint)
     }
     setTimeout(() => {
       isShowEditFlag.value = true

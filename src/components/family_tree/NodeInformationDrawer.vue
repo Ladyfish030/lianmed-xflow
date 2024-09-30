@@ -26,8 +26,8 @@
                 <div class="form-item">
                     <label>性别：</label>
                     <el-radio-group v-model="sex">
-                        <el-radio v-if="femaleDisabled" style="margin-right: 26px;" :value=0 size="small">女</el-radio>
-                        <el-radio v-if="maleDisabled" style="margin-right: 26px;" :value=1 size="small">男</el-radio>
+                        <el-radio v-if="femaleDisabled" :value=0 size="small">女</el-radio>
+                        <el-radio v-if="maleDisabled" :value=1 size="small">男</el-radio>
                         <el-radio :value=2 size="small">未知</el-radio>
                     </el-radio-group>
                 </div>
@@ -35,17 +35,18 @@
                 <div class="form-item">
                     <label>疾病情况：</label>
                     <el-radio-group style="margin-right: 0px; margin-left: 0px;" v-model="diseaseConditions">
-                        <el-radio style="margin-right: 8px;" :value=0 size="small">正常</el-radio>
-                        <el-radio style="margin-right: 8px;" :value=1 size="small">患病</el-radio>
+                        <el-radio :value=0 size="small">正常</el-radio>
+                        <el-radio :value=1 size="small">患病</el-radio>
                         <el-radio :value=2 size="small">携带者</el-radio>
+                        <el-radio :value=3 size="small">未知</el-radio>
                     </el-radio-group>
                 </div>
 
                 <div class="form-item">
                     <label>状态：</label>
                     <el-radio-group v-model="status">
-                        <el-radio style="margin-right: 26px;" :value=0 size="small">存活</el-radio>
-                        <el-radio style="margin-right: 26px;" :value=1 size="small">死亡</el-radio>
+                        <el-radio :value=0 size="small">存活</el-radio>
+                        <el-radio :value=1 size="small">死亡</el-radio>
                     </el-radio-group>
                 </div>
 
@@ -300,6 +301,8 @@ watch([
 }
 
 .drawer-footer {
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
     height: fit-content;
 }
 
