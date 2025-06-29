@@ -44,7 +44,7 @@ import { storeToRefs } from 'pinia'
 
 import NodeContextMenu from '@/components/family_tree/nodes/menu/NodeContextMenu.vue'
 
-import { FamilyTreeNodeType } from '@/enums/family_tree/FamilyTreeNodeType'
+import { FamilyTreeNodeTypeEnum } from '@/enums/family_tree/FamilyTreeNodeTypeEnum'
 import FamilyTreeNode from '@/components/family_tree/nodes/FamilyTreeNode.vue'
 import NodeInformationDrawer from '@/components/family_tree/NodeInformationDrawer.vue'
 
@@ -56,18 +56,20 @@ import { nodeMenuVisible, onNodeContextMenu } from '@/hooks/family_tree/useMenu.
 import { isScreenshotClicked, useScreenshot } from '@/hooks/family_tree/useScreenshot'
 
 const nodeTypes = {
-    [FamilyTreeNodeType.FAMILY_TREE_NODE]: markRaw(FamilyTreeNode),
+    [FamilyTreeNodeTypeEnum.FAMILY_TREE_NODE]: markRaw(FamilyTreeNode),
 }
 const { vueFlowRef } = useVueFlow()
 const { dataUrl, download, doScreenshot } = useScreenshot()
 const nodeStore = useNodeStore()
 const { nodes } = storeToRefs(nodeStore)
 
+// 控制是否正在截图，截图时隐藏部分组件
 const isCapturing = ref(false)
 
-// 捕获截图时调用 fitViewToNodes
+// 监听截图标志，触发截图流程
 watch(isScreenshotClicked, async (newValue, oldValue) => {
     if (oldValue === false && newValue === true) {
+        // 没有可导出的家系图时提示
         if (!vueFlowRef.value) {
             ElMessage({
                 type: 'warning',
@@ -77,47 +79,56 @@ watch(isScreenshotClicked, async (newValue, oldValue) => {
         }
         isCapturing.value = true
 
+        // 执行截图，结束后恢复显示
         await doScreenshot(vueFlowRef.value).finally(() => {
-            // 截屏结束后显示这些组件
             isCapturing.value = false
         });
     }
 });
 
+// 下载截图图片
 function downloadScreenshotHandler() {
     download()
 }
 
+// 节点点击事件，打开节点信息Drawer
 function nodeClickHandler(e) {
     nodeMenuVisible.value = false
     drawerClickNode.value = nodeStore.findNodeById(e.node.id)
     onNodeClickHandler()
 }
 
+// 节点右键菜单事件，显示自定义菜单
 function nodeContextMenuHandler(e) {
     onNodeContextMenu(e)
 }
 
+// 节点拖拽开始时隐藏菜单
 function nodeDragStartHandler(e) {
     nodeMenuVisible.value = false
 }
 
+// 画布右键菜单事件，隐藏节点菜单
 function contextMenuHandler(e) {
     nodeMenuVisible.value = false
 }
 
+// 画布点击事件，隐藏节点菜单
 function clickHandler(e) {
     nodeMenuVisible.value = false
 }
 
+// 画布移动开始事件，隐藏节点菜单
 function moveStartHandler(e) {
     nodeMenuVisible.value = false
 }
 
+// 视口变化开始事件，隐藏节点菜单
 function viewportChangeStartHandler(e) {
     nodeMenuVisible.value = false
 }
 
+// 组件挂载时，若无节点则自动添加一个初始节点
 onMounted(() => {
     if (nodes.value.length === 0) {
         nodeStore.addInitNode()

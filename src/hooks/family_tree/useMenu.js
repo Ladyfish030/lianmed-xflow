@@ -1,6 +1,14 @@
+/**
+ * 家系图节点菜单相关逻辑
+ * 提供节点右键菜单的显示、节点的增删（父母、配偶、兄弟姐妹、子女）、节点删除的级联处理等功能
+ * 依赖 nodeStore 进行节点的增删查改，依赖 useEdge 添加连线，依赖 useAdjustPosition 调整节点位置
+ * 主要导出菜单显示状态、菜单节点、菜单位置、各类节点添加/删除方法
+ */
+
 import { ref } from 'vue'
 
 import { useNodeStore } from '@/store/family_tree/nodeStore'
+import { NodeAdjustPositionConstantEnum } from '@/enums/family_tree/NodeAdjustPositionConstantEnum'
 
 import { addEdge } from './useEdge'
 import {
@@ -27,6 +35,9 @@ function onNodeContextMenu(e) {
     nodeMenuVisible.value = true
 }
 
+/**
+ * 为指定节点添加父母节点
+ */
 function addParentsNode(sourceNode) {
     // 修改所有节点位于家系图中的代数
     if (sourceNode.data.generation === 1) {
@@ -56,8 +67,8 @@ function addParentsNode(sourceNode) {
     fatherNode.mateId = motherNode.id
     fatherNode.childrenId.push(sourceNode.id)
     fatherNode.position = {
-        x: sourceNode.position.x - 75,
-        y: sourceNode.position.y - 120
+        x: sourceNode.position.x - NodeAdjustPositionConstantEnum.MIN_MOVE_DISTANCE,
+        y: sourceNode.position.y - NodeAdjustPositionConstantEnum.VERTICAL_OFFSET
     }
 
     motherNode.data.sex = 0
@@ -66,8 +77,8 @@ function addParentsNode(sourceNode) {
     motherNode.mateId = fatherNode.id
     motherNode.childrenId.push(sourceNode.id)
     motherNode.position = {
-        x: sourceNode.position.x + 75,
-        y: sourceNode.position.y - 120
+        x: sourceNode.position.x + NodeAdjustPositionConstantEnum.MIN_MOVE_DISTANCE,
+        y: sourceNode.position.y - NodeAdjustPositionConstantEnum.VERTICAL_OFFSET
     }
 
     nodeStore.addNode(fatherNode)
@@ -113,6 +124,9 @@ function addParentsNode(sourceNode) {
     drawerClickNode.value = fatherNode
 }
 
+/**
+ * 为指定节点添加配偶节点
+ */
 function addMateNode(sourceNode) {
     var mateNode = nodeStore.initNode()
     mateNode.data.sex = sourceNode.data.sex === 2 ? 2 : (sourceNode.data.sex === 0 ? 1 : 0)
@@ -231,6 +245,9 @@ function addMateNode(sourceNode) {
     drawerClickNode.value = mateNode
 }
 
+/**
+ * 为指定节点添加兄弟节点
+ */
 function addBrotherNode(sourceNode) {
     // 如果该节点没有父母节点，则新增父母节点
     if (sourceNode.fatherId === '' && sourceNode.motherId === '') {
@@ -330,6 +347,9 @@ function addBrotherNode(sourceNode) {
     drawerClickNode.value = brotherNode
 }
 
+/**
+ * 为指定节点添加姐妹节点
+ */
 function addSisterNode(sourceNode) {
     // 如果该节点没有父母节点，则新增父母节点
     if (sourceNode.fatherId === '' && sourceNode.motherId === '') {
@@ -429,6 +449,9 @@ function addSisterNode(sourceNode) {
     drawerClickNode.value = sisterNode
 }
 
+/**
+ * 为指定节点添加儿子节点
+ */
 function addSonNode(sourceNode) {
     // 如果该节点没有配偶节点，则新增配偶节点
     if (sourceNode.mateId === '') {
@@ -462,7 +485,7 @@ function addSonNode(sourceNode) {
         // 计算sonNode的位置
         sonNode.position = {
             x: fatherNode.position.x + (motherNode.position.x - fatherNode.position.x) / 2,
-            y: fatherNode.position.y + 120
+            y: fatherNode.position.y + NodeAdjustPositionConstantEnum.VERTICAL_OFFSET
         }
 
         // 计算sonNode的horizontalPosition属性
@@ -574,6 +597,9 @@ function addSonNode(sourceNode) {
     drawerClickNode.value = sonNode
 }
 
+/**
+ * 为指定节点添加女儿节点
+ */
 function addDaughterNode(sourceNode) {
     // 如果该节点没有配偶节点，则新增配偶节点
     if (sourceNode.mateId === '') {
@@ -607,7 +633,7 @@ function addDaughterNode(sourceNode) {
         // 计算sonNode的位置
         daughterNode.position = {
             x: fatherNode.position.x + (motherNode.position.x - fatherNode.position.x) / 2,
-            y: fatherNode.position.y + 120
+            y: fatherNode.position.y + NodeAdjustPositionConstantEnum.VERTICAL_OFFSET
         }
 
         // 计算sonNode的horizontalPosition属性
@@ -719,6 +745,10 @@ function addDaughterNode(sourceNode) {
     drawerClickNode.value = daughterNode
 }
 
+/**
+ * 计算需要级联删除的节点（包括后代、配偶及配偶祖辈等）
+ * 递归收集所有需要删除的节点ID到 nodeStore.deleteNodes
+ */
 function computeDeleteNode(sourceNode) {
     nodeStore.deleteNodes = []
     nodeStore.deleteNodes.push(sourceNode.id)
@@ -785,6 +815,9 @@ function computeDeleteNode(sourceNode) {
     }
 }
 
+/**
+ * 删除节点及其相关数据，并重新整理家系图结构
+ */
 function deleteNode(sourceNode) {
     // 调整删除节点后的家系图
     deleteNodeAdjustPosition(sourceNode)

@@ -68,6 +68,9 @@ export function useScreenshot() {
             })
     }
 
+    /**
+     * 下载截图图片
+     */
     function download() {
         const fileName = `家系图截屏-${Date.now()}`
         const link = document.createElement('a')

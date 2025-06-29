@@ -14,6 +14,7 @@ import { isScreenshotClicked } from '@/hooks/family_tree/useScreenshot'
 
 import ExportAsImageIcon from '@/assets/svg/family_tree/ExportAsImageIcon.vue'
 
+// 点击按钮时，设置截图标志为 true，触发截图流程
 function doScreenshotHandler() {
   isScreenshotClicked.value = true
 }

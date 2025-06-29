@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, reactive } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import * as NodeInitAttribute from '@/components/family_tree/nodes/attribute/NodeInitAttribute'
-import { FamilyTreeNodeType } from '@/enums/family_tree/FamilyTreeNodeType'
+import { FamilyTreeNodeTypeEnum } from '@/enums/family_tree/FamilyTreeNodeTypeEnum'
 
 import { removeEdgeByNodeId } from '@/hooks/family_tree/useEdge'
 
@@ -32,7 +32,7 @@ export const useNodeStore = defineStore('nodeStore', () => {
     function initNode() {
         let newNode = JSON.parse(JSON.stringify(NodeInitAttribute.initFamilyTreeNode));
         newNode.id = getNodeId();
-        newNode.type = FamilyTreeNodeType.FAMILY_TREE_NODE;
+        newNode.type = FamilyTreeNodeTypeEnum.FAMILY_TREE_NODE;
         newNode.style = {
             width: `${newNode.dimensions.width}px`,
             height: `${newNode.dimensions.height}px`,
@@ -50,7 +50,7 @@ export const useNodeStore = defineStore('nodeStore', () => {
         addNode(newNode);
     }
 
-    // 判断某个节点是否位于父母节点的左边，如果该节点没有配偶，则返回false
+    // 判断某个节点是否位于父母节点的左边（如果该节点没有配偶，则返回false）
     function isLocatedLeftOfMateNode(sourceNode) {
         const nextNode = nodes.value.find((node) => node.data.generation === sourceNode.data.generation && node.data.horizontalPosition === sourceNode.data.horizontalPosition + 1)
         if (nextNode !== undefined && sourceNode.mateId === nextNode.id) {
@@ -60,32 +60,6 @@ export const useNodeStore = defineStore('nodeStore', () => {
             return false
         }
     }
-
-    // function findTargetNode(sourceNode) {
-    //     // 如果存在母亲节点
-    //     if (sourceNode.motherId !== '') {
-    //         const motherNode = findNodeById(sourceNode.motherId)
-    //         // 如果 sourceNode 在父母节点的左边并且是最后一个孩子，返回 sourceNode
-    //         if (isLocatedLeftOfMateNode(sourceNode) && sourceNode.id === motherNode.childrenId[motherNode.childrenId.length - 1]) {
-    //             return sourceNode
-    //         }
-    //     }
-
-    //     // 如果有子节点，递归查找子节点
-    //     if (sourceNode.childrenId.length !== 0) {
-    //         for (const childId of sourceNode.childrenId) {
-    //             const childNode = findNodeById(childId)
-    //             const targetNode = findTargetNode(childNode)
-    //             // 如果找到了目标节点，则直接返回，不再继续递归
-    //             if (targetNode) {
-    //                 return targetNode
-    //             }
-    //         }
-    //     }
-
-    //     // 如果没有找到匹配的目标节点，返回 undefined 或 null
-    //     return null
-    // }
 
     function findTargetNode(sourceNode, result = []) {
         // 如果存在母亲节点
@@ -145,6 +119,9 @@ export const useNodeStore = defineStore('nodeStore', () => {
         return null
     }
 
+    /**
+     * 查找最顶层的母亲节点
+     */
     function findTheMotherAtTheTopRight(sourceNode) {
         if (sourceNode === null || sourceNode === undefined) return null 
         
@@ -156,6 +133,10 @@ export const useNodeStore = defineStore('nodeStore', () => {
         return currentNode
     }
 
+    /**
+     * 按代数和横向位置对节点进行排序
+     * 先按 generation 升序，再按 horizontalPosition 升序
+     */
     function sortNodesByGenerationAndHorizontalPosition() {
         nodes.value.sort((a, b) => {
             if (a.data.generation === b.data.generation) {

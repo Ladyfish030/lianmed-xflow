@@ -126,6 +126,8 @@ const isGeneticOrMedicalExamination = ref(drawerClickNode?.value.data.isGeneticO
 const annotation = ref(drawerClickNode?.value.data.annotation || '')
 
 const isSave = ref(false)
+
+// 计算性别单选项是否禁用
 const femaleDisabled = computed(() => {
     if (drawerClickNode.value.mateId !== '') {
         const mate = nodeStore.findNodeById(drawerClickNode.value.mateId)
@@ -145,6 +147,7 @@ const maleDisabled = computed(() => {
     return true
 })
 
+// 保存按钮点击，带动画效果，更新节点数据
 function saveAttributeWithAnimation() {
     isSave.value = true
     saveComplete.value = false
@@ -165,6 +168,7 @@ function saveAttributeWithAnimation() {
                 annotation: annotation.value,
             }
         })
+    // 若当前节点为先证者，则取消其他节点的先证者标记
     if (isProband.value === true) {
         nodeStore.nodes.forEach(node => {
             if (node.id !== drawerClickNode.value.id) {
@@ -180,6 +184,7 @@ function saveAttributeWithAnimation() {
     }, 1000) // 控制动画显示的时间
 }
 
+// 抽屉关闭前的处理，若有未保存内容则弹窗确认
 const handleDrawerClose = (done) => {
     if (haveEdited.value === true) {
         ElMessageBox.confirm(
@@ -197,7 +202,7 @@ const handleDrawerClose = (done) => {
                 done()
             })
             .catch(() => {
-                // catch error
+                // 用户取消关闭，不做处理
             })
     }
     else {
@@ -207,6 +212,7 @@ const handleDrawerClose = (done) => {
     }
 }
 
+// 监听所有表单字段变化，判断是否有编辑未保存
 watch([
     name,
     medicalCardNumber,
@@ -240,6 +246,7 @@ watch([
         oldIsGeneticOrMedicalExamination,
         oldAnnotation
     ]) => {
+    // 只要有任一字段与原始数据不同，则标记为已编辑
     if (
         newName !== drawerClickNode?.value.data.name ||
         newMedicalCardNumber !== drawerClickNode?.value.data.medicalCardNumber ||

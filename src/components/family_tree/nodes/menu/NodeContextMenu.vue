@@ -84,9 +84,12 @@ import { useNodeStore } from '@/store/family_tree/nodeStore'
 
 const nodeStore = useNodeStore()
 
+// 计算“新增父母”按钮是否禁用
 const isAddParentsDisabled = computed(() => {
+    // 已有父母则禁用
     if (menuClickNode?.value.fatherId !== '' || menuClickNode?.value.motherId !== '') return true
 
+    // 有配偶且配偶有父亲时，判断是否在可添加父母的位置
     if (menuClickNode?.value.mateId !== '') {
         const mateNode = nodeStore.findNodeById(menuClickNode?.value.mateId)
         if (mateNode.fatherId !== '') {
@@ -100,9 +103,12 @@ const isAddParentsDisabled = computed(() => {
     return false
 })
 
+// 计算“新增配偶”按钮是否禁用
 const isAddMateDisabled = ref(menuClickNode?.value.mateId !== '')
 
+// 计算“新增兄弟/姐妹”按钮是否禁用
 const isAddBrotherOrSisterDisabled = computed(() => {
+    // 没有父亲时，判断配偶相关逻辑
     if (menuClickNode?.value.fatherId === '') {
         if (menuClickNode?.value.mateId !== '') {
             const mateNode = nodeStore.findNodeById(menuClickNode?.value.mateId)
@@ -118,7 +124,9 @@ const isAddBrotherOrSisterDisabled = computed(() => {
     return false
 })
 
+// 计算“新增儿子/女儿”按钮是否禁用
 const isAddSonOrDaughterDisabled = computed(() => {
+    // 有父亲时，判断是否在可添加子女的位置
     if (menuClickNode?.value.fatherId !== '') {
         const fatherNode = nodeStore.findNodeById(menuClickNode?.value.fatherId)
         if (!((nodeStore.isLocatedLeftOfMateNode(menuClickNode?.value) && fatherNode.childrenId.indexOf(menuClickNode?.value.id) === fatherNode.childrenId.length - 1) ||
@@ -126,6 +134,7 @@ const isAddSonOrDaughterDisabled = computed(() => {
             (menuClickNode?.value.mateId === '' && (fatherNode.childrenId.indexOf(menuClickNode?.value.id) === 0 || fatherNode.childrenId.indexOf(menuClickNode?.value.id) === fatherNode.childrenId.length - 1)))) {
                 return true
         }
+        // 判断兄弟节点是否已有子女，若有则禁用
         return fatherNode.childrenId.some(childId => {
             if (childId !== menuClickNode?.value.id) {
                 const childNode = nodeStore.findNodeById(childId)
@@ -136,6 +145,7 @@ const isAddSonOrDaughterDisabled = computed(() => {
             return false
         })
     }
+    // 没有父亲但有配偶时，判断配偶相关逻辑
     if (menuClickNode?.value.mateId !== '') {
         const mateNode = nodeStore.findNodeById(menuClickNode?.value.mateId)
         if (mateNode.fatherId !== '') {
@@ -144,6 +154,7 @@ const isAddSonOrDaughterDisabled = computed(() => {
                 (!nodeStore.isLocatedLeftOfMateNode(mateNode) && fatherNode.childrenId.indexOf(mateNode.id) === 0))) {
                 return true
             }
+            // 判断兄弟节点是否已有子女，若有则禁用
             return fatherNode.childrenId.some(childId => {
                 if (childId !== mateNode.id) {
                     const childNode = nodeStore.findNodeById(childId)
@@ -158,34 +169,42 @@ const isAddSonOrDaughterDisabled = computed(() => {
     return false
 })
 
+// 计算"删除"按钮是否禁用（仅剩一个节点时禁用）
 const isDeleteNodeDisabled = computed(() => {
     return nodeStore.nodes.length === 1
 })
 
+// 新增配偶
 function addMateHandler() {
     addMateNode(menuClickNode.value)
 }
 
+// 新增父母
 function addParentsHandler() {
     addParentsNode(menuClickNode.value)
 }
 
+// 新增兄弟
 function addBrotherHandler() {
     addBrotherNode(menuClickNode.value)
 }
 
+// 新增姐妹
 function addSisterHandler() {
     addSisterNode(menuClickNode.value)
 }
 
+// 新增儿子
 function addSonHandler() {
     addSonNode(menuClickNode.value)
 }
 
+// 新增女儿
 function addDaughterHandler() {
     addDaughterNode(menuClickNode.value)
 }
 
+// 删除节点，弹窗确认
 function deleteNodeHandler() {
     computeDeleteNode(menuClickNode.value)
     ElMessageBox.confirm('确定删除该节点？突出显示的所有节点都将被删除', {
